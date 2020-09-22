@@ -1,8 +1,4 @@
-#include "libft/libft.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
+#include "minishell.h"
 
 int main(int ac, char **av, char **envp)
 {
