@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/21 16:52:37 by psemsari          #+#    #+#             */
-/*   Updated: 2020/09/21 16:58:55 by psemsari         ###   ########.fr       */
+/*   Created: 2020/09/22 15:36:18 by psemsari          #+#    #+#             */
+/*   Updated: 2020/09/22 16:28:39 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "builtins.h"
 
-int main(int argc, char **argv)
+int main(void)
 {
-	char *str[1000];
-	getcwd(str, 1000);
-	write(0, str, ft_strlen(str));
+	exit(0);
 	return (0);
 }

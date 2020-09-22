@@ -20,8 +20,15 @@ vpath %.c sources/parsing
 FILES =		./sources/main\
 			./sources/path\
 
+BIN =		./bin/cd\
+			./bin/echo\
+			./bin/env\
+			./bin/pwd\
+			./bin/exit\
+
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)
+BUILTINS = $(BIN:%.c=%)
 
 CC = gcc
 L_CC = clang
@@ -48,13 +55,18 @@ LIBFT:
 			@echo "$(CYAN)Building libft:$(NOC) $@"
 			cd libft && make && cd ..
 
-$(NAME): 	$(OBJ)
+$(NAME): 	$(OBJ) $(BUILTINS)
 			@echo "$(CYAN)Constructing executable:$(NOC) $@"
 			@$(L_CC) -g3 $(FLAGS) -o $(NAME) $(OBJ) $(LIB)
+
+$(BIN): %: %.c
+			@echo " $(VIOLET)[$(L_CC)] $(GREEN)[$(FLAGS)]$(NOC) $(YELLOW)in progress ...:$(NOC) $< $(RED)->$(NOC) $@"
+			@$(L_CC) -g3 $(FLAGS) $< -o ${<:%.c=%} $(LIB)
 
 .c.o:		${SRCS}
 			@echo " $(VIOLET)[$(L_CC)] $(GREEN)[$(FLAGS)]$(NOC) $(YELLOW)in progress ...:$(NOC) $< $(RED)->$(NOC) $@"
 			@$(L_CC) -g3 $(FLAGS) -c -I$(INC_PATH) $< -o ${<:.c=.o}
+
 clean:
 	@echo "$(CYAN)Clean libft:$(NOC) $@"
 	@cd libft && make clean && cd ..

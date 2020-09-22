@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/21 16:42:44 by psemsari          #+#    #+#             */
-/*   Updated: 2020/09/21 16:52:23 by psemsari         ###   ########.fr       */
+/*   Created: 2020/09/22 16:18:12 by psemsari          #+#    #+#             */
+/*   Updated: 2020/09/22 16:44:10 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
-int main(int argc, char **argv)
-{
-	if (argc > 1)
-	{
-		write(0, "cd: trop d'arguments", 21);
-		return (-1);
-	}
-	return (chdir(argv[0]));
-}
+# include <stdlib.h>
+# include <unistd.h>
+# include "../includes/libft.h"
+
+#endif

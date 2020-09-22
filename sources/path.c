@@ -54,13 +54,12 @@ char        *path(char **env, char *str)
     tab = ft_split(env[id] + 5, ':');
     path = NULL;
     command = get_command(str);
-    while (!found)
+    while (!found) //use stat
     {
         path = ft_strjoin_c(tab[i], command.command, '/');
         child = fork();
         if (child == 0)
         {
-
             execve(path, command.argument, env);
             exit(EXIT_FAILURE);
         }
