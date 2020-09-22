@@ -25,8 +25,8 @@ OBJ = $(SRCS:.c=.o)
 
 CC = gcc
 L_CC = clang
-LIB = ./sources/libft/libft.a
-FLAGS = -Wall -Wextra -Werror
+LIB = ./libft/libft.a
+#FLAGS = -Wall -Wextra -Werror
 
 ### COLORS ###
 
@@ -46,24 +46,24 @@ all: 		LIBFT $(NAME)
 
 LIBFT:
 			@echo "$(CYAN)Building libft:$(NOC) $@"
-			cd sources/libft && make && cd ../..
+			cd libft && make && cd ..
 
 $(NAME): 	$(OBJ)
 			@echo "$(CYAN)Constructing executable:$(NOC) $@"
-			@$(L_CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB)
+			@$(L_CC) -g3 $(FLAGS) -o $(NAME) $(OBJ) $(LIB)
 
 .c.o:		${SRCS}
 			@echo " $(VIOLET)[$(L_CC)] $(GREEN)[$(FLAGS)]$(NOC) $(YELLOW)in progress ...:$(NOC) $< $(RED)->$(NOC) $@"
-			@$(L_CC) $(FLAGS) -c -I$(INC_PATH) $< -o ${<:.c=.o}
+			@$(L_CC) -g3 $(FLAGS) -c -I$(INC_PATH) $< -o ${<:.c=.o}
 clean:
 	@echo "$(CYAN)Clean libft:$(NOC) $@"
-	@cd sources/libft && make clean && cd ../..
+	@cd libft && make clean && cd ..
 	@echo "\n$(RED)Removing '.o' objects: $(NOC) $@"
 	@rm -f $(OBJ)
 
 fclean: clean
 	@echo "$(CYAN)Fclean libft:$(NOC) $@"
-	@cd sources/libft && make fclean && cd ../..
+	@cd libft && make fclean && cd ..
 	@echo "\n$(RED)Removing executable: $(NOC) $@"
 	@rm -f $(NAME)
 

@@ -35,25 +35,11 @@ int main(int ac, char **av, char **envp)
 	// arg[3][1] = '\0';
 	// av[0] = "ls";
 	// printf("%d %s\n", execve("/bin/ls", av, envp), strerror(errno));
-	path(envp);
 	while (1)
 	{
 		ft_putstr("minishell> ");
 		get_next_line(0, &str);
-		av[0] = str;
-		child = fork();
-		
-		if (child == 0)
-		{
-			//printf("## child ## %d %d\n", getpid(), child);
-			//printf("%d %s\n", execve("/bin/ls", av, envp), strerror(errno));
-		}
-		else
-		{
-			waitpid(child, &ret, WUNTRACED);
-			//printf("## parent ## %d %d\n", getpid(), child);
-		}
-		free(str);
+		path(envp, str);
 	}
 
 	// while (1)

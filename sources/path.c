@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+t_parser get_command(char const *str)
+{
+	t_parser	parse;
+
+	parse.argument = ft_split(str, ' ');
+	parse.command = parse.argument[0];
+	return (parse);
+}
+
 static int  get_path_id(char **env)
 {
     int i;
@@ -26,7 +35,7 @@ static int  get_path_id(char **env)
     return (-1);
 }
 
-char        *path(char **env)
+char        *path(char **env, char *str)
 {
     char *path;
     char **tab;
@@ -35,6 +44,7 @@ char        *path(char **env)
     int ret;
     int i;
     pid_t child;
+    t_parser command;
 
     if ((id = get_path_id(env)) < 0)
         return (NULL);
@@ -43,24 +53,22 @@ char        *path(char **env)
     found = 0;
     tab = ft_split(env[id] + 5, ':');
     path = NULL;
+    command = get_command(str);
     while (!found)
     {
-        path = ft_strjoin(tab[i], "/ls");
+        path = ft_strjoin_c(tab[i], command.command, '/');
         child = fork();
         if (child == 0)
         {
-            
-            execve(path, ft_split("ls", ' '), env);
+
+            execve(path, command.argument, env);
             exit(EXIT_FAILURE);
         }
         else
         {
             waitpid(child, &ret, 0);
             if (ret != -1 && ret != 256)
-            {
-                printf("%s\n", tab[i]);
                 found = 1;
-            }
             else
             {
                 free(path);

@@ -6,7 +6,7 @@
 #    By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/11 18:12:36 by psemsari          #+#    #+#              #
-#    Updated: 2020/08/06 16:53:28 by psemsari         ###   ########.fr        #
+#    Updated: 2020/09/22 14:59:02 by psemsari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,7 +75,8 @@ SRC = ft_strlen.c \
 	ft_lstmap.c \
 	get_next_line.c \
 	ft_strrem.c \
-	ft_atoui.c
+	ft_atoui.c \
+	ft_strjoin_c.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:%.c=%.o))
 
