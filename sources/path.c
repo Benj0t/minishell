@@ -35,7 +35,7 @@ static int  get_path_id(char **env)
     return (-1);
 }
 
-char        *path(char **env, char *str)
+char        *ft_path(char **env, char *str)
 {
     char *path;
     char **tab;

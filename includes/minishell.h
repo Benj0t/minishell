@@ -10,6 +10,7 @@
 # include <string.h>
 # include "parser.h"
 
-char		*path(char **env, char *str);
+char		*ft_path(char **env, char *str);
+int			ft_pipe(char **env, char *command1, char *command2);
 
 #endif

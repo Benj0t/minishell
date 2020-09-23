@@ -19,6 +19,7 @@ vpath %.c sources/parsing
 
 FILES =		./sources/main\
 			./sources/path\
+			./sources/pipe\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)
@@ -46,7 +47,7 @@ all: 		LIBFT $(NAME)
 
 LIBFT:
 			@echo "$(CYAN)Building libft:$(NOC) $@"
-			cd libft && make && cd ..
+			cd ./libft && make && cd ..
 
 $(NAME): 	$(OBJ)
 			@echo "$(CYAN)Constructing executable:$(NOC) $@"

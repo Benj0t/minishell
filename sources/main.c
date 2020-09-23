@@ -39,7 +39,7 @@ int main(int ac, char **av, char **envp)
 	{
 		ft_putstr("minishell> ");
 		get_next_line(0, &str);
-		path(envp, str);
+		ft_pipe(envp, str, "grep allo");
 	}
 
 	// while (1)
