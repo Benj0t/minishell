@@ -25,16 +25,13 @@ int    ft_pipe(char **env, char *command1, char *command2)
         return (-1);
     if ((child = fork()) == 0)
     {
-        if ((child = fork()) == 0)
-        {
-            dup2(1, p[0]);
-            execve(ft_path(env, command2), comm2.argument, env);   
-        }
-        else
-        {
-            dup2(0, p[1]);
-            execve(ft_path(env, command1), comm1.argument,  env);
-        }
+        dup2(1, p[0]);
+        execve(ft_path(env, command2), comm2.argument, env);   
+    }
+    if ((child = fork()) == 0)
+    {
+        dup2(0, p[1]);
+        execve(ft_path(env, command1), comm1.argument,  env);
     }
     return (1);
 }
