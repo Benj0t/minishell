@@ -35,13 +35,11 @@ int main(int ac, char **av, char **envp)
 	// arg[3][1] = '\0';
 	// av[0] = "ls";
 	// printf("%d %s\n", execve("/bin/ls", av, envp), strerror(errno));
-	int i = 0;
-	while (i != 1)
+	while (1)
 	{
 		ft_putstr("minishell> ");
 		get_next_line(0, &str);
-		ft_pipe(envp, str, "grep allo");
-		i = 1;
+		ft_pipe(envp, str, "grep .c");
 	}
 
 	// while (1)

@@ -9,6 +9,7 @@
 # include <errno.h>
 # include <string.h>
 # include "parser.h"
+# include <sys/stat.h>
 
 char		*ft_path(char **env, char *str);
 int			ft_pipe(char **env, char *command1, char *command2);

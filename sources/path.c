@@ -44,6 +44,7 @@ char        *ft_path(char **env, char *str)
     int ret;
     int i;
     pid_t child;
+    struct stat buf;
     t_parser command;
 
     if ((id = get_path_id(env)) < 0)
@@ -61,7 +62,8 @@ char        *ft_path(char **env, char *str)
         if (child == 0)
         {
 
-            execve(path, command.argument, env);
+            if (!stat(path, &buf))
+                exit(EXIT_SUCCESS);
             exit(EXIT_FAILURE);
         }
         else
