@@ -20,11 +20,9 @@ vpath %.c sources/parsing
 FILES =		./sources/main\
 			./sources/path\
 
-BIN =		./bin/cd\
-			./bin/echo\
+BIN =		./bin/echo\
 			./bin/env\
 			./bin/pwd\
-			./bin/exit\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)

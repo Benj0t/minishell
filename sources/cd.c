@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 16:42:44 by psemsari          #+#    #+#             */
-/*   Updated: 2020/09/22 16:28:25 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/09/23 14:11:12 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,9 @@
 
 int main(int argc, char **argv)
 {
-	return (chdir(argv[0]));
+	if (chdir(argv[1]))
+	{
+		ft_putstr_fd(strerror(errno), 1);
+	}
+	return (0);
 }

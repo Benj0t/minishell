@@ -9,6 +9,12 @@ void	ft_putstr(char *str)
 		write(1, &(str[i++]), 1);
 }
 
+void handle_sigint(int sig)
+{
+	printf("Caught signal %d\n", sig);
+	exit(1);
+}
+
 int main(int ac, char **av, char **envp)
 {
 	(void)ac;
@@ -35,10 +41,14 @@ int main(int ac, char **av, char **envp)
 	// arg[3][1] = '\0';
 	// av[0] = "ls";
 	// printf("%d %s\n", execve("/bin/ls", av, envp), strerror(errno));
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigint);
 	while (1)
 	{
-		ft_putstr("minishell> ");
-		get_next_line(0, &str);
+
+		ft_putstr(" - minishell> ");
+		if(get_next_line(0, &str) == 0)
+			exit(0);
 		path(envp, str);
 	}
 
