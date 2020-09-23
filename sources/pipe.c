@@ -16,6 +16,8 @@ int    ft_pipe(char **env, char *command1, char *command2)
 {
     int p[2];
     int child;
+    int child2;
+    int ret;
     t_parser comm1;
     t_parser comm2;
 
@@ -29,11 +31,13 @@ int    ft_pipe(char **env, char *command1, char *command2)
         close(p[1]);
         execve(ft_path(env, command1), comm1.argument, env);   
     }
-    if ((child = fork()) == 0)
+    if ((child2 = fork()) == 0)
     {
         dup2(0, p[1]);
         close(p[0]);
         execve(ft_path(env, command2), comm2.argument,  env);
     }
+    waitpid(child2, &ret, 0);
+    waitpid(child, &ret, 0);
     return (1);
 }
