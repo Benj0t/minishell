@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-<<<<<<< HEAD
 t_parser get_command(char const *str)
 {
 	t_parser	parse;
@@ -55,12 +54,13 @@ char        *path(char **env, char *str)
     tab = ft_split(env[id] + 5, ':');
     path = NULL;
     command = get_command(str);
-    while (!found) //use stat
+    while (!found)
     {
         path = ft_strjoin_c(tab[i], command.command, '/');
         child = fork();
         if (child == 0)
         {
+
             execve(path, command.argument, env);
             exit(EXIT_FAILURE);
         }
@@ -78,31 +78,3 @@ char        *path(char **env, char *str)
     }
     return (path);
 }
-=======
-char    *path(char **env)
-{
-    char *path;
-    int i;
-    int found;
-    int ret;
-    pid_t child;
-
-    i = 0;
-    ret = 0;
-    found = 0;
-    path = ft_strjoin(env[i], "/ls");
-    child = fork();
-    env = NULL;
-    if (child == 0)
-    {
-        printf("%d %s\n", execve(path, ft_split("ls", ' '), env), strerror(errno));
-    }
-    else
-    {
-        waitpid(child, &ret, 0);
-        printf("%d", ret);
-    }
-    
-    return (path);
-}
->>>>>>> 4b3fda8431a25f107afbf0e43c6a8cd71671195e

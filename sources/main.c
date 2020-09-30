@@ -9,6 +9,30 @@ void	ft_putstr(char *str)
 		write(1, &(str[i++]), 1);
 }
 
+t_var_env	*malloc_varenv(char *key, char *str)
+{
+	t_var_env	*ret;
+	ret = (t_var_env *)malloc(sizeof(t_var_env));
+	ret->key = key;
+	ret->var = str;
+	return (ret);
+}
+
+t_list	*envp_to_list(char **envp)
+{
+	int		i;
+	t_list	*ret;
+	char	**split;
+
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		split = ft_split(envp[i], '='); // voir autre fonction
+		ft_lstadd_back(&ret, ft_lstnew(malloc_varenv(split[0], split[1])));
+		i++;
+	}
+}
+
 int main(int ac, char **av, char **envp)
 {
 	(void)ac;
@@ -35,25 +59,11 @@ int main(int ac, char **av, char **envp)
 	// arg[3][1] = '\0';
 	// av[0] = "ls";
 	// printf("%d %s\n", execve("/bin/ls", av, envp), strerror(errno));
-	path(envp);
 	while (1)
 	{
 		ft_putstr("minishell> ");
 		get_next_line(0, &str);
-		av[0] = str;
-		child = fork();
-		
-		if (child == 0)
-		{
-			//printf("## child ## %d %d\n", getpid(), child);
-			//printf("%d %s\n", execve("/bin/ls", av, envp), strerror(errno));
-		}
-		else
-		{
-			waitpid(child, &ret, WUNTRACED);
-			//printf("## parent ## %d %d\n", getpid(), child);
-		}
-		free(str);
+		parser(str);
 	}
 
 	// while (1)

@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr.c                                        :+:      :+:    :+:   */
+/*   ft_strafter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/26 13:25:15 by psemsari          #+#    #+#             */
-/*   Updated: 2019/11/26 13:25:54 by psemsari         ###   ########.fr       */
+/*   Created: 2020/09/28 19:05:38 by psemsari          #+#    #+#             */
+/*   Updated: 2020/09/28 20:07:17 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putnbr(int n)
+size_t	ft_strafter(char **str)
 {
-	char c;
+	size_t	i;
+	size_t	ret;
 
-	if (n == -2147483648)
-		ft_putstr_fd("-2147483648");
-	else
-	{
-		if (n < 0)
-		{
-			ft_putchar_fd('-', 1);
-			n = -n;
-		}
-		if (n / 10 > 0)
-			ft_putnbr_fd(n / 10, 1);
-		c = n % 10 + '0';
-		ft_putchar_fd(c, 1);
-	}
+	i = 0;
+	while (str[0][i] != ' ' && str[0][i] != '	' && str[0][i] != '\0')
+		i++;
+	ret = i;
+	while (str[0][i] == ' ' || str[0][i] == '	' || str[0][i] != '\0')
+		i++;
+	str = &str[i];
+	return (ret);
 }
