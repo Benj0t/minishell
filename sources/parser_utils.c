@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/01 20:48:24 by psemsari         ###   ########.fr       */
+/*   Created: 2020/10/01 20:43:57 by psemsari          #+#    #+#             */
+/*   Updated: 2020/10/01 20:44:32 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include <minishell.h>
 
-typedef struct	s_parser
+size_t	next_space(char *str)
 {
-		char	*command;
-		char	**argument;
-}				t_parser;
+	size_t	ret;
 
-typedef struct	s_var_env
-{
-	char	*key;
-	char	*var;
-}				t_var_env;
-
-size_t			next_space(char *str);
-int				parser(char *str, t_list *env);
-
-#endif
+	ret = 0;
+	while (str[ret] != ' ' && str[ret] != '\''
+		&& str[ret] != '"' && str[ret] != '\0')
+		ret++;
+	return (ret);
+}

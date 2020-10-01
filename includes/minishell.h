@@ -11,6 +11,7 @@
 # include "parser.h"
 
 char		*path(char **env, char *str);
-int			parser(char *str);
+t_list		*envp_to_list(char **envp);
+char		*get_env_var(char *search, t_list *lst_env);
 
 #endif

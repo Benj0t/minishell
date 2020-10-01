@@ -20,6 +20,8 @@ vpath %.c sources/parsing
 FILES =		./sources/main\
 			./sources/path\
 			./sources/parser\
+			./sources/env\
+			./sources/parser_utils\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)
