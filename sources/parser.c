@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/01 20:55:17 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/10/05 16:55:40 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ char	*arg_env(char **str, char *ret, t_list *lst_env)
 	//voir $?
 	search = next_arg(str);
 	free(ret);
+	if (!strcmp(search, "?"))
+		return (ft_strdup(ft_itoa(0))); //à voir
 	return (ft_strdup(get_env_var(search, lst_env)));
 }
 

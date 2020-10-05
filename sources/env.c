@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/01 20:43:00 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/10/05 14:45:36 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*get_env_var(char *search, t_list *lst_env)
 	{
 		lst_env = lst_env->next;
 		if (lst_env == NULL)
-			return (NULL);
+			return ("");
 		var_env = (t_var_env *)lst_env->content;
 	}
 	return (var_env->var);
