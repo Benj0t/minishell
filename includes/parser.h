@@ -6,18 +6,20 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/01 20:48:24 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/10/06 17:39:23 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-typedef struct	s_parser
+typedef struct	s_command
 {
-		char	*command;
-		char	**argument;
-}				t_parser;
+		char		**argument;
+		char		**redir_out;
+		char		**redir_in;
+		t_command	*pipe
+}				t_command;
 
 typedef struct	s_var_env
 {

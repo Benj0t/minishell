@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/05 16:55:40 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/10/06 18:36:24 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*arg_except(char **str, char *ret, t_list *env)
 	return (NULL); //quote not close error
 }
 
-char	*next_arg(char **str)
+char	*arg_next(char **str)
 {
 	size_t	i;
 	size_t	i2;
@@ -110,34 +110,34 @@ char	*arg_env(char **str, char *ret, t_list *lst_env)
 {
 	char	*search;
 	//voir $?
-	search = next_arg(str);
+	search = arg_next(str);
 	free(ret);
 	if (!strcmp(search, "?"))
 		return (ft_strdup(ft_itoa(0))); //à voir
 	return (ft_strdup(get_env_var(search, lst_env)));
 }
 
-int		parser(char *str, t_list *env)
+char	*next(char *str, t_list *env)
 {
-	t_list		*lst_pipe;
-	t_list		*lst_redi;
-	t_parser	parsing;
-	size_t		i;
 	char		*ret;
 
-	i = 0;
-	str = ft_strdup(str);
-	printf("-%s-\n", str);
-	while ((ret = next_arg(&str)) != NULL)
+	if ((ret = arg_next(&str)) != NULL)
 	{
 		if (ret[0] == '\"' || ret[0] == '\'')
 			ret = arg_except(&str, ret, env);
 		else if (ret[0] == '$')
 			ret = arg_env(&str, ret, env);
-		printf("-%s- | -%s-\n", ret, str);
-		free(ret);
-		sleep(1);
 	}
-	free(str);
+	return (ret);
+}
+
+int		parser(char *str, t_list *env)
+{
+	t_command	command;
+	char		*ret;
+
+	str = ft_strdup(str);
+	ret = next(str, env); // donne le prochain term
+
 	return (0);
 }

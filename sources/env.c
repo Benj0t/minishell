@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/05 14:45:36 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/10/06 18:25:52 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,24 @@ t_var_env	*malloc_varenv(char *key, char *str)
 	return (ret);
 }
 
-char	*get_env_var(char *search, t_list *lst_env)
+char	*get_env_var(char *search, t_list *env)
 {
 	t_var_env *var_env;
 
-	var_env = (t_var_env *)lst_env->content;
+	var_env = (t_var_env *)env->content;
 	while (ft_strncmp(var_env->key, search, ft_strlen(var_env->key)))
 	{
-		lst_env = lst_env->next;
-		if (lst_env == NULL)
+		env = env->next;
+		if (env == NULL)
 			return ("");
-		var_env = (t_var_env *)lst_env->content;
+		var_env = (t_var_env *)env->content;
 	}
 	return (var_env->var);
+}
+
+void	set_env_var(char *key, char* var, t_list *env)
+{
+	ft_lstadd_back(&env, ft_lstnew(malloc_varenv(key, var)));
 }
 
 t_list	*envp_to_list(char **envp)
@@ -56,4 +61,37 @@ t_list	*envp_to_list(char **envp)
 		i++;
 	}
 	return (ret);
+}
+
+char	**list_to_envp(t_list *env)
+{
+	int		len;
+	int		i;
+	char	**ret;
+
+	len = ft_lstsize(env);
+	ret = (char **)malloc(sizeof(char *) * (len + 1));
+	ret[len] = NULL;
+	i = 0;
+	while (env != NULL)
+	{
+		ret[i] = ft_strjoin_c(((t_var_env *)env->content)->key,
+					((t_var_env *)env->content)->var, '=');
+		env = env->next;
+		i++;
+	}
+	return (ret);
+}
+
+void	dealloc_tab(char **tab)
+{
+	char	*start;
+
+	start = tab;
+	while (tab != NULL)
+	{
+		free(*tab);
+		tab++;
+	}
+	free(start);
 }
