@@ -46,9 +46,12 @@ int main(int ac, char **av, char **envp)
 	{
 		ft_putstr("minishell> ");
 		get_next_line(0, &str);
+		if (!ft_strncmp(str, "exit", ft_strlen(str)))
+			break;
 		parser(str, env);
 	}
-
+	free(str);
+	ft_lstclear(&env, free);
 	// while (1)
 	// {
 	// 	ft_putnstr("prompt> ", 9);

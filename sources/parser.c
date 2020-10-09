@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/06 18:36:24 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/10/09 18:42:26 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,11 @@ char	*arg_next(char **str)
 
 	i = 0;
 	if (str[0][i] == '\0')
+	{
+		free(*str);
+		*str = NULL;
 		return (NULL);
+	}
 	while ((str[0][i] == ' ' || str[0][i] == '	') && str[0][i] != '\0')
 		i++;
 	tmp = ft_strdup(&str[0][i]);
@@ -117,27 +121,114 @@ char	*arg_env(char **str, char *ret, t_list *lst_env)
 	return (ft_strdup(get_env_var(search, lst_env)));
 }
 
-char	*next(char *str, t_list *env)
+char	*next(char **str, t_list *env)
 {
 	char		*ret;
 
-	if ((ret = arg_next(&str)) != NULL)
+	if (*str == NULL)
+		return (NULL);
+	if ((ret = arg_next(str)) != NULL)
 	{
 		if (ret[0] == '\"' || ret[0] == '\'')
-			ret = arg_except(&str, ret, env);
+			ret = arg_except(str, ret, env);
 		else if (ret[0] == '$')
-			ret = arg_env(&str, ret, env);
+			ret = arg_env(str, ret, env);
 	}
 	return (ret);
 }
 
-int		parser(char *str, t_list *env)
+void	setup_command(t_command *ret)
 {
-	t_command	command;
+	ret->argument = NULL;
+	ret->redir_in = NULL;
+	ret->redir_out = NULL;
+	ret->pipe = NULL;
+}
+
+t_command	*multi_command(char **str, t_list *env)
+{
+	t_command	*command;
 	char		*ret;
 
+	command = malloc(sizeof(t_command));
+	setup_command(command);
+	while ((ret = next(str, env)) != NULL)
+	{
+		if (!ft_strncmp(ret, ">", ft_strlen(ret)))
+		{
+			ret = next(str, env); //attention bug
+			ft_lstadd_back(&command->redir_out, ft_lstnew(ret));
+		}
+		else if (!ft_strncmp(ret, "<", ft_strlen(ret)))
+		{
+			ret = next(str, env);
+			ft_lstadd_back(&command->redir_in, ft_lstnew(ret));
+		}
+		else if (!ft_strncmp(ret, "|", ft_strlen(ret)))
+			command->pipe = multi_command(str, env);
+		else if (!ft_strncmp(ret, ";", ft_strlen(ret)))
+			return (command);
+		else
+			ft_lstadd_back(&command->argument, ft_lstnew(ret));
+	}
+	free(ret);
+	return (command);
+}
+
+void		clear_multi_command(t_command *command)
+{
+	t_command	*tmp;
+
+	tmp = NULL;
+	while (command != NULL)
+	{
+		tmp = command->pipe;
+		ft_lstclear(&command->argument, free);
+		ft_lstclear(&command->redir_in, free);
+		ft_lstclear(&command->redir_out, free);
+		free(command);
+		command = tmp;
+	}
+}
+
+void		print_multi_command(t_command *command)
+{
+	while (command != NULL)
+	{
+		printf("COMMAND:\n");
+		while (command->argument != NULL)
+		{
+			printf("	arg: -%s-\n", (char *)command->argument->content);
+			command->argument = command->argument->next;
+		}
+		while (command->redir_in != NULL)
+		{
+			printf("	redir_in: -%s-\n", (char *)command->redir_in->content);
+			command->redir_in = command->redir_in->next;
+		}
+		while (command->redir_out != NULL)
+		{
+			printf("	redir_out: -%s-\n", (char *)command->redir_out->content);
+			command->redir_out = command->redir_out->next;
+		}
+		command = command->pipe;
+	}
+}
+
+int		parser(char *str, t_list *env)
+{
+	t_command	*command;
+	t_list		*arg;
+
 	str = ft_strdup(str);
-	ret = next(str, env); // donne le prochain term
+
+	while (str)
+	{
+		command = multi_command(&str, env);
+		print_multi_command(command);
+		printf("EXEC\n");
+		clear_multi_command(command);
+	}
 
 	return (0);
 }

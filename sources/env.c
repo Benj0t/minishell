@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/06 18:25:52 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/10/09 16:32:51 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	**list_to_envp(t_list *env)
 
 void	dealloc_tab(char **tab)
 {
-	char	*start;
+	char	**start;
 
 	start = tab;
 	while (tab != NULL)

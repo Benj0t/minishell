@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/06 17:39:23 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/10/09 17:18:34 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 typedef struct	s_command
 {
-		char		**argument;
-		char		**redir_out;
-		char		**redir_in;
-		t_command	*pipe
+		t_list				*argument;
+		t_list				*redir_out;
+		t_list				*redir_in;
+		struct s_command	*pipe;
 }				t_command;
 
 typedef struct	s_var_env
