@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/12 17:48:20 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/10/13 15:22:27 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,17 @@ char	*arg_next(char **str)
 char	*arg_env(char **str, char *ret, t_list *lst_env)
 {
 	char	*search;
+	char	*result;
 	//voir $?
 	search = arg_next(str);
 	free(ret);
 	if (!strcmp(search, "?"))
 		return (ft_strdup(ft_itoa(0))); //à voir
-	return (ft_strdup(get_env_var(search, lst_env)));
+	result = get_env_var(search, lst_env);
+	free(search);
+	if (result == NULL)
+		return (NULL);
+	return (ft_strdup(result));
 }
 
 char	*next(char **str, t_list *env)
@@ -156,18 +161,26 @@ t_command	*multi_command(char **str, t_list *env)
 	{
 		if (!ft_strncmp(ret, ">", ft_strlen(ret)))
 		{
+			free(ret);
 			ret = next(str, env); //attention bug
 			ft_lstadd_back(&command->redir_out, ft_lstnew(ret));
 		}
 		else if (!ft_strncmp(ret, "<", ft_strlen(ret)))
 		{
+			free(ret);
 			ret = next(str, env);
 			ft_lstadd_back(&command->redir_in, ft_lstnew(ret));
 		}
 		else if (!ft_strncmp(ret, "|", ft_strlen(ret)))
+		{
+			free(ret);
 			command->pipe = multi_command(str, env);
+		}
 		else if (!ft_strncmp(ret, ";", ft_strlen(ret)))
+		{
+			free(ret);
 			return (command);
+		}
 		else
 			ft_lstadd_back(&command->argument, ft_lstnew(ret));
 	}
@@ -225,8 +238,8 @@ int		parser(char *str, t_list *env)
 	while (str)
 	{
 		command = multi_command(&str, env);
-		//print_multi_command(command);
-		//printf("EXEC\n");
+		print_multi_command(command);
+		printf("EXEC\n");
 		clear_multi_command(command);
 	}
 

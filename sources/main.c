@@ -49,6 +49,7 @@ int main(int ac, char **av, char **envp)
 		if (!ft_strncmp(str, "exit", ft_strlen(str)))
 			break;
 		parser(str, env);
+		free(str);
 	}
 	free(str);
 	ft_lstclear(&env, free);
