@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/13 15:22:27 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/10/14 16:48:23 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ft_replace(char **str, char *search, char *replace)
 
 char	*arg_except(char **str, char *ret, t_list *env)
 {
-	size_t	i;
+	int		i;
 	char	c;
 	char	*env_key;
 	char	*env_var;
@@ -47,10 +47,15 @@ char	*arg_except(char **str, char *ret, t_list *env)
 		{	//voir $?
 			env_key = ft_substr(&str[0][i], 0, next_space(&str[0][i]));
 			if ((env_var = get_env_var(&env_key[1], env)) != NULL)
+			{
 				ft_replace(str, env_key, env_var);
+				i = i + ft_strlen(env_var) - 1;
+			}
+			else
+			{
+				ft_replace(str, env_key, " ");
+			}
 			free(env_key);
-			//env_var == null error
-			i = i + ft_strlen(env_var) - 1;
 		}
 		i++;
 	}
@@ -97,7 +102,13 @@ char	*arg_next(char **str)
 		ft_strlcpy(ret, *str, 2);
 		tmp = ft_strdup(&str[0][1]);
 		free(*str);
-		*str = tmp;
+		if (tmp[0] == '\0')
+		{
+			free(tmp);
+			*str = NULL;
+		}
+		else
+			*str = tmp;
 	}
 	else
 	{
@@ -105,7 +116,13 @@ char	*arg_next(char **str)
 		ft_strlcpy(ret, *str, i + 1);
 		tmp = ft_strdup(&str[0][i]);
 		free(*str);
-		*str = tmp;
+		if (tmp[0] == '\0')
+		{
+			free(tmp);
+			*str = NULL;
+		}
+		else
+			*str = tmp;
 	}
 	return (ret);
 }
@@ -157,12 +174,13 @@ t_command	*multi_command(char **str, t_list *env)
 
 	command = malloc(sizeof(t_command));
 	setup_command(command);
-	while ((ret = next(str, env)) != NULL)
+	ret = next(str, env);
+	while (ret != NULL)
 	{
 		if (!ft_strncmp(ret, ">", ft_strlen(ret)))
 		{
 			free(ret);
-			ret = next(str, env); //attention bug
+			ret = next(str, env);
 			ft_lstadd_back(&command->redir_out, ft_lstnew(ret));
 		}
 		else if (!ft_strncmp(ret, "<", ft_strlen(ret)))
@@ -183,6 +201,7 @@ t_command	*multi_command(char **str, t_list *env)
 		}
 		else
 			ft_lstadd_back(&command->argument, ft_lstnew(ret));
+		ret = next(str, env);
 	}
 	free(ret);
 	return (command);
