@@ -39,7 +39,9 @@ int main(int ac, char **av, char **envp)
 	{
 		ft_putstr("minishell> ");
 		get_next_line(0, &str);
-		ft_pipe(envp, str, "grep .c");
+		ft_pwd(envp);
+		ft_cd(envp, str);
+		ft_pwd(envp);
 	}
 
 	// while (1)
