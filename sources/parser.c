@@ -6,12 +6,28 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2020/10/14 16:48:23 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/11/08 19:21:59 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+char	*check_symbol(char *str)
+{
+	char	*symbols[8] = {">>", ">", "<", "|", "$", ";", "'", "\""};
+	int		i;
+
+	i = 0;
+	while (i < 8)
+	{
+		if (!ft_strncmp(str, symbols[i], ft_strlen(symbols[i])))
+			return (symbols[i]);
+		i++;
+	}
+	return (NULL);
+}
+
+//remplace search par replace dans un str
 void	ft_replace(char **str, char *search, char *replace)
 {
 	size_t	i;
@@ -30,6 +46,7 @@ void	ft_replace(char **str, char *search, char *replace)
 	*str = ret;
 }
 
+//systeme pour les exceptions d'arg ($, double et simple quotes)
 char	*arg_except(char **str, char *ret, t_list *env)
 {
 	int		i;
@@ -71,14 +88,17 @@ char	*arg_except(char **str, char *ret, t_list *env)
 	return (NULL); //quote not close error
 }
 
+//renvoie la prochaine chaine
 char	*arg_next(char **str)
 {
 	size_t	i;
 	size_t	i2;
 	char	*ret;
 	char	*tmp;
+	char	*symbol;
 
 	i = 0;
+	symbol = NULL;
 	if (str[0][i] == '\0')
 	{
 		free(*str);
@@ -91,16 +111,18 @@ char	*arg_next(char **str)
 	free(*str);
 	*str = tmp;
 	i = 0;
-	while (str[0][i] != '	' && str[0][i] != ' ' && str[0][i] != '"'
-	&& str[0][i] != '\'' && str[0][i] != '<' && str[0][i] != '>'
-	&& str[0][i] != ';' && str[0][i] != '|' && str[0][i] != '$'
-	&& str[0][i] != '\0')
-		i++;
-	if (i == 0)
+	symbol = check_symbol(&str[0][i]);
+	while (symbol == NULL  && str[0][i] != ' ' && str[0][i] != '	'
+		&& str[0][i] != '\0')
 	{
-		ret = (char *)malloc(2);
-		ft_strlcpy(ret, *str, 2);
-		tmp = ft_strdup(&str[0][1]);
+		symbol = check_symbol(&str[0][i]);
+		i++;
+	}
+	if (symbol != NULL && i == 0)
+	{
+		ret = (char *)malloc(ft_strlen(symbol) + 1);
+		ft_strlcpy(ret, *str, ft_strlen(symbol) + 1);
+		tmp = ft_strdup(&str[0][ft_strlen(symbol)]);
 		free(*str);
 		if (tmp[0] == '\0')
 		{
@@ -127,6 +149,7 @@ char	*arg_next(char **str)
 	return (ret);
 }
 
+//renvoie un next argument qui a un $ devant
 char	*arg_env(char **str, char *ret, t_list *lst_env)
 {
 	char	*search;
@@ -143,6 +166,7 @@ char	*arg_env(char **str, char *ret, t_list *lst_env)
 	return (ft_strdup(result));
 }
 
+//prochain arg
 char	*next(char **str, t_list *env)
 {
 	char		*ret;
@@ -159,14 +183,17 @@ char	*next(char **str, t_list *env)
 	return (ret);
 }
 
+//setup t_command
 void	setup_command(t_command *ret)
 {
 	ret->argument = NULL;
 	ret->redir_in = NULL;
 	ret->redir_out = NULL;
+	ret->redir_append = NULL;
 	ret->pipe = NULL;
 }
 
+//enregistre plusieur t_command (recursif)
 t_command	*multi_command(char **str, t_list *env)
 {
 	t_command	*command;
@@ -177,7 +204,13 @@ t_command	*multi_command(char **str, t_list *env)
 	ret = next(str, env);
 	while (ret != NULL)
 	{
-		if (!ft_strncmp(ret, ">", ft_strlen(ret)))
+		if (!ft_strncmp(ret, ">>", ft_strlen(ret)))
+		{
+			free(ret);
+			ret = next(str, env);
+			ft_lstadd_back(&command->redir_append, ft_lstnew(ret));
+		}
+		else if (!ft_strncmp(ret, ">", ft_strlen(ret)))
 		{
 			free(ret);
 			ret = next(str, env);
@@ -207,6 +240,7 @@ t_command	*multi_command(char **str, t_list *env)
 	return (command);
 }
 
+//desalloc et clear t_command
 void		clear_multi_command(t_command *command)
 {
 	t_command	*tmp;
@@ -217,12 +251,14 @@ void		clear_multi_command(t_command *command)
 		tmp = command->pipe;
 		ft_lstclear(&command->argument, free);
 		ft_lstclear(&command->redir_in, free);
+		ft_lstclear(&command->redir_append, free);
 		ft_lstclear(&command->redir_out, free);
 		free(command);
 		command = tmp;
 	}
 }
 
+//print t_command
 void		print_multi_command(t_command *command)
 {
 	while (command != NULL)
@@ -243,10 +279,16 @@ void		print_multi_command(t_command *command)
 			printf("	redir_out: -%s-\n", (char *)command->redir_out->content);
 			command->redir_out = command->redir_out->next;
 		}
+		while (command->redir_append != NULL)
+		{
+			printf("	redir_append: -%s-\n", (char *)command->redir_append->content);
+			command->redir_append = command->redir_append->next;
+		}
 		command = command->pipe;
 	}
 }
 
+//start du parser
 int		parser(char *str, t_list *env)
 {
 	t_command	*command;
