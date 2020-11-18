@@ -41,5 +41,6 @@ int			ft_cd(char **env, char *dir);
 int			ft_pwd(char **env);
 t_parser	get_command(char const *str);
 int  get_path_id(char **env);
+int     execution(char **env, t_command *cmd);
 
 #endif
