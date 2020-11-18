@@ -10,11 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-
-*/
-
-
 #include "../includes/minishell.h"
 
 int    single_pipe(char **env, t_command *command)
@@ -184,6 +179,21 @@ int     multi_pipe(char **env, t_command *cmd, int pip[2])
     multi_pipe(env, cmd->pipe, p);
 }
 
+int     simple_command(char ** env, t_command *cmd)
+{
+    pid_t child;
+    int ret;
+    t_parser comm1;
+
+    comm1 = get_command(cmd->argument);
+    if ((child = fork()) == 0)
+    {
+        execve(ft_path(env, comm1.command), (char *)(cmd->argument->content), env);
+    }
+    waitpid(child, &ret, 0);
+    return (0);
+}
+
 int     execution(char **env, t_command *cmd)
 {
    	pid_t *child;
@@ -198,6 +208,8 @@ int     execution(char **env, t_command *cmd)
     if (!(child = (pid_t *)malloc(sizeof(pid_t) * (listlen + 1))))
         return (0);
     child[l_len] = NULL;
+    if (l_len == 0)
+        simple_command(env, cmd);
     if (l_len == 1)
         single_pipe(env, cmd);
     else if (l_len > 1)
