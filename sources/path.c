@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 t_parser get_command(char const *str)
 {
@@ -21,7 +21,7 @@ t_parser get_command(char const *str)
 	return (parse);
 }
 
-static int  get_path_id(char **env)
+int     get_path_id(char **env)
 {
     int i;
 

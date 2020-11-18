@@ -10,9 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+/*
 
-int    ft_pipe(char **env, char *command1, char *command2)
+*/
+
+
+#include "../includes/minishell.h"
+
+int    single_pipe(char **env, t_command *command)
 {
     int p[2];
     int child;
@@ -21,21 +26,58 @@ int    ft_pipe(char **env, char *command1, char *command2)
     t_parser comm1;
     t_parser comm2;
 
-    comm1 = get_command(command1);
-    comm2 = get_command(command2);
+    comm1 = get_command(command->argument);
+    comm2 = get_command(command->pipe->argument);
     if (pipe(p) < 0)
         return (-1);
     if ((child = fork()) == 0)
     {
         dup2(p[1], 1);
         close(p[0]);
-        execve(ft_path(env, command1), comm1.argument, env);   
+        redir_manager(env, command);
+        execve(ft_path(env, comm1.command), (char *)(command->argument->content), env);
     }
     if ((child2 = fork()) == 0)
     {
         dup2(p[0], 0);
         close(p[1]);
-        execve(ft_path(env, command2), comm2.argument,  env);
+        execve(ft_path(env, comm2.command), (char *)(command->pipe->argument->content),  env);
+    }
+    close(p[0]);
+    close(p[1]);
+    waitpid(child2, &ret, 0);
+    waitpid(child, &ret, 0);
+    return (1);
+}
+
+int    exec_pipe(char **env, t_command *command, int pipe[2])
+{
+    int p[2];
+    int child;
+    int child2;
+    int ret;
+    t_parser comm1;
+    t_parser comm2;
+
+    dup2(pipe[0], 0);
+    close(pipe[1]);
+    comm1 = get_command(command->argument);
+    comm2 = get_command(command->pipe->argument);
+    if (pipe(p) < 0)
+        return (-1);
+    if ((child = fork()) == 0)
+    {
+        dup2(p[1], 1);
+        close(p[0]);
+        redir_manager(env, command);
+        execve(ft_path(env, comm1.command), (char *)(command->argument->content), env);
+        // FAIRE UN BAIL AVEC EXIT
+    }
+    if ((child2 = fork()) == 0)
+    {
+        dup2(p[0], 0);
+        close(p[1]);
+        execve(ft_path(env, comm2.command), (char *)(command->pipe->argument->content),  env);
     }
     close(p[0]);
     close(p[1]);
@@ -70,41 +112,37 @@ int     create_files_out(t_list *file)
 
 int     exec_redir_in(char **env, t_command *cmd, t_list *redir)
 {
-    int child;
-    int fd;
+    pid_t   child;
+    t_list *tmp;
+    int     fd;
 
-    while (redir)
+    tmp = redir;
+    while (tmp)
     {
-        if (redir->content)
+        if (tmp->content)
         {
-            if ((child = fork()) == 0)
-            {
-                if (fd = open(redir->content, O_RDONLY) == -1)
-                    return (0);
-                dup2(fd, 0);
-                if (cmd->argument && cmd->argument.content)
-                    execve(ft_path(env, cmd->argument.content),/* A CONVERTIR EN ARRAY */ cmd->argument, env);
-            }
-            //FAIRE UN AUTRE BAIL
+            if (fd = open(tmp->content, O_RDONLY) == -1)
+                return (0);
+            dup2(fd, 0);
+            if (cmd->argument && cmd->argument->content)
+                execve(ft_path(env, cmd->argument->content), (char *)(cmd->pipe->argument->content),  env);
         }
+        //FAIRE UN AUTRE BAIL aka WaitPID
+        // Ouais tu as raison mon reuf
         else
         {
             return (0);
         }
-        redir = redir->next;
+        tmp = tmp->next;
     }
     return (1);
 }
 
-int     pipe_command(env)
-{
-    //REFLECIHR A UN AUTRE BAIL
-}
 // Faudrait il pas pipe avant d exec tout
-// appeler les fonctions d exec dans les pipes, chaque fork eecutant un cote du pipe et ensuite le main process waitpid tout
-// le pipe se fait il au debut de l exec ou au moment ou il pop dans les args ???
+// appeler les fonctions d exec dans les pipes, chaque fork executant un cote du pipe et ensuite le main process waitpid tout
+// le pipe se fait il au debut de l exec ou au moment ou il pop dans les args ?
 
-int    ft_exec(char **env, t_command *cmd)
+int    redir_manager(char **env, t_command *cmd)
 {
     t_list  *tmp;
 
@@ -114,6 +152,59 @@ int    ft_exec(char **env, t_command *cmd)
             return (0);
     tmp = &(cmd->redir_in);
     if (tmp && tmp->content)
-        if (!exec_redir_in(env. cmd, tmp))
+        if (!exec_redir_in(env, cmd, tmp))
             return (0);
+    return (1);
+}
+
+int     listlen(t_command *list)
+{
+    t_command *tmp;
+    int i;
+
+    tmp = list;
+    i = 1;
+    while (tmp->pipe)
+    {
+        i++;
+        tmp = tmp->pipe;
+    }
+    return (i);
+}
+
+int     multi_pipe(char **env, t_command *cmd, int pip[2])
+{
+    int p[2];
+
+    dup2(pip[0], 0);
+
+    if (pipe(p) < 0)
+        return (-1);
+
+    multi_pipe(env, cmd->pipe, p);
+}
+
+int     execution(char **env, t_command *cmd)
+{
+   	pid_t *child;
+    int l_len;
+    int i;
+    int pip[2];
+
+    if (pipe(pip) == 0)
+        return (NULL);
+    i = 0;
+    l_len = listlen(cmd);
+    if (!(child = (pid_t *)malloc(sizeof(pid_t) * (listlen + 1))))
+        return (0);
+    child[l_len] = NULL;
+    if (l_len == 1)
+        single_pipe(env, cmd);
+    else if (l_len > 1)
+        multi_pipe(env, cmd, pip);
+    else
+    {
+        redir_manager(env, cmd);
+        execve(ft_path(env, cmd->argument->content), (char *)(cmd->pipe->argument->content), env);
+    }
 }

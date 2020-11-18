@@ -1,6 +1,9 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 # include "libft.h"
 # include <limits.h>
 # include <unistd.h>
@@ -12,10 +15,11 @@
 # include "parser.h"
 # include <sys/stat.h>
 
-char		*ft_path(char **env, char *str);
-int			ft_pipe(char **env, char *command1, char *command2);
-int			ft_cd(char **env, char *dir);
-int			ft_pwd(char **env);
+typedef struct			s_parser
+{
+	char				*command;
+	char				**argument;
+}						t_parser;
 
 typedef	struct			s_command
 {
@@ -24,5 +28,18 @@ typedef	struct			s_command
 	t_list				*redir_in;
 	struct s_command	*pipe;
 }						t_command;
+/*
+typedef struct		s_list
+{
+	void			*content;
+	struct s_list	*next;
+}					t_list;
+*/
+char		*ft_path(char **env, char *str);
+int			ft_pipe(char **env, char *command1, char *command2);
+int			ft_cd(char **env, char *dir);
+int			ft_pwd(char **env);
+t_parser	get_command(char const *str);
+int  get_path_id(char **env);
 
 #endif
