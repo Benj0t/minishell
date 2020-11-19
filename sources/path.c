@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "minishell.h"
+#include "../includes/minishell.h"
 
 // t_parser get_command(char const *str)
 // {
@@ -21,9 +21,9 @@
 // 	return (parse);
 // }
 
-// static int  get_path_id(char **env)
-// {
-//     int i;
+int     get_path_id(char **env)
+{
+    int i;
 
 //     i = 0;
 //     while (env[i])
@@ -34,17 +34,18 @@
 //     }
 //     return (-1);
 // }
-
-// char        *path(char **env, char *str)
-// {
-//     char *path;
-//     char **tab;
-//     int id;
-//     int found;
-//     int ret;
-//     int i;
-//     pid_t child;
-//     t_parser command;
+ 
+char        *ft_path(char **env, char *str)
+{
+    char *path;
+    char **tab;
+    int id;
+    int found;
+    int ret;
+    int i;
+    pid_t child;
+    struct stat buf;
+    t_parser command;
 
 //     if ((id = get_path_id(env)) < 0)
 //         return (NULL);
@@ -61,20 +62,21 @@
 //         if (child == 0)
 //         {
 
-//             execve(path, command.argument, env);
-//             exit(EXIT_FAILURE);
-//         }
-//         else
-//         {
-//             waitpid(child, &ret, 0);
-//             if (ret != -1 && ret != 256)
-//                 found = 1;
-//             else
-//             {
-//                 free(path);
-//             }
-//         }
-//         i++;
-//     }
-//     return (path);
-// }
+            if (!stat(path, &buf))
+                exit(EXIT_SUCCESS);
+            exit(EXIT_FAILURE);
+        }
+        else
+        {
+            waitpid(child, &ret, 0);
+            if (ret != -1 && ret != 256)
+                found = 1;
+            else
+            {
+                free(path);
+            }
+        }
+        i++;
+    }
+    return (path);
+}

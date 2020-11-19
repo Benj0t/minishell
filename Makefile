@@ -15,10 +15,15 @@ INCLUDE =	minishell.h\
 
 INC_PATH = ./includes/
 
-vpath %.c sources/parsing
+vpath %.c sources/builtins
+vpath %.c sources/
 
 FILES =		./sources/main\
 			./sources/path\
+			./sources/pipe\
+			./sources/builtins/cd\
+			./sources/builtins/pwd\
+			./sources/builtins/env\
 			./sources/parser\
 			./sources/env\
 			./sources/parser_utils\
@@ -49,7 +54,7 @@ all: 		LIBFT $(NAME)
 
 LIBFT:
 			@echo "$(CYAN)Building libft:$(NOC) $@"
-			cd libft && make && cd ..
+			cd ./libft/ && make && cd ..
 
 $(NAME): 	$(OBJ)
 			@echo "$(CYAN)Constructing executable:$(NOC) $@"
