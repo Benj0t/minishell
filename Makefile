@@ -24,6 +24,9 @@ FILES =		./sources/main\
 			./sources/builtins/cd\
 			./sources/builtins/pwd\
 			./sources/builtins/env\
+			./sources/parser\
+			./sources/env\
+			./sources/parser_utils\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)

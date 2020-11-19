@@ -101,7 +101,7 @@ int					gnl_test(int check, char *str, char **line, int fd);
 int					gnl_rec(int check, char *str, char **line, int fd);
 
 unsigned int		ft_atoui(const char *str);
-
 char				*ft_strjoin_c(char const *s1, char const *s2, char c);
+size_t				ft_strafter(char **str);
 
 #endif

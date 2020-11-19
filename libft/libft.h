@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 16:08:42 by psemsari          #+#    #+#             */
-/*   Updated: 2020/08/04 18:21:43 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/09/28 20:01:51 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,7 @@ int					gnl_test(int check, char *str, char **line, int fd);
 int					gnl_rec(int check, char *str, char **line, int fd);
 
 unsigned int		ft_atoui(const char *str);
+char				*ft_strjoin_c(char const *s1, char const *s2, char c);
+size_t				ft_strafter(char **str);
 
 #endif

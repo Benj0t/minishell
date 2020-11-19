@@ -15,6 +15,7 @@ int main(int ac, char **av, char **envp)
 	char	*str;
 	pid_t	child;
 	int		ret;
+	t_list		*env;
 	//int		i = 0;
 	//char	**arg;
 	// arg = malloc(sizeof(char *) * 4);
@@ -35,6 +36,12 @@ int main(int ac, char **av, char **envp)
 	// arg[3][1] = '\0';
 	// av[0] = "ls";
 	// printf("%d %s\n", execve("/bin/ls", av, envp), strerror(errno));
+	env = envp_to_list(envp);
+	// while (env != NULL)
+	// {
+	// 	printf("%s | %s\n", ((t_var_env *)env->content)->key, ((t_var_env *)env->content)->var);
+	// 	env = env->next;
+	// }
 	while (1)
 	{
 		ft_putstr("minishell> ");
@@ -42,8 +49,13 @@ int main(int ac, char **av, char **envp)
 		ft_pwd(envp);
 		ft_cd(envp, str);
 		ft_pwd(envp);
+		if (!ft_strncmp(str, "exit", ft_strlen(str)))
+			break;
+		parser(str, env);
+		free(str);
 	}
-
+	free(str);
+	ft_lstclear(&env, free);
 	// while (1)
 	// {
 	// 	ft_putnstr("prompt> ", 9);

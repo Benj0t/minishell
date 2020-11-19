@@ -44,5 +44,8 @@ int			ft_pwd(char **env);
 t_parser	get_command(char const *str);
 int  get_path_id(char **env);
 int     execution(char **env, t_command *cmd);
+char		*path(char **env, char *str);
+t_list		*envp_to_list(char **envp);
+char		*get_env_var(char *search, t_list *lst_env);
 
 #endif
