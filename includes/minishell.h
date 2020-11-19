@@ -21,13 +21,15 @@ typedef struct			s_parser
 	char				**argument;
 }						t_parser;
 
-typedef	struct			s_command
+
+typedef struct	s_command
 {
-	t_list				*argument;
-	t_list				*redir_out;
-	t_list				*redir_in;
-	struct s_command	*pipe;
-}						t_command;
+		t_list				*argument;
+		t_list				*redir_append;
+		t_list				*redir_out;
+		t_list				*redir_in;
+		struct s_command	*pipe;
+}				t_command;
 /*
 typedef struct		s_list
 {
