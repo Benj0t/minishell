@@ -46,9 +46,9 @@ int main(int ac, char **av, char **envp)
 	{
 		ft_putstr("minishell> ");
 		get_next_line(0, &str);
-		ft_pwd(envp);
-		ft_cd(envp, str);
-		ft_pwd(envp);
+		// ft_pwd(envp);
+		// ft_cd(envp, str);
+		// ft_pwd(envp);
 		if (!ft_strncmp(str, "exit", ft_strlen(str)))
 			break;
 		parser(str, env);

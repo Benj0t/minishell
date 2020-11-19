@@ -19,8 +19,8 @@ vpath %.c sources/builtins
 vpath %.c sources/
 
 FILES =		./sources/main\
-			./sources/path\
 			./sources/pipe\
+			./sources/path\
 			./sources/builtins/cd\
 			./sources/builtins/pwd\
 			./sources/builtins/env\

@@ -1,42 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   path.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2020/11/19 16:19:56 by psemsari         ###   ########.fr       */
+/*   Created: 2020/11/19 16:56:02 by psemsari          #+#    #+#             */
+/*   Updated: 2020/11/19 16:59:16 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
-
-size_t			next_space(char *str);
-int				parser(char *str, t_list *env);
-
-typedef struct	s_command
-{
-		t_list				*argument;
-		t_list				*redir_append;
-		t_list				*redir_out;
-		t_list				*redir_in;
-		struct s_command	*pipe;
-}				t_command;
-
-typedef struct	s_var_env
-{
-	char	*key;
-	char	*var;
-}				t_var_env;
-
-typedef struct	s_parser
-{
-		char	*command;
-		char	**argument;
-}				t_parser;
+#ifndef PATH_H
+# define PATH_H
 
 t_parser get_command(t_list *argument);
+int     get_path_id(char **env);
+char        *ft_path(char **env, char *str);
 
 #endif

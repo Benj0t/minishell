@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 int    single_pipe(char **env, t_command *command)
 {
@@ -45,7 +45,7 @@ int    single_pipe(char **env, t_command *command)
     return (1);
 }
 
-int    exec_pipe(char **env, t_command *command, int pipe[2])
+int    exec_pipe(char **env, t_command *command, int pipes[2])
 {
     int p[2];
     int child;
@@ -54,8 +54,8 @@ int    exec_pipe(char **env, t_command *command, int pipe[2])
     t_parser comm1;
     t_parser comm2;
 
-    dup2(pipe[0], 0);
-    close(pipe[1]);
+    dup2(pipes[0], 0);
+    close(pipes[1]);
     comm1 = get_command(command->argument);
     comm2 = get_command(command->pipe->argument);
     if (pipe(p) < 0)
@@ -105,6 +105,21 @@ int     create_files_out(t_list *file)
 // Fork en boucle tant que y a une redir et waitpid a la fin de la boucle en desincrementant // Du coup maybe need un tableau de child.
 // C est c que je fais deja un peu je crois
 
+int    redir_manager(char **env, t_command *cmd)
+{
+    t_list  *tmp;
+
+    tmp = cmd->redir_out;
+    if (tmp && tmp->content)
+        if (!create_files_out(tmp))
+            return (0);
+    tmp = cmd->redir_in;
+    if (tmp && tmp->content)
+        if (!exec_redir_in(env, cmd, tmp))
+            return (0);
+    return (1);
+}
+
 int     exec_redir_in(char **env, t_command *cmd, t_list *redir)
 {
     pid_t   child;
@@ -136,21 +151,6 @@ int     exec_redir_in(char **env, t_command *cmd, t_list *redir)
 // Faudrait il pas pipe avant d exec tout
 // appeler les fonctions d exec dans les pipes, chaque fork executant un cote du pipe et ensuite le main process waitpid tout
 // le pipe se fait il au debut de l exec ou au moment ou il pop dans les args ?
-
-int    redir_manager(char **env, t_command *cmd)
-{
-    t_list  *tmp;
-
-    tmp = &(cmd->redir_out);
-    if (tmp && tmp->content)
-        if (!create_files_out(tmp))
-            return (0);
-    tmp = &(cmd->redir_in);
-    if (tmp && tmp->content)
-        if (!exec_redir_in(env, cmd, tmp))
-            return (0);
-    return (1);
-}
 
 int     listlen(t_command *list)
 {
@@ -205,7 +205,7 @@ int     execution(char **env, t_command *cmd)
         return (NULL);
     i = 0;
     l_len = listlen(cmd);
-    if (!(child = (pid_t *)malloc(sizeof(pid_t) * (listlen + 1))))
+    if (!(child = (pid_t *)malloc(sizeof(pid_t) * (l_len + 1))))
         return (0);
     child[l_len] = NULL;
     if (l_len == 0)

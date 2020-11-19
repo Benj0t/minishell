@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2020/11/08 19:21:59 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/11/19 17:16:16 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,12 +295,12 @@ int		parser(char *str, t_list *env)
 	t_list		*arg;
 
 	str = ft_strdup(str);
-
 	while (str)
 	{
 		command = multi_command(&str, env);
-		print_multi_command(command);
+		//print_multi_command(command);
 		printf("EXEC\n");
+		execution(list_to_envp(env), command);
 		clear_multi_command(command);
 	}
 
