@@ -21,12 +21,11 @@ t_parser get_command(t_list *argument)
 	len = ft_lstsize(argument);
 	parse.argument = (char **)malloc(sizeof(char *) * (len + 1));
 	parse.argument[len] = NULL;
-	i = 0;
-	while (argument != NULL)
+	i = -1;
+	while (++i < len)
 	{
 		parse.argument[i] = argument->content;
 		argument = argument->next;
-		i++;
 	}
 	parse.command = parse.argument[0];
 	return (parse);
@@ -46,7 +45,7 @@ int     get_path_id(char **env)
     return (-1);
 }
 
-char        *ft_path(char **env, char *str)
+char        *ft_path(char **env, t_parser comm)
 {
     char *path;
     char **tab;
@@ -56,7 +55,6 @@ char        *ft_path(char **env, char *str)
     int i;
     pid_t child;
     struct stat buf;
-    t_parser command;
 
     if ((id = get_path_id(env)) < 0)
         return (NULL);
@@ -65,10 +63,9 @@ char        *ft_path(char **env, char *str)
     found = 0;
     tab = ft_split(env[id] + 5, ':');
     path = NULL;
-    command = get_command(str);
     while (!found)
     {
-        path = ft_strjoin_c(tab[i], command.command, '/');
+        path = ft_strjoin_c(tab[i], comm.command, '/');
         child = fork();
         if (child == 0)
         {

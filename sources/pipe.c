@@ -30,13 +30,13 @@ int    single_pipe(char **env, t_command *command)
         dup2(p[1], 1);
         close(p[0]);
         redir_manager(env, command);
-        execve(ft_path(env, comm1.command), (char *)(command->argument->content), env);
+        execve(ft_path(env, comm1), comm1.argument, env);
     }
     if ((child2 = fork()) == 0)
     {
         dup2(p[0], 0);
         close(p[1]);
-        execve(ft_path(env, comm2.command), (char *)(command->pipe->argument->content),  env);
+        execve(ft_path(env, comm2), comm2.argument,  env);
     }
     close(p[0]);
     close(p[1]);
@@ -65,14 +65,14 @@ int    exec_pipe(char **env, t_command *command, int pipes[2])
         dup2(p[1], 1);
         close(p[0]);
         redir_manager(env, command);
-        execve(ft_path(env, comm1.command), (char *)(command->argument->content), env);
+        execve(ft_path(env, comm1), comm1.argument, env);
         // FAIRE UN BAIL AVEC EXIT
     }
     if ((child2 = fork()) == 0)
     {
         dup2(p[0], 0);
         close(p[1]);
-        execve(ft_path(env, comm2.command), (char *)(command->pipe->argument->content),  env);
+        execve(ft_path(env, comm2), comm2.argument,  env);
     }
     close(p[0]);
     close(p[1]);
@@ -86,9 +86,11 @@ int     create_files_out(t_list *file)
     while (file)
     {
         if (file->content)
+        {
             if (open(file->content, O_RDONLY) == -1)
                 if (open(file->content, O_CREAT) == -1)
                     return (0);
+        }
         else
         {
             return (0);
@@ -125,17 +127,19 @@ int     exec_redir_in(char **env, t_command *cmd, t_list *redir)
     pid_t   child;
     t_list *tmp;
     int     fd;
+    t_parser comm1;
 
+    comm1 = get_command(cmd->argument);
     tmp = redir;
     while (tmp)
     {
         if (tmp->content)
         {
-            if (fd = open(tmp->content, O_RDONLY) == -1)
+            if ((fd = open(tmp->content, O_RDONLY)) == -1)
                 return (0);
             dup2(fd, 0);
             if (cmd->argument && cmd->argument->content)
-                execve(ft_path(env, cmd->argument->content), (char *)(cmd->pipe->argument->content),  env);
+                execve(ft_path(env, comm1), comm1.argument,  env);
         }
         //FAIRE UN AUTRE BAIL aka WaitPID
         // Ouais tu as raison mon reuf
@@ -177,6 +181,7 @@ int     multi_pipe(char **env, t_command *cmd, int pip[2])
         return (-1);
 
     multi_pipe(env, cmd->pipe, p);
+    return (1);
 }
 
 int     simple_command(char ** env, t_command *cmd)
@@ -187,9 +192,7 @@ int     simple_command(char ** env, t_command *cmd)
 
     comm1 = get_command(cmd->argument);
     if ((child = fork()) == 0)
-    {
-        execve(ft_path(env, comm1.command), (char *)(cmd->argument->content), env);
-    }
+        execve(ft_path(env, comm1), comm1.argument, env);
     waitpid(child, &ret, 0);
     return (0);
 }
@@ -201,22 +204,30 @@ int     execution(char **env, t_command *cmd)
     int i;
     int pip[2];
 
-    if (pipe(pip) == 0)
-        return (NULL);
+    if (pipe(pip) == -1)
+        return (0);
     i = 0;
     l_len = listlen(cmd);
+    
     if (!(child = (pid_t *)malloc(sizeof(pid_t) * (l_len + 1))))
         return (0);
-    child[l_len] = NULL;
-    if (l_len == 0)
-        simple_command(env, cmd);
+    child[l_len] = 0;
     if (l_len == 1)
+    {
+        simple_command(env, cmd);
+        return (0);
+    }
+    if (l_len == 2)
+    {
         single_pipe(env, cmd);
-    else if (l_len > 1)
+    }
+    else if (l_len > 2)
+    {
         multi_pipe(env, cmd, pip);
+    }
     else
     {
-        redir_manager(env, cmd);
-        execve(ft_path(env, cmd->argument->content), (char *)(cmd->pipe->argument->content), env);
+        ft_putendl_fd("Il est con ce gosse", 0);
     }
+    return (1);
 }
