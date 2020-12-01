@@ -171,18 +171,6 @@ int     listlen(t_command *list)
     return (i);
 }
 
-int     multi_pipe(char **env, t_command *cmd, int pip[2])
-{
-    int p[2];
-
-    dup2(pip[0], 0);
-
-    if (pipe(p) < 0)
-        return (-1);
-
-    multi_pipe(env, cmd->pipe, p);
-    return (1);
-}
 
 int     simple_command(char ** env, t_command *cmd)
 {
@@ -199,31 +187,26 @@ int     simple_command(char ** env, t_command *cmd)
 
 int     execution(char **env, t_command *cmd)
 {
-   	pid_t *child;
-    int l_len;
+   	s_pipe spipe;
     int i;
-    int pip[2];
 
-    if (pipe(pip) == -1)
-        return (0);
     i = 0;
-    l_len = listlen(cmd);
-    
-    if (!(child = (pid_t *)malloc(sizeof(pid_t) * (l_len + 1))))
-        return (0);
-    child[l_len] = 0;
-    if (l_len == 1)
+    spipe.i_comm = 0;
+    spipe.i_pipe = 0;
+    spipe.n_comm = listlen(cmd);
+    spipe.n_pipe = spipe.n_comm - 1;
+    if (spipe.n_comm == 1)
     {
         simple_command(env, cmd);
         return (0);
     }
-    if (l_len == 2)
+    if (spipe.n_comm == 2)
     {
         single_pipe(env, cmd);
     }
-    else if (l_len > 2)
+    else if (spipe.n_comm > 2)
     {
-        multi_pipe(env, cmd, pip);
+        multi_pipe(env, cmd, spipe);
     }
     else
     {
