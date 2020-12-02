@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2020/12/04 14:34:28 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/12/06 15:11:11 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,9 +297,9 @@ int		parser(char *str, t_list *env)
 	while (str)
 	{
 		command = multi_command(&str, env);
-		print_multi_command(command);
-		printf("EXEC\n");
-		//execution(list_to_envp(env), command);
+		//print_multi_command(command);
+		//printf("EXEC\n");
+		execution(list_to_envp(env), command);
 		clear_multi_command(command);
 	}
 

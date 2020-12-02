@@ -198,15 +198,14 @@ int     execution(char **env, t_command *cmd)
     if (spipe.n_comm == 1)
     {
         simple_command(env, cmd);
-        return (0);
     }
-    if (spipe.n_comm == 2)
+    else if (spipe.n_comm == 2)
     {
         single_pipe(env, cmd);
     }
     else if (spipe.n_comm > 2)
     {
-        multi_pipe(env, cmd, spipe);
+        multi_pipe(env, cmd, &spipe);
     }
     else
     {
