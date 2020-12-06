@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int		first_command(char **env, t_command *cmd, s_pipe *spipe)
+static int		first_command(char **env, t_command *cmd, s_pipe *spipe, int fd)
 {
 	
     int ret;
@@ -25,7 +25,6 @@ static int		first_command(char **env, t_command *cmd, s_pipe *spipe)
     {
         dup2(spipe->p[spipe->i_pipe][1], 1);
         close(spipe->p[spipe->i_pipe][0]);
-        redir_manager(env, cmd);
         execve(ft_path(env, comm1), comm1.argument, env);
     }
     if ((spipe->child[spipe->i_comm++] = fork()) == 0)
@@ -42,7 +41,7 @@ static int		first_command(char **env, t_command *cmd, s_pipe *spipe)
     return (1);
 }
 
-static int		middle_commands(char **env, t_command *cmd, s_pipe *spipe)
+static int		middle_commands(char **env, t_command *cmd, s_pipe *spipe, int fd)
 {
 	int ret;
 	t_parser comm1;
@@ -63,7 +62,7 @@ static int		middle_commands(char **env, t_command *cmd, s_pipe *spipe)
 	return (1);
 }
 
-static int		last_command(char **env, t_command *cmd, s_pipe *spipe)
+static int		last_command(char **env, t_command *cmd, s_pipe *spipe, int fd)
 {
 	int ret;
 	t_parser comm1;
@@ -84,10 +83,11 @@ static int		last_command(char **env, t_command *cmd, s_pipe *spipe)
 int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe)
 {
     int			i;
+    int         fd;
 	t_command	*tmp;
 
-    //ft_putendl_fd("J attends... Pas grand chose de spécial... Les jours passent et se ressemblent un peu...\n", 1);
     i = 0;
+    fd = 1;
 	tmp = cmd;
 	if (!(spipe->p = (int **)malloc(sizeof(int *) * (spipe->n_pipe))))
 		return (0);
@@ -111,15 +111,15 @@ int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe)
         spipe->ret[i] = 0;
         if (i == 0)
         {
-            first_command(env, tmp, spipe);
+            first_command(env, tmp, spipe, fd);
             tmp = tmp->pipe;
         }
         if (i > 0)
-            middle_commands(env, tmp, spipe);
+            middle_commands(env, tmp, spipe, fd);
         tmp = tmp->pipe;
         i++;
     }
-    last_command(env, tmp, spipe);
+    last_command(env, tmp, spipe, fd);
     i = spipe->n_pipe;
     while (i > 0)
     {
@@ -127,4 +127,42 @@ int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe)
         i--;
     }
 	return (1);
+}
+
+int    single_pipe(char **env, t_command *command)
+{
+    int p[2];
+    int child;
+    int child2;
+    int ret;
+    t_parser comm1;
+    t_parser comm2;
+
+    comm1 = get_command(command->argument);
+    comm2 = get_command(command->pipe->argument);
+    if (pipe(p) < 0)
+        return (-1);
+    if ((child = fork()) == 0)
+    {
+        dup2(p[1], 1);
+        close(p[0]);
+        redir_manager(env, command);
+        execve(ft_path(env, comm1), comm1.argument, env);
+    }
+    if (command->pipe->redir_append || command->pipe->redir_out || command->pipe->redir_in)
+    {
+        redir_manager(env, command->pipe);
+        return (0);
+    }
+    else if ((child2 = fork()) == 0)
+    {
+        dup2(p[0], 0);
+        close(p[1]);
+        execve(ft_path(env, comm2), comm2.argument,  env);
+    }
+    close(p[0]);
+    close(p[1]);
+    waitpid(child2, &ret, 0);
+    waitpid(child, &ret, 0);
+    return (1);
 }

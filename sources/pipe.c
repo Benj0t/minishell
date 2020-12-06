@@ -12,74 +12,21 @@
 
 #include "minishell.h"
 
-int    single_pipe(char **env, t_command *command)
+int     exec_redir(char **env, t_command *cmd)
 {
-    int p[2];
-    int child;
-    int child2;
     int ret;
+    t_command *tmp;
+    pid_t   child;
+    int     fd;
     t_parser comm1;
-    t_parser comm2;
 
-    comm1 = get_command(command->argument);
-    comm2 = get_command(command->pipe->argument);
-    if (pipe(p) < 0)
-        return (-1);
-    if ((child = fork()) == 0)
-    {
-        dup2(p[1], 1);
-        close(p[0]);
-        redir_manager(env, command);
-        execve(ft_path(env, comm1), comm1.argument, env);
-    }
-    if ((child2 = fork()) == 0)
-    {
-        dup2(p[0], 0);
-        close(p[1]);
-        execve(ft_path(env, comm2), comm2.argument,  env);
-    }
-    close(p[0]);
-    close(p[1]);
-    waitpid(child2, &ret, 0);
-    waitpid(child, &ret, 0);
-    return (1);
+    comm1 = get_command(cmd->argument);
 }
-
-int    exec_pipe(char **env, t_command *command, int pipes[2])
-{
-    int p[2];
-    int child;
-    int child2;
-    int ret;
-    t_parser comm1;
-    t_parser comm2;
-
-    dup2(pipes[0], 0);
-    close(pipes[1]);
-    comm1 = get_command(command->argument);
-    comm2 = get_command(command->pipe->argument);
-    if (pipe(p) < 0)
-        return (-1);
-    if ((child = fork()) == 0)
-    {
-        dup2(p[1], 1);
-        close(p[0]);
-        redir_manager(env, command);
-        execve(ft_path(env, comm1), comm1.argument, env);
-        // FAIRE UN BAIL AVEC EXIT
-    }
-    if ((child2 = fork()) == 0)
-    {
-        dup2(p[0], 0);
-        close(p[1]);
-        execve(ft_path(env, comm2), comm2.argument,  env);
-    }
-    close(p[0]);
-    close(p[1]);
-    waitpid(child2, &ret, 0);
-    waitpid(child, &ret, 0);
-    return (1);
-}
+/*Executer la redirection avant chaque commande
+Changer le fd dans le main programme ofc pour exec la commande de base dans le bon fd
+dup stdin + out dans deux int pour pas les perdre et les reset a chaque commande
+Utiliser les redirs commes crees dans le parser de Pierre aka comm->redir
+*/
 
 int     create_files_out(t_list *file)
 {
@@ -90,6 +37,7 @@ int     create_files_out(t_list *file)
             if (open(file->content, O_RDONLY) == -1)
                 if (open(file->content, O_CREAT) == -1)
                     return (0);
+            
         }
         else
         {
@@ -100,13 +48,6 @@ int     create_files_out(t_list *file)
     return (1);
 }
 
-
-// WAITPID ???
-// GARDER LE RETOUR DU EXECVE ???
-// aled
-// Fork en boucle tant que y a une redir et waitpid a la fin de la boucle en desincrementant // Du coup maybe need un tableau de child.
-// C est c que je fais deja un peu je crois
-
 int    redir_manager(char **env, t_command *cmd)
 {
     t_list  *tmp;
@@ -115,15 +56,18 @@ int    redir_manager(char **env, t_command *cmd)
     if (tmp && tmp->content)
         if (!create_files_out(tmp))
             return (0);
-    tmp = cmd->redir_in;
+    tmp = cmd->redir_out;
     if (tmp && tmp->content)
-        if (!exec_redir_in(env, cmd, tmp))
+    {
+        if (!exec_redir(env, cmd))
             return (0);
+    }
     return (1);
 }
 
 int     exec_redir_in(char **env, t_command *cmd, t_list *redir)
 {
+    int ret;
     pid_t   child;
     t_list *tmp;
     int     fd;
@@ -131,18 +75,21 @@ int     exec_redir_in(char **env, t_command *cmd, t_list *redir)
 
     comm1 = get_command(cmd->argument);
     tmp = redir;
+    ret = 0;
     while (tmp)
     {
         if (tmp->content)
         {
-            if ((fd = open(tmp->content, O_RDONLY)) == -1)
-                return (0);
-            dup2(fd, 0);
-            if (cmd->argument && cmd->argument->content)
-                execve(ft_path(env, comm1), comm1.argument,  env);
+            if ((child = fork()) == 0)
+            {
+                if ((fd = open(tmp->content, O_RDONLY)) == -1)
+                    return (0);
+                dup2(fd, 0);
+                if (cmd->argument && cmd->argument->content)
+                    execve(ft_path(env, comm1), comm1.argument,  env);
+            }
+            waitpid(child, &ret, 0);
         }
-        //FAIRE UN AUTRE BAIL aka WaitPID
-        // Ouais tu as raison mon reuf
         else
         {
             return (0);
@@ -151,10 +98,6 @@ int     exec_redir_in(char **env, t_command *cmd, t_list *redir)
     }
     return (1);
 }
-
-// Faudrait il pas pipe avant d exec tout
-// appeler les fonctions d exec dans les pipes, chaque fork executant un cote du pipe et ensuite le main process waitpid tout
-// le pipe se fait il au debut de l exec ou au moment ou il pop dans les args ?
 
 int     listlen(t_command *list)
 {
@@ -171,7 +114,6 @@ int     listlen(t_command *list)
     return (i);
 }
 
-
 int     simple_command(char ** env, t_command *cmd)
 {
     pid_t child;
@@ -179,8 +121,16 @@ int     simple_command(char ** env, t_command *cmd)
     t_parser comm1;
 
     comm1 = get_command(cmd->argument);
-    if ((child = fork()) == 0)
+    if (cmd->redir_in || cmd->redir_out || cmd->redir_append)
+    {
+        printf ("Coucou je suis la\n");
+        redir_manager(env, cmd);
+        return(0);
+    }
+    else if ((child = fork()) == 0)
+    {
         execve(ft_path(env, comm1), comm1.argument, env);
+    }
     waitpid(child, &ret, 0);
     return (0);
 }

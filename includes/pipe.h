@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2020/12/02 18:56:52 by bemoreau         ###   ########.fr       */
+/*   Updated: 2020/12/04 14:52:14 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct	t_pipe
 
 
 int     redir_manager(char **env, t_command *cmd);
+int     create_files_in(t_list *file);
 int     exec_redir_in(char **env, t_command *cmd, t_list *redir);
 int     listlen(t_command *list);
 int     multi_pipe(char **env, t_command *cmd, s_pipe *spipe);
@@ -33,6 +34,7 @@ int     simple_command(char ** env, t_command *cmd);
 int     single_pipe(char **env, t_command *command);
 int     exec_pipe(char **env, t_command *command, int pipe[2]);
 int     create_files_out(t_list *file);
+int		exec_redir_out(char **env, t_command *cmd, t_list *redir);
 int     execution(char **env, t_command *cmd);
 
 #endif
