@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2020/11/19 17:16:16 by psemsari         ###   ########.fr       */
+/*   Updated: 2020/12/04 14:34:28 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,10 @@ char	*arg_next(char **str)
 	*str = tmp;
 	i = 0;
 	symbol = check_symbol(&str[0][i]);
-	while (symbol == NULL  && str[0][i] != ' ' && str[0][i] != '	'
-		&& str[0][i] != '\0')
+	while (symbol == NULL && str[0][i] != ' ' && str[0][i] != '	' && str[0][i] != '\0')
 	{
-		symbol = check_symbol(&str[0][i]);
 		i++;
+		symbol = check_symbol(&str[0][i]);
 	}
 	if (symbol != NULL && i == 0)
 	{
@@ -204,7 +203,7 @@ t_command	*multi_command(char **str, t_list *env)
 	ret = next(str, env);
 	while (ret != NULL)
 	{
-		if (!ft_strncmp(ret, ">>", ft_strlen(ret)))
+		if (!ft_strncmp(ret, ">>", 2))
 		{
 			free(ret);
 			ret = next(str, env);
@@ -298,9 +297,9 @@ int		parser(char *str, t_list *env)
 	while (str)
 	{
 		command = multi_command(&str, env);
-		//print_multi_command(command);
+		print_multi_command(command);
 		printf("EXEC\n");
-		execution(list_to_envp(env), command);
+		//execution(list_to_envp(env), command);
 		clear_multi_command(command);
 	}
 
