@@ -28,6 +28,7 @@ FILES =		./sources/main\
 			./sources/env\
 			./sources/parser_utils\
 			./sources/multi_pipe\
+			./sources/redir\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)
@@ -53,18 +54,17 @@ WHITE = \033[1;37m
 
 all: 		LIBFT $(NAME)
 
-$(NAME): 	$(OBJ)
-	@echo "$(CYAN)Constructing executable:$(NOC) $@"
-	@$(L_CC) -g3 $(FLAGS) -o $(NAME) $(OBJ) $(LIB)
+LIBFT:
+			@echo "$(CYAN)Building libft:$(NOC) $@"
+			cd ./libft/ && make && cd ..
 
-LIBFT:		
-	@echo "$(CYAN)Building libft:$(NOC) $@"
-	@cd libft && make && cd ..
+$(NAME): 	$(OBJ)
+			@echo "$(CYAN)Constructing executable:$(NOC) $@"
+			@$(L_CC) -g3 $(FLAGS) -o $(NAME) $(OBJ) $(LIB)
 
 .c.o:		${SRCS}
-	@echo " $(VIOLET)[$(L_CC)] $(GREEN)[$(FLAGS)]$(NOC) $(YELLOW)in progress ...:$(NOC) $< $(RED)->$(NOC) $@"
-	@$(L_CC) -g3 $(FLAGS) -c -I$(INC_PATH) $< -o ${<:.c=.o}
-
+			@echo " $(VIOLET)[$(L_CC)] $(GREEN)[$(FLAGS)]$(NOC) $(YELLOW)in progress ...:$(NOC) $< $(RED)->$(NOC) $@"
+			@$(L_CC) -g3 $(FLAGS) -c -I$(INC_PATH) $< -o ${<:.c=.o}
 clean:
 	@echo "$(CYAN)Clean libft:$(NOC) $@"
 	@cd libft && make clean && cd ..
@@ -77,6 +77,6 @@ fclean: clean
 	@echo "\n$(RED)Removing executable: $(NOC) $@"
 	@rm -f $(NAME)
 
-re: fclean LIBFT all
+re: fclean all
 
-.PHONY: all clean re fclean LIBFT
+.PHONY: all clean re fclean MLX LIBFT

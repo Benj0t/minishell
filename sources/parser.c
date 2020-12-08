@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2020/12/06 15:17:30 by bemoreau         ###   ########.fr       */
+/*   Updated: 2020/12/08 17:07:15 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,11 @@ t_command	*multi_command(char **str, t_list *env)
 
 	command = malloc(sizeof(t_command));
 	setup_command(command);
+	command->pipe = NULL;
+	command->argument = NULL;
+	command->redir_in = NULL;
+	command->redir_out = NULL;
+	command->redir_append = NULL;
 	ret = next(str, env);
 	while (ret != NULL)
 	{

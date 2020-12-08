@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int		first_command(char **env, t_command *cmd, s_pipe *spipe, int fd)
+static int		first_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 {
 	
     int ret;
@@ -21,12 +21,15 @@ static int		first_command(char **env, t_command *cmd, s_pipe *spipe, int fd)
 
     comm1 = get_command(cmd->argument);
     comm2 = get_command(cmd->pipe->argument);
+    exec_redir(cmd, redir);
     if ((spipe->child[spipe->i_comm++] = fork()) == 0)
     {
         dup2(spipe->p[spipe->i_pipe][1], 1);
         close(spipe->p[spipe->i_pipe][0]);
         execve(ft_path(env, comm1), comm1.argument, env);
     }
+    end_redir(redir);
+    exec_redir(cmd->pipe, redir);
     if ((spipe->child[spipe->i_comm++] = fork()) == 0)
     {
         dup2(spipe->p[spipe->i_pipe][0], 0);
@@ -35,18 +38,20 @@ static int		first_command(char **env, t_command *cmd, s_pipe *spipe, int fd)
         close(spipe->p[spipe->i_pipe + 1][0]);
         execve(ft_path(env, comm2), comm2.argument,  env);
     }
+    end_redir(redir);
     close(spipe->p[spipe->i_pipe][0]);
     close(spipe->p[spipe->i_pipe][1]);
 	++spipe->i_pipe;
     return (1);
 }
 
-static int		middle_commands(char **env, t_command *cmd, s_pipe *spipe, int fd)
+static int		middle_commands(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 {
 	int ret;
 	t_parser comm1;
 
 	comm1 = get_command(cmd->argument);
+    exec_redir(cmd, redir);
     if ((spipe->child[spipe->i_comm++] = fork()) == 0)
     {
         dup2(spipe->p[spipe->i_pipe][0], 0);
@@ -55,32 +60,34 @@ static int		middle_commands(char **env, t_command *cmd, s_pipe *spipe, int fd)
         close(spipe->p[spipe->i_pipe + 1][0]);
         execve(ft_path(env, comm1), comm1.argument,  env);
     }
-	// Maybe dup2 next pipe in main process
+    end_redir(redir);
 	close(spipe->p[spipe->i_pipe][0]);
     close(spipe->p[spipe->i_pipe][1]);
 	++spipe->i_pipe;
 	return (1);
 }
 
-static int		last_command(char **env, t_command *cmd, s_pipe *spipe, int fd)
+static int		last_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 {
 	int ret;
 	t_parser comm1;
 
 	comm1 = get_command(cmd->argument);
+    exec_redir(cmd, redir);
     if ((spipe->child[spipe->i_comm++] = fork()) == 0)
     {
         dup2(spipe->p[spipe->i_pipe][0], 0);
 		close(spipe->p[spipe->i_pipe][1]);
         execve(ft_path(env, comm1), comm1.argument,  env);
     }
+    end_redir(redir);
 	close(spipe->p[spipe->i_pipe][0]);
     close(spipe->p[spipe->i_pipe][1]);
 	++spipe->i_pipe;
 	return (1);
 }
 
-int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe)
+int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 {
     int			i;
     int         fd;
@@ -111,15 +118,15 @@ int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe)
         spipe->ret[i] = 0;
         if (i == 0)
         {
-            first_command(env, tmp, spipe, fd);
+            first_command(env, tmp, spipe, redir);
             tmp = tmp->pipe;
         }
         if (i > 0)
-            middle_commands(env, tmp, spipe, fd);
+            middle_commands(env, tmp, spipe, redir);
         tmp = tmp->pipe;
         i++;
     }
-    last_command(env, tmp, spipe, fd);
+    last_command(env, tmp, spipe, redir);
     i = spipe->n_pipe;
     while (i > 0)
     {
@@ -129,7 +136,7 @@ int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe)
 	return (1);
 }
 
-int    single_pipe(char **env, t_command *command)
+int    single_pipe(char **env, t_command *command, t_redir *redir)
 {
     int p[2];
     int child;
@@ -140,26 +147,31 @@ int    single_pipe(char **env, t_command *command)
 
     comm1 = get_command(command->argument);
     comm2 = get_command(command->pipe->argument);
+    exec_redir(command, redir);
     if (pipe(p) < 0)
         return (-1);
     if ((child = fork()) == 0)
     {
-        dup2(p[1], 1);
+        if (redir->std_in == -1 && redir->std_out == -1)
+            dup2(p[1], 1);
         close(p[0]);
-        redir_manager(env, command);
         execve(ft_path(env, comm1), comm1.argument, env);
     }
-    if (command->pipe->redir_append || command->pipe->redir_out || command->pipe->redir_in)
+    if (redir->std_out != -1 || redir->std_in != -1)
     {
-        redir_manager(env, command->pipe);
+        end_redir(redir);
         return (0);
     }
-    else if ((child2 = fork()) == 0)
+    end_redir(redir);
+    exec_redir(command->pipe, redir);
+    if ((child2 = fork()) == 0)
     {
-        dup2(p[0], 0);
+        if (redir->std_in == -1)
+            dup2(p[0], 0);
         close(p[1]);
         execve(ft_path(env, comm2), comm2.argument,  env);
     }
+    end_redir(redir);
     close(p[0]);
     close(p[1]);
     waitpid(child2, &ret, 0);
