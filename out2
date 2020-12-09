@@ -2,5 +2,8 @@ Makefile
 includes
 libft
 minishell
+out
+out10
 out2
+out3
 sources

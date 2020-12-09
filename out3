@@ -1,5 +1,6 @@
-Makefile
 includes
+sources
+
 libft
 minishell
 out2

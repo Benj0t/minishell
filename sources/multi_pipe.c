@@ -24,23 +24,36 @@ static int		first_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *re
     exec_redir(cmd, redir);
     if ((spipe->child[spipe->i_comm++] = fork()) == 0)
     {
-        dup2(spipe->p[spipe->i_pipe][1], 1);
+        if (redir->std_out == -1)
+            dup2(spipe->p[spipe->i_pipe][1], 1);
         close(spipe->p[spipe->i_pipe][0]);
         execve(ft_path(env, comm1), comm1.argument, env);
+    }
+    if (redir->std_out != -1)
+    {
+        end_redir(redir);
+        return (0);
     }
     end_redir(redir);
     exec_redir(cmd->pipe, redir);
     if ((spipe->child[spipe->i_comm++] = fork()) == 0)
     {
-        dup2(spipe->p[spipe->i_pipe][0], 0);
+        if (redir->std_in == -1)
+            dup2(spipe->p[spipe->i_pipe][0], 0);
 		close(spipe->p[spipe->i_pipe][1]);
-		dup2(spipe->p[spipe->i_pipe + 1][1], 1);
+		if (redir->std_out == -1)
+            dup2(spipe->p[spipe->i_pipe + 1][1], 1);
         close(spipe->p[spipe->i_pipe + 1][0]);
         execve(ft_path(env, comm2), comm2.argument,  env);
     }
-    end_redir(redir);
     close(spipe->p[spipe->i_pipe][0]);
     close(spipe->p[spipe->i_pipe][1]);
+    if (redir->std_out != -1)
+    {
+        end_redir(redir);
+        return (0);
+    }
+    end_redir(redir);
 	++spipe->i_pipe;
     return (1);
 }
@@ -54,15 +67,22 @@ static int		middle_commands(char **env, t_command *cmd, s_pipe *spipe, t_redir *
     exec_redir(cmd, redir);
     if ((spipe->child[spipe->i_comm++] = fork()) == 0)
     {
-        dup2(spipe->p[spipe->i_pipe][0], 0);
+        if (redir->std_in == -1)
+            dup2(spipe->p[spipe->i_pipe][0], 0);
 		close(spipe->p[spipe->i_pipe][1]);
-		dup2(spipe->p[spipe->i_pipe + 1][1], 1);
+		if (redir->std_out == -1)
+            dup2(spipe->p[spipe->i_pipe + 1][1], 1);
         close(spipe->p[spipe->i_pipe + 1][0]);
         execve(ft_path(env, comm1), comm1.argument,  env);
     }
-    end_redir(redir);
 	close(spipe->p[spipe->i_pipe][0]);
     close(spipe->p[spipe->i_pipe][1]);
+    if (redir->std_out != -1)
+    {
+        end_redir(redir);
+        return (0);
+    }
+    end_redir(redir);
 	++spipe->i_pipe;
 	return (1);
 }
@@ -76,9 +96,15 @@ static int		last_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *red
     exec_redir(cmd, redir);
     if ((spipe->child[spipe->i_comm++] = fork()) == 0)
     {
-        dup2(spipe->p[spipe->i_pipe][0], 0);
+        if (redir->std_in == -1)
+            dup2(spipe->p[spipe->i_pipe][0], 0);
 		close(spipe->p[spipe->i_pipe][1]);
         execve(ft_path(env, comm1), comm1.argument,  env);
+    }
+    if (redir->std_out != -1)
+    {
+        end_redir(redir);
+        return (0);
     }
     end_redir(redir);
 	close(spipe->p[spipe->i_pipe][0]);
@@ -157,7 +183,7 @@ int    single_pipe(char **env, t_command *command, t_redir *redir)
         close(p[0]);
         execve(ft_path(env, comm1), comm1.argument, env);
     }
-    if (redir->std_out != -1 || redir->std_in != -1)
+    if (redir->std_out != -1)
     {
         end_redir(redir);
         return (0);
