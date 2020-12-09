@@ -34,11 +34,11 @@ int     exec_redir(t_command *cmd, t_redir *redir)
     t_list *tmp;
     int     fd;
 
-    tmp = cmd->redir_in;
     redir->save_stdin = dup(0);
     redir->save_stdout = dup(1);
 	redir->std_in = -1;
 	redir->std_out = -1;
+    tmp = cmd->redir_in;
     while (tmp && tmp->content)
     {
         if ((fd = open(tmp->content, O_RDONLY)) == -1)
@@ -79,7 +79,38 @@ int     exec_redir(t_command *cmd, t_redir *redir)
         }
         if (tmp->next == NULL)
         {
-			printf("LE FD WESH\n");
+            printf("out\n");
+            dup2(fd, 1);
+			redir->std_out = fd;
+        }
+        else
+        {
+            close(fd);
+        }
+        tmp = tmp->next;
+    }
+    tmp = cmd->redir_append;
+    while (tmp && tmp->content)
+    {
+        if ((fd = open(tmp->content, O_WRONLY | O_APPEND)) == -1)
+        {
+            if ((fd = open(tmp->content, O_CREAT)) == -1)
+            {
+                ft_putendl_fd("Can't create redirection file !", 1);
+                return (-1);
+            }
+            else
+            {
+                close(fd);
+                if ((fd = open(tmp->content, O_WRONLY | O_APPEND)) == -1)
+                {
+                    ft_putendl_fd("Can't append redirection file !", 1);
+                    return (-1);
+                }
+            }
+        }
+        if (tmp->next == NULL)
+        {
             dup2(fd, 1);
 			redir->std_out = fd;
         }

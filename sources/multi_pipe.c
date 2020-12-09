@@ -101,14 +101,14 @@ static int		last_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *red
 		close(spipe->p[spipe->i_pipe][1]);
         execve(ft_path(env, comm1), comm1.argument,  env);
     }
+	close(spipe->p[spipe->i_pipe][0]);
+    close(spipe->p[spipe->i_pipe][1]);
     if (redir->std_out != -1)
     {
         end_redir(redir);
         return (0);
     }
     end_redir(redir);
-	close(spipe->p[spipe->i_pipe][0]);
-    close(spipe->p[spipe->i_pipe][1]);
 	++spipe->i_pipe;
 	return (1);
 }
@@ -117,6 +117,7 @@ int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 {
     int			i;
     int         fd;
+    int         ret;
 	t_command	*tmp;
 
     i = 0;
@@ -138,26 +139,26 @@ int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 	if (!(spipe->ret = (int *)malloc(sizeof(int) * (spipe->n_comm + 1))))
         return (0);
     i = 0;
-    t_parser comm1;
     while (i < spipe->n_pipe - 1 && tmp)
     {
         spipe->ret[i] = 0;
         if (i == 0)
         {
-            first_command(env, tmp, spipe, redir);
+            ret = first_command(env, tmp, spipe, redir);
             tmp = tmp->pipe;
         }
-        if (i > 0)
-            middle_commands(env, tmp, spipe, redir);
+        if (i > 0 && ret == 1)
+            ret = middle_commands(env, tmp, spipe, redir);
         tmp = tmp->pipe;
         i++;
     }
-    last_command(env, tmp, spipe, redir);
-    i = spipe->n_pipe;
-    while (i > 0)
+    if (ret == 1)
+        ret = last_command(env, tmp, spipe, redir);
+    spipe->i_pipe++;
+    while (spipe->i_pipe >= 0)
     {
-        waitpid(spipe->child[i], &(spipe->ret[i]), 0);
-        i--;
+        waitpid(spipe->child[spipe->i_pipe], &(spipe->ret[spipe->i_pipe]), 0);
+        spipe->i_pipe--;
     }
 	return (1);
 }
