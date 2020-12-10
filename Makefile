@@ -27,6 +27,8 @@ FILES =		./sources/main\
 			./sources/parser\
 			./sources/env\
 			./sources/parser_utils\
+			./sources/multi_pipe\
+			./sources/redir\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)
@@ -77,4 +79,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean re fclean MLX
+.PHONY: all clean re fclean MLX LIBFT
