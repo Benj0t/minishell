@@ -44,7 +44,7 @@ int     simple_command(char ** env, t_command *cmd, t_redir *redir, s_pipe *spip
     return (0);
 }
 
-int     ft_print_ret(int *ret)
+int     ft_ret(int *ret)
 {
     int i;
 
@@ -53,9 +53,7 @@ int     ft_print_ret(int *ret)
     {
         i++;
     }
-    ft_putnbr_fd((unsigned char)ret[i - 1], 1);
-    ft_putchar_fd('\n', 1);
-    return (0);
+    return((unsigned char)ret[i - 1]);
 }
 
 int     execution(char **env, t_command *cmd, t_redir *redir, s_pipe *spipe)
@@ -67,10 +65,6 @@ int     execution(char **env, t_command *cmd, t_redir *redir, s_pipe *spipe)
     spipe->i_comm = 0;
     spipe->i_pipe = 0;
     spipe->n_pipe = spipe->n_comm - 1;
-    if ((ft_memcmp(cmd->argument->content, "$?", 2)) == 12)
-    {
-        ft_print_ret(spipe->ret);
-    }
     if (spipe->n_comm == 1)
     {
         simple_command(env, cmd, redir, spipe);

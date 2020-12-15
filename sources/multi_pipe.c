@@ -19,9 +19,9 @@ static int		first_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *re
     t_parser comm1;
     t_parser comm2;
 
+    exec_redir(cmd, redir);
     comm1 = get_command(cmd->argument);
     comm2 = get_command(cmd->pipe->argument);
-    exec_redir(cmd, redir);
     if ((spipe->child[spipe->i_comm++] = fork()) == 0)
     {
         if (redir->std_out == -1)
