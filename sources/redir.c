@@ -79,7 +79,6 @@ int     exec_redir(t_command *cmd, t_redir *redir)
         }
         if (tmp->next == NULL)
         {
-            printf("out\n");
             dup2(fd, 1);
 			redir->std_out = fd;
         }

@@ -6,7 +6,11 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2020/12/15 17:51:06 by psemsari         ###   ########.fr       */
+=======
+/*   Updated: 2020/12/15 17:06:01 by bemoreau         ###   ########.fr       */
+>>>>>>> 36698b5... error codes Working but not the good ones
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,7 +297,7 @@ void		print_multi_command(t_command *command)
 }
 
 //start du parser
-int		parser(char *str, t_list *env)
+int		parser(char *str, t_list *env, t_redir *redir, s_pipe *spipe)
 {
 	t_command	*command;
 	t_list		*arg;
@@ -304,7 +308,7 @@ int		parser(char *str, t_list *env)
 		command = multi_command(&str, env);
 		//print_multi_command(command);
 		//printf("EXEC\n");
-		execution(list_to_envp(env), command);
+		execution(list_to_envp(env), command, redir, spipe);
 		clear_multi_command(command);
 	}
 

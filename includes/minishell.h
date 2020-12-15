@@ -12,6 +12,7 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <string.h>
+# include "pipe.h"
 # include "parser.h"
 # include <sys/stat.h>
 
