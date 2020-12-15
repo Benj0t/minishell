@@ -40,8 +40,10 @@ int			ft_pipe(char **env, char *command1, char *command2);
 int			ft_cd(char **env, char *dir);
 int			ft_pwd(char **env);
 t_list		*envp_to_list(char **envp);
+void		set_env_var(char *key, char* var, t_list *env);
 char		**list_to_envp(t_list *env);
 char		*get_env_var(char *search, t_list *lst_env);
+int			unset(t_list *arg, t_list *env);
 
 #include "path.h"
 #include "pipe.h"
