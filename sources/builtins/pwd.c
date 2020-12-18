@@ -1,8 +1,11 @@
 #include "minishell.h"
+#include "limits.h"
 
-int		ft_pwd(t_list **env)
+int		ft_pwd(void)
 {
 	char	*str;
+
+	getcwd(str, PATH_MAX)
 
 	str = get_env_var("PWD", env);
 	if (str == NULL)
