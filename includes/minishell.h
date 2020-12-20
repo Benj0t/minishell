@@ -37,8 +37,8 @@ typedef struct		s_list
 }					t_list;
 */
 int			ft_pipe(char **env, char *command1, char *command2);
-int			ft_cd(char *dir);
-int			ft_pwd(t_list **env);
+int			ft_cd(char **arg, t_list *lst_env);
+int			ft_pwd(void);
 t_list		*envp_to_list(char **envp);
 void		set_env_var(char *key, char* var, t_list *env);
 char		**list_to_envp(t_list *env);

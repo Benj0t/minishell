@@ -3,14 +3,12 @@
 
 int		ft_pwd(void)
 {
-	char	*str;
+	char	*pwd;
 
-	getcwd(str, PATH_MAX)
-
-	str = get_env_var("PWD", env);
-	if (str == NULL)
+	pwd = getcwd(pwd, 4096);
+	if (pwd == NULL)
 		return (-1);
 	else
-		ft_putstr_fd(str, 1);
+		ft_putstr_fd(pwd, 1);
 	return (0);
 }
