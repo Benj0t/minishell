@@ -6,15 +6,16 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2020/12/08 15:16:58 by bemoreau         ###   ########.fr       */
+/*   Updated: 2020/12/10 19:39:30 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
+# include "pipe.h"
+
 size_t			next_space(char *str);
-int				parser(char *str, t_list *env);
 
 typedef struct	s_command
 {
