@@ -42,6 +42,7 @@ int main(int ac, char **av, char **envp)
 	// 	printf("%s | %s\n", ((t_var_env *)env->content)->key, ((t_var_env *)env->content)->var);
 	// 	env = env->next;
 	// }
+	set_env_var("lol", "hey", env);
 	while (1)
 	{
 		ft_putstr("minishell> ");

@@ -1,27 +1,14 @@
 #include "minishell.h"
+#include "limits.h"
 
-static int	find_pwd(char **env)
+int		ft_pwd(void)
 {
-	int i;
+	char	*pwd;
 
-	i = -1;
-	while (env[++i])
-		if (env[i][0] == 'P' && env[i][1] == 'W' && env[i][2] == 'D' && env[i][3] == '=')
-			return (i);
-	return (-1);
-}
-
-int		ft_pwd(char **env)
-{
-	int i;
-	char *str;
-
-	printf("AAAAAAAAAAAAAAAA\n");
-	if ((i = find_pwd(env)) == -1)
+	pwd = getcwd(pwd, 4096);
+	if (pwd == NULL)
 		return (-1);
-	str = env[i];
-	//ft_putendl_fd(str + 4, 1);
-	str = getcwd(str, 4096);
-	ft_putendl_fd(str + 4, 1);
+	else
+		ft_putstr_fd(pwd, 1);
 	return (0);
 }
