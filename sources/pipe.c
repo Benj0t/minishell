@@ -32,15 +32,21 @@ int     simple_command(char ** env, t_command *cmd, t_redir *redir, s_pipe *spip
     pid_t child;
     t_parser comm1;
 
+    if (!(spipe->pid = (int *)malloc(sizeof(int) * (2))))
+        return (1);
+    spipe->pid[0] = -1;
+    spipe->pid[1] = -1;
     if (!(spipe->ret = (int *)malloc(sizeof(int) * (2))))
         return (1);
+    spipe->ret[0] = -1;
     spipe->ret[1] = -1;
     comm1 = get_command(cmd->argument);
     exec_redir(cmd, redir);
     if ((child = fork()) == 0)
         execve(ft_path(env, comm1), comm1.argument, env);
     end_redir(redir);
-    waitpid(child, (int *)&(spipe->ret[0]), 0);
+    waitpid(child, (int *)&(spipe->pid[0]), 0);
+    spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
     return (0);
 }
 

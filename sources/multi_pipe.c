@@ -15,7 +15,6 @@
 static int		first_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 {
 	
-    int ret;
     t_parser comm1;
     t_parser comm2;
 
@@ -134,12 +133,20 @@ int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 	}
 	if (!(spipe->child = (pid_t *)malloc(sizeof(pid_t) * (spipe->n_comm + 1))))
         return (0);
-    spipe->child[spipe->n_comm] = 0;
-	
+    spipe->child[spipe->n_comm] = 0;	
+	if (!(spipe->pid = (int *)malloc(sizeof(int) * (spipe->n_comm + 1))))
+        return (0);
+    i = 0;
+    while ( i <= spipe->n_comm)
+        spipe->pid[i++] = -1;
+    i = 0;
 	if (!(spipe->ret = (int *)malloc(sizeof(int) * (spipe->n_comm + 1))))
         return (0);
     i = 0;
-    spipe->ret[spipe->n_comm] = -1;
+    while ( i <= spipe->n_comm)
+        spipe->ret[i++] = -1;
+    i = 0;
+    spipe->pid[spipe->n_comm] = -1;
     while (i < spipe->n_pipe - 1 && tmp)
     {
         if (i == 0)
@@ -157,7 +164,11 @@ int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
     spipe->i_pipe++;
     i = 0;
     while (spipe->i_pipe >= 0)
-        waitpid(spipe->child[spipe->i_pipe--], (int *)&(spipe->ret[i++]), 0);
+    {
+        waitpid(spipe->child[spipe->i_pipe--], (int *)&(spipe->pid[i]), 0);
+        spipe->ret[i] = WEXITSTATUS(spipe->pid[i]);
+        i++;
+    }
 	return (1);
 }
 
@@ -169,8 +180,15 @@ int    single_pipe(char **env, t_command *command, t_redir *redir, s_pipe *spipe
     t_parser comm1;
     t_parser comm2;
 
+    if (!(spipe->pid = (int *)malloc(sizeof(int) * (3))))
+        return (-1);
+    spipe->pid[0] = -1;
+    spipe->pid[1] = -1;
+    spipe->pid[2] = -1;
     if (!(spipe->ret = (int *)malloc(sizeof(int) * (3))))
         return (-1);
+    spipe->ret[0] = -1;
+    spipe->ret[1] = -1;
     spipe->ret[2] = -1;
     comm1 = get_command(command->argument);
     comm2 = get_command(command->pipe->argument);
@@ -201,7 +219,9 @@ int    single_pipe(char **env, t_command *command, t_redir *redir, s_pipe *spipe
     end_redir(redir);
     close(p[0]);
     close(p[1]);
-    waitpid(child, (int *)&(spipe->ret[0]), 0);
-    waitpid(child, (int *)&(spipe->ret[1]), 0);
+    waitpid(child, (int *)&(spipe->pid[0]), 0);
+    waitpid(child, (int *)&(spipe->pid[1]), 0);
+    spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
+    spipe->ret[1] = WEXITSTATUS(spipe->pid[1]);
     return (1);
 }

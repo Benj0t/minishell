@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2020/12/15 18:10:04 by bemoreau         ###   ########.fr       */
+/*   Updated: 2020/12/20 18:16:10 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ typedef struct	t_pipe
 {
 	int			**p;
 	int			*ret;
+	int			*pid;
 	pid_t		*child;
 	int			n_pipe;
 	int			n_comm;
