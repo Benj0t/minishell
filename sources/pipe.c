@@ -46,9 +46,13 @@ int     execution(char **env, t_command *cmd)
 {
    	s_pipe spipe;
     t_redir redir;
+    t_parser cd_test;
     int i;
 
     i = 0;
+    cd_test = get_command(cmd->argument);
+    if (ft_strncmp(cd_test.command, "cd", 2))
+        return (ft_cd(cd_test.argument, envp_to_list(env)));
     spipe.n_comm = listlen(cmd);
     spipe.i_comm = 0;
     spipe.i_pipe = 0;
