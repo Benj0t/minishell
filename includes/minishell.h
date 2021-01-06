@@ -1,9 +1,9 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 # include "libft.h"
 # include <limits.h>
 # include <unistd.h>
@@ -14,6 +14,7 @@
 # include <string.h>
 # include "parser.h"
 # include <sys/stat.h>
+# include <sys/param.h>
 
 // typedef struct			s_parser
 // {
@@ -43,9 +44,11 @@ t_list		*envp_to_list(char **envp);
 void		set_env_var(char *key, char* var, t_list *env);
 char		**list_to_envp(t_list *env);
 char		*get_env_var(char *search, t_list *lst_env);
-int			unset(t_list *arg, t_list *env);
+int			unset(char	**arg, t_list *env);
+int			list_env(t_list *env);
+void		modified_env(char *key, char* var, t_list *env);
 
-#include "path.h"
-#include "pipe.h"
+# include "path.h"
+# include "pipe.h"
 
 #endif

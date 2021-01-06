@@ -24,6 +24,8 @@ FILES =		./sources/main\
 			./sources/builtins/cd\
 			./sources/builtins/pwd\
 			./sources/builtins/env\
+			./sources/builtins/export\
+			./sources/builtins/unset\
 			./sources/parser\
 			./sources/env\
 			./sources/parser_utils\

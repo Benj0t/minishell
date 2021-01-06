@@ -39,15 +39,47 @@
 
 #include "minishell.h"
 
+#define EHOME "pas de variable d'environnement $HOME"
+#define EOLDPWD "pas de variable d'environnement $OLDPWD"
+
 int		ft_cd(char **arg, t_list *env)
 {
-	char	*pwd;
+	char	*previous;
 	char	*home;
+	char	*pwd;
+	char	*new;
+	int		ret;
 
+	errno = 0;
+	pwd = getcwd(NULL, MAXPATHLEN);
+	previous = get_env_var("OLDPWD", env);
 	home = get_env_var("HOME", env);
-	pwd = getcwd(pwd, 4096);
-	if (chdir(home) == -1)
-		return (-1);
-	set_env_var("OLDPWD", pwd, env);
+	if (arg[1] == NULL)
+	{
+		if (home)
+			new = home;
+		else
+		{
+			ft_putstr_fd(EHOME, 2); //exit error
+			return (-1);
+		}
+	}
+	else if (!ft_strncmp(arg[1], "-", 2))
+	{
+		if (previous)
+			new = previous;
+		else
+		{
+			ft_putstr_fd(EOLDPWD, 2); //exit error
+			return (-1);
+		}
+	}
+	else
+		new = arg[1];
+	ret = chdir(new);
+	if (ret != 0)
+		printf("%d : %d : %s\n", ret, errno, strerror(errno));
+	if (ft_strncmp(pwd, new, MAXPATHLEN))
+		set_env_var("OLDPWD", pwd, env);
 	return (0);
 }

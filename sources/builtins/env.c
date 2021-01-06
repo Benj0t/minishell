@@ -1,10 +1,14 @@
 #include "minishell.h"
 
-static int	env(char **env)
+int		list_env(t_list *env)
 {
-	int i;
+	t_var_env *var_env;
 
-	i = 0;
-	while (env[i])
-		ft_putendl_fd(env[i++], 1);
+	while (env != NULL)
+	{
+		var_env = (t_var_env *)env->content;
+		printf("%s=%s\n", var_env->key, var_env->var);
+		env = env->next;
+	}
+	return (0);
 }

@@ -6,25 +6,25 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2020/12/15 16:44:21 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/06 13:05:37 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		unset(t_list *arg, t_list *env)
+int		unset(char **arg, t_list *env)
 {
 	t_var_env	*var_env;
 	t_list		*before;
 	t_list		*base;
+	int	i = 1;
 
 	base = env;
-	arg = arg->next;
-	while (arg != NULL)
+	while (arg[i] != NULL)
 	{
 		env = base;
 		var_env = (t_var_env *)env->content;
-		while (ft_strncmp(var_env->key, arg->content, ft_strlen(var_env->key)))
+		while (ft_strncmp(var_env->key, arg[i], ft_strlen(var_env->key)))
 		{
 			before = env;
 			env = env->next;
@@ -33,7 +33,9 @@ int		unset(t_list *arg, t_list *env)
 			var_env = (t_var_env *)env->content;
 		}
 		before->next = env->next; //free
-		arg = arg->next;
+		i++;
 	}
+	env = base;
+	list_env(env);
 	return (0);
 }

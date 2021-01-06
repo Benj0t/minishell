@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2020/12/08 16:00:34 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/01/06 13:09:48 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,6 @@ int     single_pipe(char **env, t_command *command, t_redir *redir);
 int     exec_pipe(char **env, t_command *command, int pipe[2]);
 int     create_files_out(t_list *file);
 int		exec_redir_out(char **env, t_command *cmd, t_list *redir);
-int     execution(char **env, t_command *cmd);
+int     execution(t_list *env, t_command *cmd);
 
 #endif

@@ -45,7 +45,8 @@ int main(int ac, char **av, char **envp)
 	set_env_var("lol", "hey", env);
 	while (1)
 	{
-		ft_putstr("minishell> ");
+		ft_pwd();
+		ft_putstr("> ");
 		get_next_line(0, &str);
 		// ft_pwd(envp);
 		// ft_cd(envp, str);

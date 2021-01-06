@@ -42,32 +42,36 @@ int     simple_command(char ** env, t_command *cmd, t_redir *redir)
     return (0);
 }
 
-int     execution(char **env, t_command *cmd)
+int     execution(t_list *env, t_command *cmd)
 {
    	s_pipe spipe;
     t_redir redir;
-    t_parser cd_test;
+    t_parser test;
     int i;
 
     i = 0;
-    cd_test = get_command(cmd->argument);
-    if (ft_strncmp(cd_test.command, "cd", 2))
-        return (ft_cd(cd_test.argument, envp_to_list(env)));
+    test = get_command(cmd->argument);
+    if (ft_strncmp(test.command, "cd", 3) == 0)
+        return (ft_cd(test.argument, env));
+    if (ft_strncmp(test.command, "unset", 6) == 0)
+        return (unset(test.argument, env));
+    if (ft_strncmp(test.command, "env", 4) == 0)
+        return (list_env(env));
     spipe.n_comm = listlen(cmd);
     spipe.i_comm = 0;
     spipe.i_pipe = 0;
     spipe.n_pipe = spipe.n_comm - 1;
     if (spipe.n_comm == 1)
     {
-        simple_command(env, cmd, &redir);
+        simple_command(list_to_envp(env), cmd, &redir);
     }
     else if (spipe.n_comm == 2)
     {
-        single_pipe(env, cmd, &redir);
+        single_pipe(list_to_envp(env), cmd, &redir);
     }
     else if (spipe.n_comm > 2)
     {
-        multi_pipe(env, cmd, &spipe, &redir);
+        multi_pipe(list_to_envp(env), cmd, &spipe, &redir);
     }
     else
     {
