@@ -26,6 +26,8 @@ FILES =		./sources/main\
 			./sources/builtins/env\
 			./sources/builtins/export\
 			./sources/builtins/unset\
+			./sources/builtins/echo\
+			./sources/builtins/exit\
 			./sources/parser\
 			./sources/env\
 			./sources/parser_utils\

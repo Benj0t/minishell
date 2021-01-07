@@ -6,25 +6,31 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/06 13:05:37 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/07 15:09:55 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+# define EENOUGH "unset: not enough arguments"
 
 int		unset(char **arg, t_list *env)
 {
 	t_var_env	*var_env;
 	t_list		*before;
 	t_list		*base;
-	int	i = 1;
 
+	if (!arg[1])
+	{
+		ft_putstr_fd(EENOUGH, 2);
+		return (1);
+	}
 	base = env;
-	while (arg[i] != NULL)
+	while (*arg != NULL)
 	{
 		env = base;
 		var_env = (t_var_env *)env->content;
-		while (ft_strncmp(var_env->key, arg[i], ft_strlen(var_env->key)))
+		while (ft_strncmp(var_env->key, *arg, ft_strlen(var_env->key)))
 		{
 			before = env;
 			env = env->next;
@@ -33,9 +39,7 @@ int		unset(char **arg, t_list *env)
 			var_env = (t_var_env *)env->content;
 		}
 		before->next = env->next; //free
-		i++;
+		arg++;
 	}
-	env = base;
-	list_env(env);
 	return (0);
 }

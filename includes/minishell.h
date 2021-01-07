@@ -47,6 +47,8 @@ char		*get_env_var(char *search, t_list *lst_env);
 int			unset(char	**arg, t_list *env);
 int			list_env(t_list *env);
 void		modified_env(char *key, char* var, t_list *env);
+int			ft_echo(char **arg);
+int			ft_exit(char **arg);
 
 # include "path.h"
 # include "pipe.h"

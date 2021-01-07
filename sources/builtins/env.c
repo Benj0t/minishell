@@ -7,7 +7,9 @@ int		list_env(t_list *env)
 	while (env != NULL)
 	{
 		var_env = (t_var_env *)env->content;
-		printf("%s=%s\n", var_env->key, var_env->var);
+		ft_putstr_fd(var_env->key, 1);
+		ft_putchar_fd('=', 1);
+		ft_putendl_fd(var_env->var, 1);
 		env = env->next;
 	}
 	return (0);
