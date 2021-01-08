@@ -88,7 +88,7 @@ int				ft_cd(char **arg, t_list *env)
 		new = arg[1];
 	ret = chdir(new);
 	if (ret != 0)
-		cd_error(NULL);
+		return (cd_error(NULL));
 	if (ft_strncmp(pwd, new, MAXPATHLEN))
 		set_env_var("OLDPWD", pwd, env);
 	return (0);
