@@ -50,10 +50,20 @@ int     simple_command(char ** env, t_command *cmd, t_redir *redir, s_pipe *spip
     return (0);
 }
 
-int     execution(t_list *env, t_command *cmd)
+int     ft_ret(int *ret)
 {
-   	s_pipe spipe;
-    t_redir redir;
+    int i;
+
+    i = 0;
+    while (ret[i] != -1)
+    {
+        i++;
+    }
+    return((unsigned char)ret[i - 1]);
+}
+
+int     execution(t_list *env, t_command *cmd, t_redir *redir, s_pipe *spipe)
+{
     t_parser test;
     int i;
 
@@ -69,38 +79,13 @@ int     execution(t_list *env, t_command *cmd)
         return (ft_echo(test.argument));
     if (ft_strncmp(test.command, "exit", 5) == 0)
         return (ft_exit(test.argument));
-    spipe.n_comm = listlen(cmd);
-    spipe.i_comm = 0;
-    spipe.i_pipe = 0;
-    spipe.n_pipe = spipe.n_comm - 1;
-    if (spipe.n_comm == 1)
-    {
-        simple_command(list_to_envp(env), cmd, &redir);
-
-int     ft_ret(int *ret)
-{
-    int i;
-
-    i = 0;
-    while (ret[i] != -1)
-    {
-        i++;
-    }
-    return((unsigned char)ret[i - 1]);
-}
-
-int     execution(char **env, t_command *cmd, t_redir *redir, s_pipe *spipe)
-{
-    int i;
-
-    i = 0;
     spipe->n_comm = listlen(cmd);
     spipe->i_comm = 0;
     spipe->i_pipe = 0;
     spipe->n_pipe = spipe->n_comm - 1;
     if (spipe->n_comm == 1)
     {
-        simple_command(env, cmd, redir, spipe);
+        simple_command(list_to_envp(env), cmd, redir, spipe);
     }
     else if (spipe->n_comm == 2)
     {
