@@ -1,4 +1,6 @@
 #include "minishell.h"
+#include "pipe.h"
+#include "parser.h"
 
 void	ft_putstr(char *str)
 {
@@ -12,10 +14,13 @@ void	ft_putstr(char *str)
 int main(int ac, char **av, char **envp)
 {
 	(void)ac;
-	char	*str;
-	pid_t	child;
-	int		ret;
+	char		*str;
+	pid_t		child;
+	int			ret;
+	t_redir		redir;
 	t_list		*env;
+	s_pipe		spipe;
+
 	//int		i = 0;
 	//char	**arg;
 	// arg = malloc(sizeof(char *) * 4);
@@ -43,6 +48,7 @@ int main(int ac, char **av, char **envp)
 	// 	env = env->next;
 	// }
 	set_env_var("lol", "hey", env);
+	spipe.ret = 0;
 	while (1)
 	{
 		ft_pwd();
@@ -53,7 +59,7 @@ int main(int ac, char **av, char **envp)
 		// ft_pwd(envp);
 		if (!ft_strncmp(str, "exit", ft_strlen(str)))
 			break;
-		parser(str, env);
+		parser(str, env, &redir, &spipe);
 		free(str);
 	}
 	free(str);

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parser_old.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
 /*   Updated: 2021/01/11 13:38:44 by psemsari         ###   ########.fr       */
@@ -149,15 +149,15 @@ char	*arg_next(char **str) //token next
 }
 
 //renvoie un next argument qui a un $ devant
-char	*arg_env(char **str, char *ret, t_list *lst_env)//expander env
+char	*arg_env(char **str, char *ret, t_list *lst_env, s_pipe *spipe)
 {
 	char	*search;
 	char	*result;
 	//voir $?
 	search = arg_next(str);
 	free(ret);
-	if (!strcmp(search, "?"))
-		return (ft_strdup(ft_itoa(0))); //à voir
+	if (!ft_strncmp(search, "?", 1))
+		return (ft_strdup(ft_itoa(ft_ret(spipe->ret)))); //à voir
 	result = get_env_var(search, lst_env);
 	free(search);
 	if (result == NULL)
@@ -165,8 +165,7 @@ char	*arg_env(char **str, char *ret, t_list *lst_env)//expander env
 	return (ft_strdup(result));
 }
 
-//prochain arg
-char	*next(char **str, t_list *env) //next token
+char	*next(char **str, t_list *env, s_pipe *spipe)
 {
 	char		*ret;
 
@@ -177,7 +176,7 @@ char	*next(char **str, t_list *env) //next token
 		if (ret[0] == '\"' || ret[0] == '\'')
 			ret = arg_except(str, ret, env);
 		else if (ret[0] == '$')
-			ret = arg_env(str, ret, env);
+			ret = arg_env(str, ret, env, spipe);
 	}
 	return (ret);
 }
@@ -193,7 +192,7 @@ void	setup_command(t_command *ret)
 }
 
 //enregistre plusieur t_command (recursif)
-t_command	*multi_command(char **str, t_list *env)
+t_command	*multi_command(char **str, t_list *env, s_pipe *spipe)
 {
 	t_command	*command;
 	char		*ret;
@@ -205,31 +204,31 @@ t_command	*multi_command(char **str, t_list *env)
 	command->redir_in = NULL;
 	command->redir_out = NULL;
 	command->redir_append = NULL;
-	ret = next(str, env);
+	ret = next(str, env, spipe);
 	while (ret != NULL)
 	{
 		if (!ft_strncmp(ret, ">>", 2))
 		{
 			free(ret);
-			ret = next(str, env);
+			ret = next(str, env, spipe);
 			ft_lstadd_back(&command->redir_append, ft_lstnew(ret));
 		}
 		else if (!ft_strncmp(ret, ">", ft_strlen(ret)))
 		{
 			free(ret);
-			ret = next(str, env);
+			ret = next(str, env, spipe);
 			ft_lstadd_back(&command->redir_out, ft_lstnew(ret));
 		}
 		else if (!ft_strncmp(ret, "<", ft_strlen(ret)))
 		{
 			free(ret);
-			ret = next(str, env);
+			ret = next(str, env, spipe);
 			ft_lstadd_back(&command->redir_in, ft_lstnew(ret));
 		}
 		else if (!ft_strncmp(ret, "|", ft_strlen(ret)))
 		{
 			free(ret);
-			command->pipe = multi_command(str, env);
+			command->pipe = multi_command(str, env, spipe);
 		}
 		else if (!ft_strncmp(ret, ";", ft_strlen(ret)))
 		{
@@ -238,7 +237,7 @@ t_command	*multi_command(char **str, t_list *env)
 		}
 		else
 			ft_lstadd_back(&command->argument, ft_lstnew(ret));
-		ret = next(str, env);
+		ret = next(str, env, spipe);
 	}
 	free(ret);
 	return (command);
@@ -293,7 +292,7 @@ void		print_multi_command(t_command *command)
 }
 
 //start du parser
-int		parser(char *str, t_list *env)
+int		parser(char *str, t_list *env, t_redir *redir, s_pipe *spipe)
 {
 	t_command	*command;
 	t_list		*arg;
@@ -301,10 +300,10 @@ int		parser(char *str, t_list *env)
 	str = ft_strdup(str);
 	while (str)
 	{
-		command = multi_command(&str, env);
+		command = multi_command(&str, env, spipe);
 		//print_multi_command(command);
 		//printf("EXEC\n");
-		execution(env, command);
+		execution(env, command, redir, spipe);
 		clear_multi_command(command);
 	}
 
