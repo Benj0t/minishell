@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2020/12/08 15:48:38 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/01/06 14:33:06 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,20 @@ char	*get_env_var(char *search, t_list *env)
 
 void	set_env_var(char *key, char* var, t_list *env)
 {
-	ft_lstadd_back(&env, ft_lstnew(malloc_varenv(key, var)));
+	t_var_env *var_env;
+
+	if (get_env_var(key, env) != NULL)
+	{
+		var_env = (t_var_env *)env->content;
+		while (ft_strncmp(var_env->key, key, ft_strlen(var_env->key)))
+		{
+			env = env->next;
+			var_env = (t_var_env *)env->content;
+		}
+		var_env->var = var;
+	}
+	else
+		ft_lstadd_back(&env, ft_lstnew(malloc_varenv(key, var)));
 }
 
 t_list	*envp_to_list(char **envp)

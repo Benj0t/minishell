@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parser_old.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2020/12/20 20:14:39 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/01/11 13:38:44 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*check_symbol(char *str)
+char	*check_symbol(char *str) //get token type
 {
 	char	*symbols[8] = {">>", ">", "<", "|", "$", ";", "'", "\""};
 	int		i;
@@ -28,7 +28,7 @@ char	*check_symbol(char *str)
 }
 
 //remplace search par replace dans un str
-void	ft_replace(char **str, char *search, char *replace)
+void	ft_replace(char **str, char *search, char *replace) //expander
 {
 	size_t	i;
 	char	*retstr;
@@ -47,7 +47,7 @@ void	ft_replace(char **str, char *search, char *replace)
 }
 
 //systeme pour les exceptions d'arg ($, double et simple quotes)
-char	*arg_except(char **str, char *ret, t_list *env)
+char	*arg_except(char **str, char *ret, t_list *env) //parser (path to go)
 {
 	int		i;
 	char	c;
@@ -89,7 +89,7 @@ char	*arg_except(char **str, char *ret, t_list *env)
 }
 
 //renvoie la prochaine chaine
-char	*arg_next(char **str)
+char	*arg_next(char **str) //token next
 {
 	size_t	i;
 	size_t	i2;
@@ -165,7 +165,6 @@ char	*arg_env(char **str, char *ret, t_list *lst_env, s_pipe *spipe)
 	return (ft_strdup(result));
 }
 
-//prochain arg
 char	*next(char **str, t_list *env, s_pipe *spipe)
 {
 	char		*ret;
@@ -304,7 +303,7 @@ int		parser(char *str, t_list *env, t_redir *redir, s_pipe *spipe)
 		command = multi_command(&str, env, spipe);
 		//print_multi_command(command);
 		//printf("EXEC\n");
-		execution(list_to_envp(env), command, redir, spipe);
+		execution(env, command, redir, spipe);
 		clear_multi_command(command);
 	}
 

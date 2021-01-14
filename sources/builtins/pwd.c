@@ -5,7 +5,7 @@ int		ft_pwd(void)
 {
 	char	*pwd;
 
-	pwd = getcwd(pwd, 4096);
+	pwd = getcwd(NULL, MAXPATHLEN);
 	if (pwd == NULL)
 		return (-1);
 	else
