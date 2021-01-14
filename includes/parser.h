@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2020/12/10 19:39:30 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/01/14 15:58:05 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,7 @@ typedef struct	s_parser
 }				t_parser;
 
 t_parser get_command(t_list *argument);
+
+t_command	*setup_command(void);
 
 #endif

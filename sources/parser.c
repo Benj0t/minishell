@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_old.c                                       :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/11 13:38:44 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/14 14:52:17 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,16 +179,6 @@ char	*next(char **str, t_list *env, s_pipe *spipe)
 			ret = arg_env(str, ret, env, spipe);
 	}
 	return (ret);
-}
-
-//setup t_command
-void	setup_command(t_command *ret)
-{
-	ret->argument = NULL;
-	ret->redir_in = NULL;
-	ret->redir_out = NULL;
-	ret->redir_append = NULL;
-	ret->pipe = NULL;
 }
 
 //enregistre plusieur t_command (recursif)
