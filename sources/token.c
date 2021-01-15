@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/14 15:51:23 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/15 15:02:21 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,31 +34,31 @@ static t_ttoken	search_type(char c)
 	return (i+1);
 }
 
-// t_token		view_next_token(const char *str)
-// {
-// 	t_token	tok;
-// 	size_t	i;
+t_token		view_next_token(const char *str)
+{
+	t_token	tok;
+	size_t	i;
 
-// 	i = 0;
-// 	tok.name = NULL;
-// 	tok.type = tok_eof;
-// 	if (str[i] == '\0')
-// 	{
-// 		str = NULL;
-// 		return (tok);
-// 	}
-// 	while (!in_list(str[i], T_ALL))
-// 		i++;
-// 	if (in_list(str[i], T_ALL) && i == 0)
-// 	{
-// 		tok.name = ft_substr(str, 0, 1);
-// 		tok.type = search_type(*tok.name);
-// 		return (tok);
-// 	}
-// 	tok.type = tok_word;
-// 	tok.name = ft_substr(str, 0, i);
-// 	return (tok);
-// }
+	i = 0;
+	tok.name = NULL;
+	tok.type = tok_eof;
+	if (str[i] == '\0')
+	{
+		str = NULL;
+		return (tok);
+	}
+	while (!in_list(str[i], T_ALL))
+		i++;
+	if (in_list(str[i], T_ALL) && i == 0)
+	{
+		tok.name = ft_substr(str, 0, 1);
+		tok.type = search_type(*tok.name);
+		return (tok);
+	}
+	tok.type = tok_word;
+	tok.name = ft_substr(str, 0, i);
+	return (tok);
+}
 
 t_token		next_token(char **str)
 {
@@ -76,13 +76,13 @@ t_token		next_token(char **str)
 	{
 		tok.name = ft_substr(*str, 0, 1);
 		tok.type = search_type(*tok.name);
-		*str = ft_strdup(&str[0][1]);
+		*str = ft_strdup(&str[0][1]); //free
 		printf("-%s-%d\n", tok.name, tok.type);
 		return (tok);
 	}
 	tok.type = tok_word;
 	tok.name = ft_substr(*str, 0, i);
-	*str = ft_strdup(&str[0][i]);
+	*str = ft_strdup(&str[0][i]); //free
 	printf("-%s-%d\n", tok.name, tok.type);
 	return (tok);
 }

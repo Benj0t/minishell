@@ -12,7 +12,10 @@
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
-			"environment": [],
+			"environment": [
+				{"name":"test", "value":"ls -a"},
+				{"name":"yop", "value":"coucou"}
+			],
 			"externalConsole": false,
 			"MIMode": "lldb"
 		}

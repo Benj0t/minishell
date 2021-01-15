@@ -44,10 +44,11 @@ void		print_multi_command(t_command *command)
 	}
 }
 
-int main(int argc, char const *argv[])
+int main(int argc, char const *argv[], char **envp)
 {
-	char	*str;
-	t_token	tok;
+	char		*str;
+	t_token		tok;
+	t_list		*env;
 	t_command	*command;
 
 	//str = ft_strdup("cat <lol.c>> out;echo $yop \"$yop\" '$yop'");
@@ -56,9 +57,12 @@ int main(int argc, char const *argv[])
 	// 	tok = next_token(&str);
 	// 	printf("-%s- %d\n", tok.name, (int)tok.type);
 	// }
+	env = envp_to_list(envp);
 	str = ft_strdup("cat <lol.c>> out | grep hey");
+	str = ft_strdup("echo $yop \"$yop hey\" '$yop'");
+	//str = ft_strdup(argv[1]);
 	command = setup_command();
-	parser_token(&str, command);
+	parser_token(&str, command, env);
 	print_multi_command(command);
 	return 0;
 }
