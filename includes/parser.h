@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/15 13:37:47 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/18 12:33:42 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,10 @@
 
 size_t			next_space(char *str);
 
-typedef struct	s_command
-{
-		t_list				*argument;
-		t_list				*redir_append;
-		t_list				*redir_out;
-		t_list				*redir_in;
-		struct s_command	*pipe;
-}				t_command;
-
-typedef struct	s_var_env
-{
-	char	*key;
-	char	*var;
-}				t_var_env;
-
-typedef struct	s_parser
-{
-		char	*command;
-		char	**argument;
-}				t_parser;
 
 t_parser get_command(t_list *argument);
 
 t_command	*setup_command(void);
+int			parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe);
 
 #endif

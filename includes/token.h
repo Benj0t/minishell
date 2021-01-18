@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 09:46:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/15 16:19:41 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/18 12:09:45 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,9 @@ typedef struct	s_token
 }				t_token;
 
 t_token		next_token(char **str);
-int			parser_token(char **str, t_command *command, t_list *env);
 t_token		view_next_token(const char *str);
 void		smplquote_expander(char **str, t_token *tok);
 void		environnment_expander(char **str, t_list *env);
-void	dblquote_expander(char **str, t_token *tok, t_list *env);
+void		dblquote_expander(char **str, t_token *tok, t_list *env);
 
 #endif
