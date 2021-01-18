@@ -28,9 +28,11 @@ FILES =		./sources/main\
 			./sources/builtins/unset\
 			./sources/builtins/echo\
 			./sources/builtins/exit\
+			./sources/enter\
 			./sources/parser\
+			./sources/token\
 			./sources/env\
-			./sources/parser_utils\
+			./sources/expander\
 			./sources/multi_pipe\
 			./sources/redir\
 

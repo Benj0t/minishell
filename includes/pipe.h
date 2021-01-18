@@ -6,15 +6,16 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/14 11:28:56 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/18 12:32:44 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPE_H
 # define PIPE_H
 
-# include "parser.h"
 # include "minishell.h"
+# include "parser.h"
+
 typedef struct	t_pipe
 {
 	int			**p;
