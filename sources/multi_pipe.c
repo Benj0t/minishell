@@ -21,14 +21,13 @@ static int		first_command(t_list *env, t_command *cmd, s_pipe *spipe, t_redir *r
     exec_redir(cmd, redir);
     comm1 = get_command(cmd->argument);
     comm2 = get_command(cmd->pipe->argument);
-    if ((spipe->child[spipe->i_comm++] = fork()) == 0)
+    spipe->ret[spipe->index] = builtins(cmd, env, spipe);
+    if (spipe->ret[spipe->index++] == -1 && (spipe->child[spipe->i_comm++] = fork()) == 0)
     {
         if (redir->std_out == -1)
             dup2(spipe->p[spipe->i_pipe][1], 1);
         close(spipe->p[spipe->i_pipe][0]);
-        spipe->ret[spipe->index] = builtins(cmd, env, spipe);
-        if (spipe->ret[spipe->index++] == -1)
-            execve(ft_path(list_to_envp(env), comm1), comm1.argument, list_to_envp(env));
+        execve(ft_path(list_to_envp(env), comm1), comm1.argument, list_to_envp(env));
     }
     if (redir->std_out != -1)
     {
@@ -37,7 +36,8 @@ static int		first_command(t_list *env, t_command *cmd, s_pipe *spipe, t_redir *r
     }
     end_redir(redir);
     exec_redir(cmd->pipe, redir);
-    if ((spipe->child[spipe->i_comm++] = fork()) == 0)
+    spipe->ret[spipe->index] = builtins(cmd, env, spipe);
+    if (spipe->ret[spipe->index++] == -1 && (spipe->child[spipe->i_comm++] = fork()) == 0)
     {
         if (redir->std_in == -1)
             dup2(spipe->p[spipe->i_pipe][0], 0);
@@ -45,9 +45,7 @@ static int		first_command(t_list *env, t_command *cmd, s_pipe *spipe, t_redir *r
 		if (redir->std_out == -1)
             dup2(spipe->p[spipe->i_pipe + 1][1], 1);
         close(spipe->p[spipe->i_pipe + 1][0]);
-        spipe->ret[spipe->index] = builtins(cmd->pipe, env, spipe);
-        if (spipe->ret[spipe->index++] == -1)
-            execve(ft_path(list_to_envp(env), comm2), comm2.argument,  list_to_envp(env));
+        execve(ft_path(list_to_envp(env), comm2), comm2.argument,  list_to_envp(env));
     }
     close(spipe->p[spipe->i_pipe][0]);
     close(spipe->p[spipe->i_pipe][1]);
@@ -68,7 +66,8 @@ static int		middle_commands(t_list *env, t_command *cmd, s_pipe *spipe, t_redir 
 
 	comm1 = get_command(cmd->argument);
     exec_redir(cmd, redir);
-    if ((spipe->child[spipe->i_comm++] = fork()) == 0)
+    spipe->ret[spipe->index] = builtins(cmd, env, spipe);
+    if (spipe->ret[spipe->index++] == -1 && (spipe->child[spipe->i_comm++] = fork()) == 0)
     {
         if (redir->std_in == -1)
             dup2(spipe->p[spipe->i_pipe][0], 0);
@@ -76,9 +75,7 @@ static int		middle_commands(t_list *env, t_command *cmd, s_pipe *spipe, t_redir 
 		if (redir->std_out == -1)
             dup2(spipe->p[spipe->i_pipe + 1][1], 1);
         close(spipe->p[spipe->i_pipe + 1][0]);
-        spipe->ret[spipe->index] = builtins(cmd, env, spipe);
-        if (spipe->ret[spipe->index++] == -1)
-            execve(ft_path(list_to_envp(env), comm1), comm1.argument, list_to_envp(env));
+        execve(ft_path(list_to_envp(env), comm1), comm1.argument, list_to_envp(env));
     }
 	close(spipe->p[spipe->i_pipe][0]);
     close(spipe->p[spipe->i_pipe][1]);
@@ -99,14 +96,13 @@ static int		last_command(t_list *env, t_command *cmd, s_pipe *spipe, t_redir *re
 
 	comm1 = get_command(cmd->argument);
     exec_redir(cmd, redir);
-    if ((spipe->child[spipe->i_comm++] = fork()) == 0)
+    spipe->ret[spipe->index] = builtins(cmd, env, spipe);
+    if (spipe->ret[spipe->index++] == -1 && (spipe->child[spipe->i_comm++] = fork()) == 0)
     {
         if (redir->std_in == -1)
             dup2(spipe->p[spipe->i_pipe][0], 0);
 		close(spipe->p[spipe->i_pipe][1]);
-        spipe->ret[spipe->index] = builtins(cmd, env, spipe);
-        if (spipe->ret[spipe->index++] == -1)
-            execve(ft_path(list_to_envp(env), comm1), comm1.argument,  list_to_envp(env));
+        execve(ft_path(list_to_envp(env), comm1), comm1.argument,  list_to_envp(env));
     }
 	close(spipe->p[spipe->i_pipe][0]);
     close(spipe->p[spipe->i_pipe][1]);
@@ -207,14 +203,13 @@ int    single_pipe(t_list *env, t_command *command, t_redir *redir, s_pipe *spip
     exec_redir(command, redir);
     if (pipe(p) < 0)
         return (-1);
-    if ((child = fork()) == 0)
+    spipe->ret[0] = builtins(command, env, spipe);
+    if (spipe->ret[0] == -1 && (child = fork()) == 0)
     {
         if (redir->std_in == -1 && redir->std_out == -1)
             dup2(p[1], 1);
         close(p[0]);
-        spipe->ret[0] = builtins(command, env, spipe);
-        if (spipe->ret[0] == -1)
-            execve(ft_path(list_to_envp(env), comm1), comm1.argument, list_to_envp(env));
+        execve(ft_path(list_to_envp(env), comm1), comm1.argument, list_to_envp(env));
         if (redir->std_out != -1)
         {
             end_redir(redir);
@@ -223,14 +218,13 @@ int    single_pipe(t_list *env, t_command *command, t_redir *redir, s_pipe *spip
     }
     end_redir(redir);
     exec_redir(command->pipe, redir);
-    if ((child2 = fork()) == 0)
+    spipe->ret[1] = builtins(command, env, spipe);
+    if (spipe->ret[1] == -1 && (child2 = fork()) == 0)
     {
         if (redir->std_in == -1)
             dup2(p[0], 0);
         close(p[1]);
-       spipe->ret[1] = builtins(command->pipe, env, spipe);
-        if (spipe->ret[1] == -1)
-            execve(ft_path(list_to_envp(env), comm2), comm2.argument,  list_to_envp(env));
+        execve(ft_path(list_to_envp(env), comm2), comm2.argument,  list_to_envp(env));
     }
     end_redir(redir);
     close(p[0]);

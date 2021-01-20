@@ -14,13 +14,13 @@
 
 void		end_redir(t_redir *redir)
 {
-    if (redir->std_in != -1)
+    if (redir->std_in == -1)
     {
         dup2(redir->save_stdin, 0);
         close(redir->save_stdin);
         close(redir->std_in);
     }
-    if (redir->std_out != -1)
+    if (redir->std_out == -1)
     {
         dup2(redir->save_stdout, 1);
         close(redir->save_stdout);
