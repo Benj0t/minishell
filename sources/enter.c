@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   enter.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/18 13:44:28 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/20 10:04:23 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,30 +33,38 @@ void		clear_multi_command(t_command *command)
 //print t_command
 void		print_multi_command(t_command *command)
 {
-	while (command != NULL)
+	t_command *tmp;
+	t_list *lst_tmp;
+
+	tmp = command;
+	while (tmp != NULL)
 	{
 		printf("COMMAND:\n");
-		while (command->argument != NULL)
+		lst_tmp = command->argument;
+		while (lst_tmp != NULL)
 		{
-			printf("	arg: -%s-\n", (char *)command->argument->content);
-			command->argument = command->argument->next;
+			printf("	arg: -%s-\n", (char *)lst_tmp->content);
+			lst_tmp = lst_tmp->next;
 		}
-		while (command->redir_in != NULL)
+		lst_tmp = command->redir_in;
+		while (lst_tmp != NULL)
 		{
-			printf("	redir_in: -%s-\n", (char *)command->redir_in->content);
-			command->redir_in = command->redir_in->next;
+			printf("	redir_in: -%s-\n", (char *)lst_tmp->content);
+			lst_tmp = lst_tmp->next;
 		}
-		while (command->redir_out != NULL)
+		lst_tmp = command->redir_out;
+		while (lst_tmp != NULL)
 		{
-			printf("	redir_out: -%s-\n", (char *)command->redir_out->content);
-			command->redir_out = command->redir_out->next;
+			printf("	redir_out: -%s-\n", (char *)lst_tmp->content);
+			lst_tmp = lst_tmp->next;
 		}
-		while (command->redir_append != NULL)
+		lst_tmp = command->redir_append;
+		while (lst_tmp != NULL)
 		{
-			printf("	redir_append: -%s-\n", (char *)command->redir_append->content);
-			command->redir_append = command->redir_append->next;
+			printf("	redir_append: -%s-\n", (char *)lst_tmp->content);
+			lst_tmp = lst_tmp->next;
 		}
-		command = command->pipe;
+		tmp = tmp->pipe;
 	}
 }
 
@@ -77,14 +85,13 @@ t_command	*setup_command(void)
 int		parser(char *str, t_list *env, t_redir *redir, s_pipe *spipe)
 {
 	t_command	*command;
-	t_list		*arg;
 
 	str = ft_strdup(str);
-	while (str[0] != '\0')
+	while (*str)
 	{
 		command = setup_command();
 		parser_token(&str, command, env, spipe);
-		//print_multi_command(command);
+		print_multi_command(command);
 		//printf("EXEC\n");
 		execution(env, command, redir, spipe);
 		clear_multi_command(command);
