@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int		first_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
+static int		first_command(t_list *env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 {
 	
     t_parser comm1;
@@ -26,7 +26,9 @@ static int		first_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *re
         if (redir->std_out == -1)
             dup2(spipe->p[spipe->i_pipe][1], 1);
         close(spipe->p[spipe->i_pipe][0]);
-        execve(ft_path(env, comm1), comm1.argument, env);
+        spipe->ret[spipe->index] = builtins(cmd, env, spipe);
+        if (spipe->ret[spipe->index++] == -1)
+            execve(ft_path(list_to_envp(env), comm1), comm1.argument, list_to_envp(env));
     }
     if (redir->std_out != -1)
     {
@@ -43,7 +45,9 @@ static int		first_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *re
 		if (redir->std_out == -1)
             dup2(spipe->p[spipe->i_pipe + 1][1], 1);
         close(spipe->p[spipe->i_pipe + 1][0]);
-        execve(ft_path(env, comm2), comm2.argument,  env);
+        spipe->ret[spipe->index] = builtins(cmd->pipe, env, spipe);
+        if (spipe->ret[spipe->index++] == -1)
+            execve(ft_path(list_to_envp(env), comm2), comm2.argument,  list_to_envp(env));
     }
     close(spipe->p[spipe->i_pipe][0]);
     close(spipe->p[spipe->i_pipe][1]);
@@ -57,7 +61,7 @@ static int		first_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *re
     return (1);
 }
 
-static int		middle_commands(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
+static int		middle_commands(t_list *env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 {
 	int ret;
 	t_parser comm1;
@@ -72,7 +76,9 @@ static int		middle_commands(char **env, t_command *cmd, s_pipe *spipe, t_redir *
 		if (redir->std_out == -1)
             dup2(spipe->p[spipe->i_pipe + 1][1], 1);
         close(spipe->p[spipe->i_pipe + 1][0]);
-        execve(ft_path(env, comm1), comm1.argument,  env);
+        spipe->ret[spipe->index] = builtins(cmd, env, spipe);
+        if (spipe->ret[spipe->index++] == -1)
+            execve(ft_path(list_to_envp(env), comm1), comm1.argument, list_to_envp(env));
     }
 	close(spipe->p[spipe->i_pipe][0]);
     close(spipe->p[spipe->i_pipe][1]);
@@ -86,7 +92,7 @@ static int		middle_commands(char **env, t_command *cmd, s_pipe *spipe, t_redir *
 	return (1);
 }
 
-static int		last_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
+static int		last_command(t_list *env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 {
 	int ret;
 	t_parser comm1;
@@ -98,7 +104,9 @@ static int		last_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *red
         if (redir->std_in == -1)
             dup2(spipe->p[spipe->i_pipe][0], 0);
 		close(spipe->p[spipe->i_pipe][1]);
-        execve(ft_path(env, comm1), comm1.argument,  env);
+        spipe->ret[spipe->index] = builtins(cmd, env, spipe);
+        if (spipe->ret[spipe->index++] == -1)
+            execve(ft_path(list_to_envp(env), comm1), comm1.argument,  list_to_envp(env));
     }
 	close(spipe->p[spipe->i_pipe][0]);
     close(spipe->p[spipe->i_pipe][1]);
@@ -112,13 +120,14 @@ static int		last_command(char **env, t_command *cmd, s_pipe *spipe, t_redir *red
 	return (1);
 }
 
-int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
+int     		multi_pipe(t_list *env, t_command *cmd, s_pipe *spipe, t_redir *redir)
 {
     int			i;
     int         fd;
     int         ret;
 	t_command	*tmp;
 
+    spipe->index = 0;
     i = 0;
     fd = 1;
 	tmp = cmd;
@@ -160,19 +169,24 @@ int     		multi_pipe(char **env, t_command *cmd, s_pipe *spipe, t_redir *redir)
         i++;
     }
     if (ret == 1)
+    {
         ret = last_command(env, tmp, spipe, redir);
+    }
     spipe->i_pipe++;
     i = 0;
     while (spipe->i_pipe >= 0)
     {
-        waitpid(spipe->child[spipe->i_pipe--], (int *)&(spipe->pid[i]), 0);
-        spipe->ret[i] = WEXITSTATUS(spipe->pid[i]);
+        if (spipe->ret[i] == -1)
+        {
+            waitpid(spipe->child[spipe->i_pipe--], (int *)&(spipe->pid[i]), 0);
+            spipe->ret[i] = WEXITSTATUS(spipe->pid[i]);
+        }
         i++;
     }
 	return (1);
 }
 
-int    single_pipe(char **env, t_command *command, t_redir *redir, s_pipe *spipe)
+int    single_pipe(t_list *env, t_command *command, t_redir *redir, s_pipe *spipe)
 {
     int p[2];
     int child;
@@ -187,8 +201,6 @@ int    single_pipe(char **env, t_command *command, t_redir *redir, s_pipe *spipe
     spipe->pid[2] = -1;
     if (!(spipe->ret = (int *)malloc(sizeof(int) * (3))))
         return (-1);
-    spipe->ret[0] = -1;
-    spipe->ret[1] = -1;
     spipe->ret[2] = -1;
     comm1 = get_command(command->argument);
     comm2 = get_command(command->pipe->argument);
@@ -200,12 +212,14 @@ int    single_pipe(char **env, t_command *command, t_redir *redir, s_pipe *spipe
         if (redir->std_in == -1 && redir->std_out == -1)
             dup2(p[1], 1);
         close(p[0]);
-        execve(ft_path(env, comm1), comm1.argument, env);
-    }
-    if (redir->std_out != -1)
-    {
-        end_redir(redir);
-        return (0);
+        spipe->ret[0] = builtins(command, env, spipe);
+        if (spipe->ret[0] == -1)
+            execve(ft_path(list_to_envp(env), comm1), comm1.argument, list_to_envp(env));
+        if (redir->std_out != -1)
+        {
+            end_redir(redir);
+            return (0);
+        }
     }
     end_redir(redir);
     exec_redir(command->pipe, redir);
@@ -214,14 +228,22 @@ int    single_pipe(char **env, t_command *command, t_redir *redir, s_pipe *spipe
         if (redir->std_in == -1)
             dup2(p[0], 0);
         close(p[1]);
-        execve(ft_path(env, comm2), comm2.argument,  env);
+       spipe->ret[1] = builtins(command->pipe, env, spipe);
+        if (spipe->ret[1] == -1)
+            execve(ft_path(list_to_envp(env), comm2), comm2.argument,  list_to_envp(env));
     }
     end_redir(redir);
     close(p[0]);
     close(p[1]);
-    waitpid(child, (int *)&(spipe->pid[0]), 0);
-    waitpid(child, (int *)&(spipe->pid[1]), 0);
-    spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
-    spipe->ret[1] = WEXITSTATUS(spipe->pid[1]);
+    if (spipe->ret[0] == -1)
+    {
+        waitpid(child, (int *)&(spipe->pid[0]), 0);
+        spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
+    }
+    if (spipe->ret[1] == -1)
+    {
+        waitpid(child, (int *)&(spipe->pid[1]), 0);
+        spipe->ret[1] = WEXITSTATUS(spipe->pid[1]);
+    }
     return (1);
 }
