@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   enter.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/18 13:44:28 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/19 14:32:58 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void		clear_multi_command(t_command *command)
 //print t_command
 void		print_multi_command(t_command *command)
 {
+
 	while (command != NULL)
 	{
 		printf("COMMAND:\n");
@@ -77,10 +78,9 @@ t_command	*setup_command(void)
 int		parser(char *str, t_list *env, t_redir *redir, s_pipe *spipe)
 {
 	t_command	*command;
-	t_list		*arg;
 
 	str = ft_strdup(str);
-	while (str[0] != '\0')
+	while (*str)
 	{
 		command = setup_command();
 		parser_token(&str, command, env, spipe);

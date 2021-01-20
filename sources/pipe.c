@@ -75,8 +75,8 @@ int     execution(t_list *env, t_command *cmd, t_redir *redir, s_pipe *spipe)
         return (unset(test.argument, env));
     if (ft_strncmp(test.command, "env", 4) == 0)
         return (list_env(env));
-    if (ft_strncmp(test.command, "echo", 5) == 0)
-        return (ft_echo(test.argument));
+    // if (ft_strncmp(test.command, "echo", 5) == 0)
+    //     return (ft_echo(test.argument));
     if (ft_strncmp(test.command, "exit", 5) == 0)
         return (ft_exit(test.argument));
     spipe->n_comm = listlen(cmd);

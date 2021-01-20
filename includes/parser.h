@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/18 12:33:42 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/19 09:25:23 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 # define PARSER_H
 
 # include "pipe.h"
-
-size_t			next_space(char *str);
-
 
 t_parser get_command(t_list *argument);
 
