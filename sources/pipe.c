@@ -91,12 +91,10 @@ int     execution(t_list *env, t_command *cmd, t_redir *redir, s_pipe *spipe)
 {
 
     int i;
-    //int ret;
 
     i = 0;
-    //ret = builtins(cmd, env);
-    //if (ret != -1)
-    //    return (ret);
+    if (cmd->argument == NULL)
+        return (-1);
     spipe->n_comm = listlen(cmd);
     spipe->i_comm = 0;
     spipe->i_pipe = 0;
