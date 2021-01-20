@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/20 10:04:23 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/20 10:37:44 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,25 +40,25 @@ void		print_multi_command(t_command *command)
 	while (tmp != NULL)
 	{
 		printf("COMMAND:\n");
-		lst_tmp = command->argument;
+		lst_tmp = tmp->argument;
 		while (lst_tmp != NULL)
 		{
 			printf("	arg: -%s-\n", (char *)lst_tmp->content);
 			lst_tmp = lst_tmp->next;
 		}
-		lst_tmp = command->redir_in;
+		lst_tmp = tmp->redir_in;
 		while (lst_tmp != NULL)
 		{
 			printf("	redir_in: -%s-\n", (char *)lst_tmp->content);
 			lst_tmp = lst_tmp->next;
 		}
-		lst_tmp = command->redir_out;
+		lst_tmp = tmp->redir_out;
 		while (lst_tmp != NULL)
 		{
 			printf("	redir_out: -%s-\n", (char *)lst_tmp->content);
 			lst_tmp = lst_tmp->next;
 		}
-		lst_tmp = command->redir_append;
+		lst_tmp = tmp->redir_append;
 		while (lst_tmp != NULL)
 		{
 			printf("	redir_append: -%s-\n", (char *)lst_tmp->content);
@@ -92,7 +92,7 @@ int		parser(char *str, t_list *env, t_redir *redir, s_pipe *spipe)
 		command = setup_command();
 		parser_token(&str, command, env, spipe);
 		print_multi_command(command);
-		//printf("EXEC\n");
+		printf("EXEC\n");
 		execution(env, command, redir, spipe);
 		clear_multi_command(command);
 	}
