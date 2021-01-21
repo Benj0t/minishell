@@ -45,6 +45,27 @@ int     get_path_id(char **env)
     return (-1);
 }
 
+char        *rel_path(char **env, t_parser comm, struct stat buf)
+{
+    int ret;
+    int child;
+
+    child = fork();
+    if (child == 0)
+    {
+        if (!stat(comm.argument[0], &buf))
+            exit(EXIT_SUCCESS);
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        waitpid(child, &ret, 0);
+        if (ret != -1 && ret != 256)
+            return (ft_strdup(comm.argument[0]));
+    }
+    return (NULL);
+}
+
 char        *ft_path(char **env, t_parser comm)
 {
     char *path;
@@ -56,6 +77,9 @@ char        *ft_path(char **env, t_parser comm)
     pid_t child;
     struct stat buf;
 
+    path = rel_path(env, comm, buf);
+    if (path)
+        return (path);
     if ((id = get_path_id(env)) < 0)
         return (NULL);
     i = 0;

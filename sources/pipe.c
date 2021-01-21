@@ -23,8 +23,8 @@ int    builtins(t_command *cmd, t_list *env, s_pipe *spipe)
         return (unset(parse.argument, env));
     if (ft_strncmp(parse.command, "env", 4) == 0)
         return (list_env(env));
-    if (ft_strncmp(parse.command, "echo", 5) == 0)
-        return (ft_echo(parse.argument));
+    // if (ft_strncmp(parse.command, "echo", 5) == 0)
+    //     return (ft_echo(parse.argument));
     if (ft_strncmp(parse.command, "exit", 5) == 0)
         return (ft_exit(parse.argument));
     return (-1);
@@ -111,9 +111,6 @@ int     execution(t_list *env, t_command *cmd, t_redir *redir, s_pipe *spipe)
     {
         multi_pipe(env, cmd, spipe, redir);
     }
-    else
-    {
-        ft_putendl_fd("Il est con ce gosse", 1);
-    }
+    spipe->last_ret = spipe->ret[spipe->n_comm - 1];
     return (1);
 }
