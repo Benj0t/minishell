@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/21 13:36:40 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/22 11:46:08 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,10 @@ t_command	*setup_command(void)
 	t_command	*ret;
 
 	ret = malloc(sizeof(t_command));
-	ret->argument = NULL;
-	ret->redir_in = NULL;
-	ret->redir_out = NULL;
-	ret->redir_append = NULL;
+	ret->argument = ft_strdup("");
+	ret->redir_in = ft_strdup("");
+	ret->redir_out = ft_strdup("");
+	ret->redir_append = ft_strdup("");
 	ret->pipe = NULL;
 	return (ret);
 }
@@ -95,10 +95,11 @@ int		parser(char *str, t_list *env, t_redir *redir, s_pipe *spipe)
 			clear_multi_command(command);
 			break ;
 		}
-		print_multi_command(command);
-		printf("EXEC\n");
-		execution(env, command, redir, spipe);
-		clear_multi_command(command);
+		printf("%s\n%s\n%s\n%s\n", command->argument, command->redir_append, command->redir_out, command->redir_in);
+		//print_multi_command(command);
+		//printf("EXEC\n");
+		//execution(env, command, redir, spipe);
+		//clear_multi_command(command);
 	}
 	return (0);
 }
