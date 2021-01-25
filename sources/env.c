@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/06 14:33:06 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/22 04:49:53 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ char	**list_to_envp(t_list *env)
 
 	len = ft_lstsize(env);
 	ret = (char **)malloc(sizeof(char *) * (len + 1));
-	ret[len] = NULL;
 	i = 0;
 	while (env != NULL)
 	{
@@ -93,6 +92,7 @@ char	**list_to_envp(t_list *env)
 		env = env->next;
 		i++;
 	}
+	ret[len] = NULL;
 	return (ret);
 }
 
@@ -101,7 +101,7 @@ void	dealloc_tab(char **tab)
 	char	**start;
 
 	start = tab;
-	while (tab != NULL)
+	while (*tab != NULL)
 	{
 		free(*tab);
 		tab++;

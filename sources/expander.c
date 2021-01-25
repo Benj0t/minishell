@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/19 15:41:22 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/21 10:02:03 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	environnment_expander(char **str, t_list *env, s_pipe *spipe)
 
 	tok = next_token(str);
 	if (*tok.name == '?')
-		var = ft_itoa(*spipe->ret);
+		var = ft_itoa(spipe->last_ret);
 	else
 		var = get_env_var(tok.name, env);
 	if (var != NULL)
