@@ -10,5 +10,6 @@ int		ft_pwd(void)
 		return (-1);
 	else
 		ft_putstr_fd(pwd, 1);
+	free(pwd);
 	return (0);
 }
