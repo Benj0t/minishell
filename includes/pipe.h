@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/20 05:50:47 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/01/25 07:24:21 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,13 @@
 # include "minishell.h"
 # include "parser.h"
 
+// /!\ CHANGER EN T_PIPE ENCULE
+
 typedef struct	t_pipe
 {
+	char		*path;
+	char		**l_env;
+	int			last_ret;
 	int			**p;
 	int			*ret;
 	int			*pid;
@@ -37,6 +42,14 @@ typedef struct	s_redir
    	int 		save_stdout;
 }				t_redir;
 
+void	end_redir(t_redir *redir);
+char    **set_local_env(t_list *env, s_pipe *spipe);
+void   	free_spipe(s_pipe *spipe);
+int		first_command(t_list *env, t_command *cmd,\
+		s_pipe *spipe, t_redir *redir);
+void	dealloc_tab(char **tab);
+char    *init_path(char **env, t_parser command, s_pipe *spipe);
+char	**set_local_env(t_list *env, s_pipe *spipe);
 int		builtins(t_command *cmd, t_list *env, s_pipe *spipe);
 int		parser(char *str, t_list *env, t_redir *redir, s_pipe *spipe);
 int     ft_ret(int *ret);
@@ -53,5 +66,9 @@ int     exec_pipe(char **env, t_command *command, int pipe[2]);
 int     create_files_out(t_list *file);
 int		exec_redir_out(char **env, t_command *cmd, t_list *redir);
 int     execution(t_list *env, t_command *cmd, t_redir *redir, s_pipe *spipe);
-
+void	get_ret_values(s_pipe *spipe);
+int		init_pipe(s_pipe *spipe);
+int		init_spipe(s_pipe *spipe);
+int		err_msg(char *str);
+void	save_std(t_redir *redir, t_list **tmp, t_command *cmd);
 #endif

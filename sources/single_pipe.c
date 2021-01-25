@@ -6,11 +6,25 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/01/25 04:38:11 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/01/25 07:57:11 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void		pid_manager(s_pipe *spipe, int child[2])
+{
+	if (spipe->ret[0] == -1)
+	{
+		waitpid(child[0], (int *)&(spipe->pid[0]), 0);
+		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
+	}
+	if (spipe->ret[1] == -1)
+	{
+		waitpid(child[1], (int *)&(spipe->pid[1]), 0);
+		spipe->ret[1] = WEXITSTATUS(spipe->pid[1]);
+	}	
+}
 
 static int	left_command(s_pipe *spipe, t_redir *redir,\
 						t_command *command, int p[2])
@@ -33,7 +47,7 @@ static int	left_command(s_pipe *spipe, t_redir *redir,\
 		}
 	}
 	end_redir(redir);
-	return (1);
+	return (child);
 }
 
 static int	right_command(s_pipe *spipe, t_redir *redir,\
@@ -51,24 +65,10 @@ static int	right_command(s_pipe *spipe, t_redir *redir,\
 		execve(init_path(spipe->l_env, comm2, spipe),\
 				comm2.argument, spipe->l_env);
 	}
-	end_redir(redir);
 	close(p[0]);
 	close(p[1]);
-	return (1);
-}
-
-void		pid_manager(s_pipe *spipe, int child[2])
-{
-	if (spipe->ret[0] == -1)
-	{
-		waitpid(child[0], (int *)&(spipe->pid[0]), 0);
-		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
-	}
-	if (spipe->ret[1] == -1)
-	{
-		waitpid(child[1], (int *)&(spipe->pid[1]), 0);
-		spipe->ret[1] = WEXITSTATUS(spipe->pid[1]);
-	}
+	end_redir(redir);
+	return (child);
 }
 
 int			single_pipe(t_list *env, t_command *command,\
@@ -77,19 +77,19 @@ int			single_pipe(t_list *env, t_command *command,\
 	int			p[2];
 	int			child[2];
 
+	exec_redir(command, redir);
 	if (pipe(p) < 0)
 		return (-1);
 	set_local_env(env, spipe);
-	exec_redir(command, redir);
 	spipe->ret[0] = builtins(command, env, spipe);
 	child[0] = left_command(spipe, redir, command, p);
-	if (!child[0])
+	if (child[0] == -1)
 		return (0);
 	set_local_env(env, spipe);
 	exec_redir(command->pipe, redir);
 	spipe->ret[1] = builtins(command, env, spipe);
 	child[1] = right_command(spipe, redir, command, p);
-	if (!child[1])
+	if (child[1] == -1)
 		return (0);
 	pid_manager(spipe, child);
 	return (1);
