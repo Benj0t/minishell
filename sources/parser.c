@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/26 15:29:23 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/26 16:08:33 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,11 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 	t_token		tok;
 
 	tok = next_token(str);
-	while (tok.type == tok_space || tok.type == tok_tab)
+	if (tok.type == tok_space || tok.type == tok_tab)
+	{
+		command->argument = ft_strjoin(command->argument, tok.name);
 		tok = next_token(str);
+	}
 	if (tok.type == tok_eof)
 		return (0);
 	if (tok.type > T_NOWORD && command->argument == NULL)
@@ -52,16 +55,22 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 		if (tok.type == tok_out)
 		{
 			tok = next_token(str);
-			while (tok.type == tok_space || tok.type == tok_tab)
+			if (tok.type == tok_space || tok.type == tok_tab)
+			{
+				command->redir_append = ft_strjoin(command->redir_append, tok.name);
 				tok = next_token(str);
+			}
 			if (tok.type > T_NOWORD)
 				return (error_parser(EUNEXPECTED, tok.name));
 			ft_lstadd_back(&command->redir_append, ft_lstnew(tok.name));
 		}
 		else
 		{
-			while (tok.type == tok_space || tok.type == tok_tab)
+			if (tok.type == tok_space || tok.type == tok_tab)
+			{
+				command->redir_out = ft_strjoin(command->redir_out, tok.name);
 				tok = next_token(str);
+			}
 			if (tok.type > T_NOWORD)
 				return (error_parser(EUNEXPECTED, tok.name));
 			if (tok.type == tok_backslash)
@@ -72,8 +81,11 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 	if (tok.type == tok_in)
 	{
 		tok = next_token(str);
-		while (tok.type == tok_space || tok.type == tok_tab)
+		if (tok.type == tok_space || tok.type == tok_tab)
+		{
+			command->redir_in = ft_strjoin(command->redir_in, tok.name);
 			tok = next_token(str);
+		}
 		if (tok.type > T_NOWORD)
 			return (error_parser(EUNEXPECTED, tok.name));
 		if (tok.type == tok_backslash)
