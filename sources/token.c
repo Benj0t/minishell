@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/21 14:08:16 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/26 13:58:56 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,18 @@ t_token		view_next_token(const char *str)
 	return (tok);
 }
 
+int			is_quote(char c)
+{
+	if (c == '"' || c == '\'')
+		return (1);
+	return (0);
+}
+
 t_token		next_token(char **str)
 {
 	t_token	tok;
 	size_t	i;
+	char	quote;
 
 	i = 0;
 	tok.name = NULL;
@@ -71,7 +79,22 @@ t_token		next_token(char **str)
 	if (str[0][i] == '\0')
 		return (tok);
 	while (!in_list(str[0][i], T_ALL) && str[0][i] != '\0')
+	{
+		if (is_quote(str[0][i]))
+		{
+			quote = str[0][i];
+			i++;
+			while (str[0][i] != quote && str[0][i] != '\0')
+				i++;
+			if (str[0][i] == '\0')
+			{
+				tok.name = "finir le quote s'il vou plait monsieur";
+				tok.type = tok_error;
+				return (tok);
+			}
+		}
 		i++;
+	}
 	if (in_list(str[0][i], T_ALL) && i == 0)
 	{
 		tok.name = ft_substr(*str, 0, 1);
