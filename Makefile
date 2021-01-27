@@ -40,6 +40,7 @@ FILES =		./sources/main\
 			./sources/pipe_utils\
 			./sources/init_pipe\
 			./sources/redir_utils\
+			./sources/signal\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)

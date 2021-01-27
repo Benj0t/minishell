@@ -34,6 +34,7 @@ typedef struct	s_parser
 # include <sys/wait.h>
 # include <errno.h>
 # include <string.h>
+# include <signal.h>
 # include "parser.h"
 # include "pipe.h"
 # include <sys/stat.h>
@@ -60,6 +61,7 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 */
+void		sig_handler(int sigid);
 int			ft_pipe(char **env, char *command1, char *command2);
 int			ft_cd(char **arg, t_list *lst_env);
 int			ft_pwd(void);
