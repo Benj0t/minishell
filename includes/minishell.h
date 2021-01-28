@@ -5,10 +5,10 @@
 
 typedef struct	s_command
 {
-		char*				argument;
-		char*				redir_append;
-		char*				redir_out;
-		char*				redir_in;
+		t_list			*argument;
+		t_list			*redir_append;
+		t_list			*redir_out;
+		t_list			*redir_in;
 		struct s_command	*pipe;
 }				t_command;
 

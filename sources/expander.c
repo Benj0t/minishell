@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/26 15:56:50 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/28 17:20:48 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,23 @@ void	backslash(char **str, t_token *tok)
 // ok j'ai une bete d'idee que tu feras apres manger ...
 // en fait les expander vont prendre les next arg et soit modifer le type du tok envoye soit modifier le tok et c'est comme ca que ca va changer ... on peut essayer pour backslash
 // si c'est une erreur on envoie le token error ! je compte sur toi
-void	environnment_expander(char **str, t_token *tok, t_list *env, s_pipe *spipe)
+void	environnment_expander(size_t i, char **str, t_token *tok, t_list *env, s_pipe *spipe)
 {
+	size_t	base;
+	char	*ret;
+	char	*key;
+	char	*var;
 
+	base = i;
+	while (str[0][i] != ' ' && str[0][i] != '	' && str[0][i] != '\0' && str[0][i] != '"')
+		i++;
+	//pour le test de char
+	key = ft_substr(*str, base, i-1);
+	var = get_env_var(key, env);
+	ret = ft_substr(*str, 0, base);
+	ret = ft_strjoin(ret, var);
+	ret = ft_strjoin(ret, &str[0][i+1]);
+	*str = ret;
 }
 
 void	smplquote_expander(char **result, t_token *tok)
@@ -53,10 +67,8 @@ void	smplquote_expander(char **result, t_token *tok)
 	size_t i;
 
 	i = 0;
-	while (tok->name[i] != '"')
-	{
+	while (tok->name[i] != '\'')
 		i++;
-	}
 	*result = ft_strjoin(*result, ft_substr(tok->name, 0, i));
 	tok->name = ft_strdup(&tok->name[i + 1]); //free
 }
@@ -69,7 +81,7 @@ void	dblquote_expander(char **result, t_token *tok, t_list *env, s_pipe *spipe)
 	while (tok->name[i] != '"')
 	{
 		if (tok->name[i] == '$')
-			environnment_expander(result, tok, env, spipe);
+			environnment_expander(i, result, tok, env, spipe);
 		i++;
 	}
 	*result = ft_strjoin(*result, ft_substr(tok->name, 0, i));
