@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/06 14:33:06 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/30 16:13:14 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,15 @@ t_var_env	*malloc_varenv(char *key, char *str)
 
 char	*get_env_var(char *search, t_list *env)
 {
-	t_var_env *var_env;
+	t_var_env	*var_env;
+	size_t		len;
 
 	var_env = (t_var_env *)env->content;
-	while (ft_strncmp(var_env->key, search, ft_strlen(var_env->key)))
+	if (ft_strlen(var_env->key) < ft_strlen(search))
+		len = ft_strlen(search);
+	else
+		len = ft_strlen(var_env->key);
+	while (ft_strncmp(var_env->key, search, len))
 	{
 		env = env->next;
 		if (env == NULL)
