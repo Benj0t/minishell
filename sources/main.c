@@ -15,7 +15,7 @@ void	ft_putstr(char *str)
 
 void	sig_handler(int sigid)
 {
-	if (child != 0)
+	if (sigid == SIGINT && child != 0)
 	{
 		write(1, "\n", 1);
 		kill(child, SIGTERM);
@@ -36,18 +36,20 @@ int main(int ac, char **av, char **envp)
 	env = envp_to_list(envp);
 	set_env_var("lol", "hey", env); 
 	spipe.ret = 0;
+	child = 0;
 	while (1)
 	{
 		ft_pwd();
 		ft_putstr("> ");
-		child = fork();
+		signal(SIGQUIT, &sig_handler);
 		signal(SIGINT, &sig_handler);
+		child = fork();
 		if (child == 0)
 		{
 			get_next_line(0, &str);
 			parser(str, env, &redir, &spipe);
 			free(str);
-			kill(getpid(), SIGQUIT);
+			kill(getpid(), SIGTERM);
 		}
 		waitpid(child, &ret, 0);
 	}
