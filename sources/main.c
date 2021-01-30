@@ -15,11 +15,11 @@ void	ft_putstr(char *str)
 
 void	sig_handler(int sigid)
 {
-	int i;
-
-	i = 3;
-	write(1, &i, 1);
-	kill(child, 1);
+	if (child != 0)
+	{
+		write(1, "\n", 1);
+		kill(child, SIGTERM);
+	}
 	return ;
 }
 
@@ -34,22 +34,20 @@ int main(int ac, char **av, char **envp)
 
 	spipe.last_ret = 0;
 	env = envp_to_list(envp);
-	set_env_var("lol", "hey", env);
+	set_env_var("lol", "hey", env); 
 	spipe.ret = 0;
 	while (1)
 	{
-		ret = 0;
-		signal(SIGINT, &sig_handler);
 		ft_pwd();
 		ft_putstr("> ");
 		child = fork();
+		signal(SIGINT, &sig_handler);
 		if (child == 0)
 		{
-			ft_putstr("Je suis le fork");
 			get_next_line(0, &str);
 			parser(str, env, &redir, &spipe);
 			free(str);
-			exit(EXIT_SUCCESS);
+			kill(getpid(), SIGQUIT);
 		}
 		waitpid(child, &ret, 0);
 	}
