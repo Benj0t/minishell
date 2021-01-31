@@ -31,6 +31,7 @@ int main(int ac, char **av, char **envp)
 	t_redir		redir;
 	t_list		*env;
 	s_pipe		spipe;
+	int			pid;
 
 	spipe.last_ret = 0;
 	env = envp_to_list(envp);
@@ -46,12 +47,15 @@ int main(int ac, char **av, char **envp)
 		child = fork();
 		if (child == 0)
 		{
-			get_next_line(0, &str);
+			gnl_prompt(0, &str);
 			parser(str, env, &redir, &spipe);
 			free(str);
 			kill(getpid(), SIGTERM);
 		}
-		waitpid(child, &ret, 0);
+		waitpid(child, &pid, 0);
+		ret = WEXITSTATUS(pid);
+		if (ret == 9)
+			exit(9);
 	}
 	free(str);
 	ft_lstclear(&env, free);
