@@ -31,6 +31,8 @@ int main(int ac, char **av, char **envp)
 		ft_pwd();
 		ft_putstr("> ");
 		get_next_line(0, &str);
+		if (!ft_strncmp("exit", str, 5))
+			exit(0);
 		parser(str, env, &redir, &spipe);
 		free(str);
 	}

@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/30 15:59:41 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/01 15:10:29 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	smplquote_expander(char **result, t_token *tok)
 	size_t i;
 
 	i = 0;
-	while (tok->name[i] != '"')
+	while (tok->name[i] != '\'')
 		i++;
 	tok->name[i] = '\0';
 	*result = ft_strjoin(*result, tok->name);
@@ -89,7 +89,7 @@ void	dblquote_expander(char **result, t_token *tok, t_list *env, s_pipe *spipe)
 			tok->name[i] = '\0';
 			*result = ft_strjoin(*result, tok->name);
 			tok->name = ft_strdup(&tok->name[i + 1]);
-			i++;
+			i = 0;
 		}
 		if (tok->name[i] == '$' && !backslash)
 		{
@@ -110,6 +110,7 @@ void	dblquote_expander(char **result, t_token *tok, t_list *env, s_pipe *spipe)
 void	expansion(t_token *tok, t_list *env, s_pipe *spipe)
 {
 	char	*result;
+	char	quote;
 	size_t	i;
 
 	i = 0;
@@ -118,10 +119,14 @@ void	expansion(t_token *tok, t_list *env, s_pipe *spipe)
 	{
 		if (is_quote(tok->name[i]))
 		{
+			quote = tok->name[i];
 			tok->name[i] = '\0';
 			result = ft_strjoin(result, tok->name);
 			tok->name = ft_strdup(&tok->name[i + 1]); //free
-			dblquote_expander(&result, tok, env, spipe);
+			if (quote == '"')
+				dblquote_expander(&result, tok, env, spipe);
+			else
+				smplquote_expander(&result, tok);
 		}
 		if (tok->name[i] == '$')
 		{
