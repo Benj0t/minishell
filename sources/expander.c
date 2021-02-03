@@ -40,54 +40,104 @@ void	backslash(char **str, t_token *tok)
 	// }
 }
 
-void	environnment_expander(char **str, t_list *env, s_pipe *spipe)
+// ok j'ai une bete d'idee que tu feras apres manger ...
+// en fait les expander vont prendre les next arg et soit modifer le type du tok envoye soit modifier le tok et c'est comme ca que ca va changer ... on peut essayer pour backslash
+// si c'est une erreur on envoie le token error ! je compte sur toi
+void	environnment_expander(char **str, t_token *tok, t_list *env, s_pipe *spipe)
 {
-	t_token	tok;
+	size_t	i;
+	char	*ret;
+	char	*key;
 	char	*var;
 
-	tok = next_token(str);
-	if (*tok.name == '?')
-	{
-		var = ft_itoa(spipe->last_ret);
-	}
-	else
-		var = get_env_var(tok.name, env);
-	if (var != NULL)
-		*str = ft_strjoin(var, *str); //free
+	i = 0;
+	while (tok->name[i] != ' ' && tok->name[i] != '	' && tok->name[i] != '\0' && tok->name[i] != '"' && tok->name[i] != '\\')
+		i++;
+	//pour le test de char
+	key = ft_substr(tok->name, 0, i);
+	var = get_env_var(key, env);
+	if (var == NULL)
+		var = "";
+	*str = ft_strjoin(*str, var);
+	tok->name = ft_strdup(&tok->name[i]);
 }
 
-void	smplquote_expander(char **str, t_token *tok)
+void	smplquote_expander(char **result, t_token *tok)
 {
+	size_t i;
+
+	i = 0;
+	while (tok->name[i] != '\'')
+		i++;
+	tok->name[i] = '\0';
+	*result = ft_strjoin(*result, tok->name);
+	tok->name = &tok->name[i+1];
+}
+
+void	dblquote_expander(char **result, t_token *tok, t_list *env, s_pipe *spipe)
+{
+	size_t i;
+	int		backslash;
+
+	i = 0;
+	while (tok->name[i] != '"')
+	{
+		backslash = 0;
+		if (tok->name[i] == '\\' && tok->name[i+1] == '$')
+		{
+			backslash = 1;
+			tok->name[i] = '\0';
+			*result = ft_strjoin(*result, tok->name);
+			tok->name = ft_strdup(&tok->name[i + 1]);
+			i = 0;
+		}
+		if (tok->name[i] == '$' && !backslash)
+		{
+			tok->name[i] = '\0';
+			*result = ft_strjoin(*result, tok->name);
+			tok->name = ft_strdup(&tok->name[i + 1]);
+			environnment_expander(result, tok, env, spipe);
+			i = 0;
+			continue;
+		}
+		i++;
+	}
+	tok->name[i] = '\0';
+	*result = ft_strjoin(*result, tok->name);
+	tok->name = &tok->name[i+1];
+}
+
+void	expansion(t_token *tok, t_list *env, s_pipe *spipe)
+{
+	char	*result;
+	char	quote;
 	size_t	i;
 
 	i = 0;
-	while (str[0][i] != T_ALL[3] && str[0][i] != T_EOF)
-		i++;
-	if (str[0][i] == T_EOF) //erreur
-		return ;
-	tok->name = ft_substr(*str, 0, i);
-	*str = ft_strdup(&str[0][i + 1]); //free
-}
-
-void	dblquote_expander(char **str, t_token *tok, t_list *env, s_pipe *spipe)
-{
-	t_token	tmp;
-	char	*ret;
-	char	*var;
-	char	*name;
-
-	tmp = next_token(str);
-	ret = ft_strdup("");
-	while (tmp.type != tok_dblquote && tmp.type != tok_eof)
+	result = ft_strdup("");
+	while (tok->name[i] != '\0')
 	{
-		if (tmp.type == tok_env)
-			environnment_expander(str, env, spipe);
-		if (tmp.type != tok_dblquote && tmp.type != tok_env)
-			ret = ft_strjoin(ret, tmp.name); //free
-		tmp = next_token(str);
+		if (is_quote(tok->name[i]))
+		{
+			quote = tok->name[i];
+			tok->name[i] = '\0';
+			result = ft_strjoin(result, tok->name);
+			tok->name = ft_strdup(&tok->name[i + 1]); //free
+			if (quote == '"')
+				dblquote_expander(&result, tok, env, spipe);
+			else
+				smplquote_expander(&result, tok);
+		}
+		if (tok->name[i] == '$')
+		{
+			tok->name[i] = '\0';
+			result = ft_strjoin(result, tok->name);
+			tok->name = ft_strdup(&tok->name[i + 1]);
+			environnment_expander(&result, tok, env, spipe);
+			i = 0;
+			continue;
+		}
+		i++;
 	}
-	if (tmp.type == tok_eof) //erreur
-		return ;
-	tok->name = ret;
-	return ;
+	tok->name = ft_strjoin(result, tok->name); //free
 }

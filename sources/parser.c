@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/19 10:01:52 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/01/28 14:30:00 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,83 +22,62 @@
 
 int		error_parser(char *str, char *name)
 {
-	printf("error: %s '%s'\n", str, name);
+	if (str == NULL)
+		printf("minishell: %s\n", name);
+	else
+		printf("minishell: %s `%s`\n", str, name);
 	return (1);
 }
 
+//probleme : quand il n'y a pas d'espace tout les elements sont un seul argument
 int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 {
 	t_token		tok;
 
 	tok = next_token(str);
-	while (tok.type == tok_space || tok.type == tok_tab)
+	if (tok.type == tok_space || tok.type == tok_tab)
 		tok = next_token(str);
 	if (tok.type == tok_eof)
 		return (0);
 	if (tok.type > T_NOWORD && command->argument == NULL)
-		return (error_parser("unexpected token", tok.name));
-	if (tok.type == tok_backslash)
-		backslash(str, &tok);
-	if (tok.type == tok_env)
-		environnment_expander(str, env, spipe);
-	if (tok.type == tok_smpquote)
-		smplquote_expander(str, &tok);
-	if (tok.type == tok_dblquote)
-		dblquote_expander(str, &tok, env, spipe);
-	if (tok.type == tok_word || tok.type == tok_smpquote || tok.type == tok_dblquote)
+		return (error_parser(EUNEXPECTED, tok.name));
+	if (tok.type == tok_word)
+	{
+		expansion(&tok, env, spipe);
 		ft_lstadd_back(&command->argument, ft_lstnew(tok.name));
+	}
 	if (tok.type == tok_out)
 	{
 		tok = next_token(str);
 		if (tok.type == tok_out)
 		{
 			tok = next_token(str);
-			while (tok.type == tok_space || tok.type == tok_tab)
+			if (tok.type == tok_space || tok.type == tok_tab)
 				tok = next_token(str);
 			if (tok.type > T_NOWORD)
-				return (error_parser("unexpected token", tok.name));
-			if (tok.type == tok_backslash)
-				backslash(str, &tok);
-			if (tok.type == tok_env)
-				environnment_expander(str, env, spipe);
-			if (tok.type == tok_dblquote)
-				dblquote_expander(str, &tok, env, spipe);
-			if (tok.type == tok_smpquote)
-				smplquote_expander(str, &tok);
+				return (error_parser(EUNEXPECTED, tok.name));
 			ft_lstadd_back(&command->redir_append, ft_lstnew(tok.name));
 		}
 		else
 		{
-			while (tok.type == tok_space || tok.type == tok_tab)
+			if (tok.type == tok_space || tok.type == tok_tab)
 				tok = next_token(str);
 			if (tok.type > T_NOWORD)
-				return (error_parser("unexpected token", tok.name));
+				return (error_parser(EUNEXPECTED, tok.name));
 			if (tok.type == tok_backslash)
 				backslash(str, &tok);
-			if (tok.type == tok_env)
-				environnment_expander(str, env, spipe);
-			if (tok.type == tok_dblquote)
-				dblquote_expander(str, &tok, env, spipe);
-			if (tok.type == tok_smpquote)
-				smplquote_expander(str, &tok);
 			ft_lstadd_back(&command->redir_out, ft_lstnew(tok.name));
 		}
 	}
 	if (tok.type == tok_in)
 	{
 		tok = next_token(str);
-		while (tok.type == tok_space || tok.type == tok_tab)
+		if (tok.type == tok_space || tok.type == tok_tab)
 			tok = next_token(str);
 		if (tok.type > T_NOWORD)
-			return (error_parser("unexpected token", tok.name));
+			return (error_parser(EUNEXPECTED, tok.name));
 		if (tok.type == tok_backslash)
 			backslash(str, &tok);
-		if (tok.type == tok_env)
-			environnment_expander(str, env, spipe);
-		if (tok.type == tok_dblquote)
-			dblquote_expander(str, &tok, env, spipe);
-		if (tok.type == tok_smpquote)
-			smplquote_expander(str, &tok);
 		ft_lstadd_back(&command->redir_in, ft_lstnew(tok.name));
 	}
 	if (tok.type == tok_pipe)
@@ -108,5 +87,7 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 	}
 	if (tok.type == tok_end)
 		return (0);
+	if (tok.type == tok_error)
+		return (error_parser(NULL, tok.name));
 	return (parser_token(str, command, env, spipe));
 }

@@ -90,12 +90,15 @@ int		parser(char *str, t_list *env, t_redir *redir, s_pipe *spipe)
 	while (*str)
 	{
 		command = setup_command();
-		parser_token(&str, command, env, spipe);
+		if (parser_token(&str, command, env, spipe))
+		{
+			clear_multi_command(command);
+			return (1);
+		}
 		print_multi_command(command);
-		//printf("EXEC\n");
-		execution(env, command, redir, spipe);
+		printf("EXEC\n");
+		//execution(env, command, redir, spipe);
 		clear_multi_command(command);
 	}
-
 	return (0);
 }

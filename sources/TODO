@@ -11,6 +11,8 @@ bug cd lstat etc
 some bug parser voir tester
 tester loop
 
+export sans opt
+export sans ""
 BEN:
 
 Check le ^\ sur les macs, car Linux (wsl) trop random, a check l implementation multipipe
