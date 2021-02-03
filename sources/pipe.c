@@ -6,11 +6,22 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/01/25 07:51:01 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/01 19:01:04 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+pid_t child;
+
+void	sig_quit(int sigid)
+{
+	if (sigid == SIGQUIT && child != 0)
+	{
+		write(1, "\n", 1);
+		kill(child, SIGTERM);
+	}
+}
 
 int		builtins(t_command *cmd, t_list *env, s_pipe *spipe)
 {
@@ -48,16 +59,17 @@ int		listlen(t_command *list)
 int		simple_command(t_list *env, t_command *cmd,\
 						t_redir *redir, s_pipe *spipe)
 {
-	pid_t		child;
 	t_parser	comm1;
 	int			ret;
 
+	child = 0;
 	comm1 = get_command(cmd->argument);
 	set_local_env(env, spipe);
 	exec_redir(cmd, redir);
 	ret = builtins(cmd, env, spipe);
 	if (ret == -1)
 	{
+		signal(SIGQUIT, &sig_quit);
 		if ((child = fork()) == 0)
 			execve(init_path(spipe->l_env, comm1, spipe),\
 							comm1.argument, spipe->l_env);

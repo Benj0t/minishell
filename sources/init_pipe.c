@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/01/25 05:10:24 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/01 18:57:15 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ char		*init_path(char **env, t_parser command, s_pipe *spipe)
 	if (spipe->path)
 		free(spipe->path);
 	spipe->path = ft_path(env, command);
+	if (!(spipe->path))
+		exit(127);
 	return (spipe->path);
 }
 
