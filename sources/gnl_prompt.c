@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/31 22:03:51 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/01 19:02:05 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int		prompt_test(int check, char *str, char **line, int fd)
 	ft_memset(str, 0, BUFFER_SIZE);
 	check = read(fd, str, BUFFER_SIZE);
 	if ((check == 0) && (ft_strlen(*line) == 0))
+	{
+		write(1, "exit\n", 5);
 		exit(9);
+	}
 	if (check == 0)
 		check = 1;
 	str[check] = 0;
