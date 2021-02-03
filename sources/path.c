@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2020/09/21 14:08:51 by marvin           ###   ########.fr       */
+/*   Updated: 2021/01/25 05:16:38 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_parser get_command(t_list *argument)
+t_parser	get_command(t_list *argument)
 {
 	t_parser	parse;
-	int		len;
-	int		i;
+	int			len;
+	int			i;
 
 	len = ft_lstsize(argument);
 	parse.argument = (char **)malloc(sizeof(char *) * (len + 1));
@@ -31,84 +31,85 @@ t_parser get_command(t_list *argument)
 	return (parse);
 }
 
-int     get_path_id(char **env)
+int			get_path_id(char **env)
 {
-    int i;
+	int i;
 
-    i = 0;
-    while (env[i])
-    {
-        if (!ft_strncmp("PATH=", env[i], 5))
-            return (i);
-        i++;
-    }
-    return (-1);
+	i = 0;
+	while (env[i])
+	{
+		if (!ft_strncmp("PATH=", env[i], 5))
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
-char        *rel_path(char **env, t_parser comm, struct stat buf)
+char		*rel_path(char **env, t_parser comm, struct stat buf)
 {
-    int ret;
-    int child;
+	int ret;
+	int child;
 
-    child = fork();
-    if (child == 0)
-    {
-        if (!stat(comm.argument[0], &buf))
-            exit(EXIT_SUCCESS);
-        exit(EXIT_FAILURE);
-    }
-    else
-    {
-        waitpid(child, &ret, 0);
-        if (ret != -1 && ret != 256)
-            return (ft_strdup(comm.argument[0]));
-    }
-    return (NULL);
+	child = fork();
+	if (child == 0)
+	{
+		if (!stat(comm.argument[0], &buf))
+			exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		waitpid(child, &ret, 0);
+		if (ret != -1 && ret != 256)
+			return (ft_strdup(comm.argument[0]));
+	}
+	return (NULL);
 }
 
-char        *ft_path(char **env, t_parser comm)
+int			stat_loop(char *path, struct stat *buf, int *ret)
 {
-    char *path;
-    char **tab;
-    int id;
-    int found;
-    int ret;
-    int i;
-    pid_t child;
-    struct stat buf;
+	pid_t		child;
 
-    path = rel_path(env, comm, buf);
-    if (path)
-        return (path);
-    if ((id = get_path_id(env)) < 0)
-        return (NULL);
-    i = 0;
-    ret = 0;
-    found = 0;
-    tab = ft_split(env[id] + 5, ':');
-    path = NULL;
-    while (!found)
-    {
-        path = ft_strjoin_c(tab[i], comm.command, '/');
-        child = fork();
-        if (child == 0)
-        {
+	child = fork();
+	if (child == 0)
+	{
+		if (!stat(path, buf))
+			exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		waitpid(child, ret, 0);
+		if (*ret != -1 && *ret != 256)
+			return (1);
+		else
+		{
+			free(path);
+		}
+	}
+	return (0);
+}
 
-            if (!stat(path, &buf))
-                exit(EXIT_SUCCESS);
-            exit(EXIT_FAILURE);
-        }
-        else
-        {
-            waitpid(child, &ret, 0);
-            if (ret != -1 && ret != 256)
-                found = 1;
-            else
-            {
-                free(path);
-            }
-        }
-        i++;
-    }
-    return (path);
+char		*ft_path(char **env, t_parser comm)
+{
+	char		*path;
+	char		**tab;
+	int			ret;
+	int			i;
+	struct stat	buf;
+
+	path = rel_path(env, comm, buf);
+	if (path)
+		return (path);
+	if ((i = get_path_id(env)) < 0)
+		return (NULL);
+	tab = ft_split(env[i] + 5, ':');
+	i = 0;
+	ret = 0;
+	path = NULL;
+	path = ft_strjoin_c(tab[i], comm.command, '/');
+	while (tab[i] && !(stat_loop(path, &buf, &ret)))
+		path = ft_strjoin_c(tab[++i], comm.command, '/');
+	dealloc_tab(tab);
+	return (path);
 }

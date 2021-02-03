@@ -2,6 +2,9 @@
 #include "pipe.h"
 #include "parser.h"
 
+pid_t	child;
+int		sig_ret;
+
 void	ft_putstr(char *str)
 {
 	int i;
@@ -11,30 +14,53 @@ void	ft_putstr(char *str)
 		write(1, &(str[i++]), 1);
 }
 
+void	sig_handler(int sigid)
+{
+	if (sigid == SIGINT && child != 0)
+	{
+		write(1, "\n", 1);
+		sig_ret = 130;
+		kill(child, SIGTERM);
+	}
+	return ;
+}
+
 int main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	char		*str;
-	pid_t		child;
-	int			ret;
 	t_redir		redir;
 	t_list		*env;
 	s_pipe		spipe;
+	int			pid;
 
 	spipe.last_ret = 0;
+	sig_ret = 0;
 	env = envp_to_list(envp);
-	set_env_var("lol", "hey", env);
+	set_env_var("lol", "hey", env); 
 	spipe.ret = 0;
-
+	child = 0;
 	while (1)
 	{
+		sig_ret = 0;
 		ft_pwd();
 		ft_putstr("> ");
-		get_next_line(0, &str);
-		if (!ft_strncmp("exit", str, 5))
-			exit(0);
-		parser(str, env, &redir, &spipe);
-		free(str);
+		signal(SIGQUIT, &sig_handler);
+		signal(SIGINT, &sig_handler);
+		child = fork();
+		if (child == 0)
+		{
+			gnl_prompt(0, &str);
+			parser(str, env, &redir, &spipe);
+			free(str);
+			exit(spipe.last_ret);
+		}
+		waitpid(child, &pid, 0);
+		spipe.last_ret = WEXITSTATUS(pid);
+		if (sig_ret)
+			spipe.last_ret = sig_ret;
+		if (spipe.last_ret == 9)
+			exit(9);
 	}
 	free(str);
 	ft_lstclear(&env, free);

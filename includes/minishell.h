@@ -60,6 +60,10 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 */
+int			gnl_prompt(int fd, char **line);
+int			prompt_rec(int check, char *str, char **line, int fd);
+int			prompt_test(int check, char *str, char **line, int fd);
+int			prompt_malloc(char **line, char *str);
 int			ft_pipe(char **env, char *command1, char *command2);
 int			ft_cd(char **arg, t_list *lst_env);
 int			ft_pwd(void);
