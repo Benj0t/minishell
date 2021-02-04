@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/28 14:30:00 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/04 16:33:19 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 	if (tok.type == tok_word)
 	{
 		expansion(&tok, env, spipe);
-		ft_lstadd_back(&command->argument, ft_lstnew(tok.name));
+		if (ft_strncmp("", tok.name, ft_strlen(tok.name))) //free if nothing
+			ft_lstadd_back(&command->argument, ft_lstnew(tok.name));
 	}
 	if (tok.type == tok_out)
 	{
@@ -91,3 +92,7 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 		return (error_parser(NULL, tok.name));
 	return (parser_token(str, command, env, spipe));
 }
+
+/*
+	verif si command->argument != NULL si redir out ou redir in
+*/

@@ -25,6 +25,7 @@ typedef struct	s_parser
 }				t_parser;
 
 # include <sys/types.h>
+# include <signal.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -70,6 +71,7 @@ int			ft_pwd(void);
 t_list		*envp_to_list(char **envp);
 void		set_env_var(char *key, char* var, t_list *env);
 char		**list_to_envp(t_list *env);
+int			valid_env(char *s);
 char		*get_env_var(char *search, t_list *lst_env);
 int			unset(char	**arg, t_list *env);
 int			list_env(t_list *env);

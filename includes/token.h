@@ -6,16 +6,16 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 09:46:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/30 11:38:12 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/04 16:13:18 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-# define T_ALL " 	\\;|><"
+# define T_ALL " 	\\><;|"
 # define T_EOF '\0'
-# define T_NOWORD 6
+# define T_NOWORD 5
 
 # define EUNEXPECTED "syntax error near unexpected token"
 
@@ -25,12 +25,13 @@ typedef enum	e_ttoken
 	tok_space,
 	tok_tab,
 	tok_backslash,
-	tok_end,
-	tok_pipe,
 	tok_out,
 	tok_in,
+	tok_end,
+	tok_pipe,
 	tok_eof,
-	tok_error
+	tok_error,
+	tok_null
 }				t_ttoken;
 
 typedef struct	s_token

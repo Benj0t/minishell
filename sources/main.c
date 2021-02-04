@@ -34,20 +34,20 @@ int main(int ac, char **av, char **envp)
 	s_pipe		spipe;
 	int			pid;
 
+	pid = 0;
 	spipe.last_ret = 0;
 	sig_ret = 0;
 	env = envp_to_list(envp);
-	set_env_var("lol", "hey", env); 
+	set_env_var("lol", "hey", env); //test
 	spipe.ret = 0;
 	child = 0;
 	while (1)
 	{
 		sig_ret = 0;
-		ft_pwd();
-		ft_putstr("> ");
+		ft_putstr_fd("> ", 2);
 		signal(SIGQUIT, &sig_handler);
 		signal(SIGINT, &sig_handler);
-		child = fork();
+		//child = fork();
 		if (child == 0)
 		{
 			gnl_prompt(0, &str);
@@ -55,7 +55,7 @@ int main(int ac, char **av, char **envp)
 			free(str);
 			exit(spipe.last_ret);
 		}
-		waitpid(child, &pid, 0);
+		//waitpid(child, &pid, 0);
 		spipe.last_ret = WEXITSTATUS(pid);
 		if (sig_ret)
 			spipe.last_ret = sig_ret;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/01 17:52:42 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/04 16:32:26 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	environnment_expander(char **str, t_token *tok, t_list *env, s_pipe *spipe)
 	char	*var;
 
 	i = 0;
-	while (tok->name[i] != ' ' && tok->name[i] != '	' && tok->name[i] != '\0' && tok->name[i] != '"' && tok->name[i] != '\\')
+	while (tok->name[i] != ' ' && tok->name[i] != '	' && tok->name[i] != '\0'
+		&& tok->name[i] != '"' && tok->name[i] != '\\' && tok->name[i] != '=')
 		i++;
 	//pour le test de char
 	key = ft_substr(tok->name, 0, i);

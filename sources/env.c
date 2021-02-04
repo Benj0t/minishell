@@ -3,14 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/22 04:49:53 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/04 15:05:00 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int			valid_env(char *s)
+{
+	size_t i;
+
+	i = 0;
+	if (s[i] == '=' || ft_isdigit(s[i]))
+		return (0);
+	while (s[i] && s[i] != '=')
+	{
+			if (!ft_isalnum(s[i]) && s[i] != '_')
+				return (0);
+		i++;
+	}
+	return (i);
+}
 
 t_var_env	*malloc_varenv(char *key, char *str)
 {
