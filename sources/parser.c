@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/04 16:33:19 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/05 11:21:57 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,18 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 	tok = next_token(str);
 	if (tok.type == tok_space || tok.type == tok_tab)
 		tok = next_token(str);
+	if (tok.type == tok_backslash)
+	{
+		tok = next_token(str);
+		tok.type = tok_word;
+	}
 	if (tok.type == tok_eof)
 		return (0);
 	if (tok.type > T_NOWORD && command->argument == NULL)
 		return (error_parser(EUNEXPECTED, tok.name));
 	if (tok.type == tok_word)
 	{
-		expansion(&tok, env, spipe);
-		if (ft_strncmp("", tok.name, ft_strlen(tok.name))) //free if nothing
+		if (expansion(&tok, env, spipe)) //free if nothing
 			ft_lstadd_back(&command->argument, ft_lstnew(tok.name));
 	}
 	if (tok.type == tok_out)

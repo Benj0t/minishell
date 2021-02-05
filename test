@@ -1,5 +1,0 @@
-bash: line 7: cd: .: No such file or directory
-pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
-chdir: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
-bash: line 14: PATH$
-: command not found
