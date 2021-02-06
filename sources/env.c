@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/04 15:05:00 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/06 15:50:05 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,20 @@ int			valid_env(char *s)
 		i++;
 	}
 	return (i);
+}
+
+void		print_env(t_list *env)
+{
+	t_var_env *var_env;
+
+	while (env != NULL)
+	{
+		var_env = (t_var_env *)env->content;
+		ft_putstr_fd(var_env->key, 1);
+		ft_putchar_fd('=', 1);
+		ft_putendl_fd(var_env->var, 1);
+		env = env->next;
+	}
 }
 
 t_var_env	*malloc_varenv(char *key, char *str)

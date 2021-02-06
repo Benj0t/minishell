@@ -6,11 +6,25 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:12:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/20 12:23:39 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/06 13:11:29 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		check_opt_n(char *arg)
+{
+	if (*arg != '-')
+		return (0);
+	arg++;
+	while (*arg == 'n')
+	{
+		arg++;
+		if (*arg == '\0')
+			return (1);
+	}
+	return (0);
+}
 
 int		ft_echo(char **arg)
 {
@@ -18,7 +32,7 @@ int		ft_echo(char **arg)
 
 	opt_n = 0;
 	arg++;
-	if (*arg && !ft_strncmp(*arg, "-n", 3))
+	while (*arg && check_opt_n(*arg))
 	{
 		opt_n = 1;
 		arg++;

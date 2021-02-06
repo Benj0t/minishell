@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 09:46:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/05 15:24:55 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/06 15:51:28 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ t_token		next_token(char **str);
 t_token		view_next_token(const char *str);
 int			is_quote(char c);
 void		smplquote_expander(char **result, t_token *tok);
-int			environnment_expander(char **str, t_token *tok, t_list *env, s_pipe *spipe);
+int			environnment_expander(t_token *tok, t_list *env, s_pipe *spipe);
 void		dblquote_expander(char **result, t_token *tok, t_list *env, s_pipe *spipe);
 void		backslash(char **str, t_token *tok);
-int			expansion(t_token *tok, t_list *env, s_pipe *spipe);
+int			expansion(t_command *command, t_token *tok, t_list *env, s_pipe *spipe);
 
 #endif

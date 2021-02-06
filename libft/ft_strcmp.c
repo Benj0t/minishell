@@ -1,38 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/06 11:49:10 by psemsari         ###   ########.fr       */
+/*   Created: 2019/10/11 17:03:17 by psemsari          #+#    #+#             */
+/*   Updated: 2021/02/06 12:55:02 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int		export(t_list *arg, t_list *env)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	t_var_env	*var_env;
-	char 		*str;
-	int			i;
+	size_t	i;
+	int		ret;
 
 	i = 0;
-	arg = arg->next;
-	if (arg == NULL)
-		print_env(env);
-	while (arg != NULL)
-	{
-		str = arg->content;
-		i = valid_env(str);
-		if (str[i] == '=') //key=value
-		{
-			str[i] = 0;
-			set_env_var(str, &str[i+1], env);
-			return (0);
-		}
-		arg = arg->next;
-	}
-	return (0);
+	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
+		i++;
+	if ((unsigned char)s1[i] - (unsigned char)s2[i] > 0)
+		ret = 1;
+	else if ((unsigned char)s1[i] - (unsigned char)s2[i] < 0)
+		ret = -1;
+	else
+		ret = 0;
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/05 11:21:57 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/06 15:52:27 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 		return (error_parser(EUNEXPECTED, tok.name));
 	if (tok.type == tok_word)
 	{
-		if (expansion(&tok, env, spipe)) //free if nothing
-			ft_lstadd_back(&command->argument, ft_lstnew(tok.name));
+		environnment_expander(&tok, env, spipe);
+		ft_lstadd_back(&command->argument, ft_lstnew(tok.name));
 	}
 	if (tok.type == tok_out)
 	{
