@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/06 16:03:52 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/07 20:33:47 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,20 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 	char	*var;
 
 	tok->name[i] = '\0';
-	ret = valid_env(&tok->name[i + 1]);
+	ret = 0;
+	while (tok->name[i + 1 + ret])
+	{
+		if (!ft_isalnum(tok->name[i + 1 + ret]) && tok->name[i + 1 + ret] != '_')
+			break;
+		ret++;
+	}
 	tmp = ft_substr(&tok->name[i + 1], 0, ret);
 	var = get_env_var(tmp, env);
+	if (var == NULL)
+		var = "";
 	free(tmp);
 	tmp = ft_strjoin(tok->name, var);
-	tok->name = ft_strjoin(tmp, &tok->name[ret + 1]);
+	tok->name = ft_strjoin(tmp, &tok->name[i + 1 + ret]);
 	free(tmp);
 	return (i + ft_strlen(var));
 }
@@ -71,10 +79,12 @@ int		environnment_expander(t_token *tok, t_list *env, s_pipe *spipe)
 	{
 		if (tok->name[i] == '\'')
 			quote = !quote;
-		if (tok->name[i] == '$' && !quote)
+		if (tok->name[i] == '$' && !quote && valid_env(&tok->name[i + 1]))
 			i = ft_subvar(i, tok, env, spipe);
 		i++;
 	}
+	if (tok->name[0] == '\0')
+		return (0);
 	return (1);
 }
 
@@ -97,27 +107,7 @@ void	dblquote_expander(char **result, t_token *tok, t_list *env, s_pipe *spipe)
 
 	i = 0;
 	while (tok->name[i] != '"')
-	{
-		backslash = 0;
-		if (tok->name[i] == '\\' && tok->name[i+1] == '$')
-		{
-			backslash = 1;
-			tok->name[i] = '\0';
-			*result = ft_strjoin(*result, tok->name);
-			tok->name = ft_strdup(&tok->name[i + 1]);
-			i = 0;
-		}
-		if (tok->name[i] == '$' && !backslash)
-		{
-			tok->name[i] = '\0';
-			*result = ft_strjoin(*result, tok->name);
-			tok->name = ft_strdup(&tok->name[i + 1]);
-			//environnment_expander(result, tok, env, spipe);
-			i = 0;
-			continue;
-		}
 		i++;
-	}
 	tok->name[i] = '\0';
 	*result = ft_strjoin(*result, tok->name);
 	tok->name = &tok->name[i+1];
@@ -144,18 +134,8 @@ int		expansion(t_command *command, t_token *tok, t_list *env, s_pipe *spipe)
 			else
 				smplquote_expander(&result, tok);
 		}
-		if (tok->name[i] == '$')
-		{
-			tok->name[i] = '\0';
-			result = ft_strjoin(result, tok->name);
-			tok->name = ft_strdup(&tok->name[i + 1]);
-			//environnment_expander(&result, tok, env, spipe);
-			i = 0;
-			continue;
-		}
 		i++;
 	}
 	tok->name = ft_strjoin(result, tok->name); //free
-	ft_lstadd_back(&command->argument, ft_lstnew(tok->name));
 	return (1);
 }
