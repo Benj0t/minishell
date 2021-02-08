@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/26 13:58:56 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/08 15:25:18 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,13 @@ t_token		next_token(char **str)
 		{
 			quote = str[0][i];
 			i++;
-			while (str[0][i] != quote && str[0][i] != '\0')
+			while (str[0][i] != '\0')
+			{
+				if (str[0][i] == quote)
+					if (!backslash(str[0], i))
+						break;
 				i++;
+			}
 			if (str[0][i] == '\0')
 			{
 				tok.name = "finir le quote s'il vou plait monsieur";
@@ -109,30 +114,3 @@ t_token		next_token(char **str)
 	// printf("-%s-%d\n", tok.name, tok.type);
 	return (tok);
 }
-
-// t_token		next_token(char **str)
-// {
-// 	t_token	tok;
-// 	size_t	i;
-
-// 	i = 0;
-// 	tok.name = NULL;
-// 	tok.type = tok_eof;
-// 	if (str[0][i] == '\0')
-// 		return (tok);
-// 	while (!in_list(str[0][i], T_ALL) && str[0][i] != '\0')
-// 		i++;
-// 	if (in_list(str[0][i], T_ALL) && i == 0)
-// 	{
-// 		tok.name = ft_substr(*str, 0, 1);
-// 		tok.type = search_type(*tok.name);
-// 		*str = ft_strdup(&str[0][1]); //free
-// 		// printf("-%s-%d\n", tok.name, tok.type);
-// 		return (tok);
-// 	}
-// 	tok.type = tok_word;
-// 	tok.name = ft_substr(*str, 0, i);
-// 	*str = ft_strdup(&str[0][i]); //free
-// 	// printf("-%s-%d\n", tok.name, tok.type);
-// 	return (tok);
-// }

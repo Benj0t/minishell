@@ -6,38 +6,18 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/07 20:33:47 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/08 15:38:10 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "token.h"
 
-//quand $ expander -> transform $ en phrase
-// phrase passe dans la moulinette mais ca perd tout les mecanisme
-
-//$ ' " <>| ;
-//annule la commande en le faisant disparaitre
-void	backslash(char **str, t_token *tok)
+int		backslash(char *str, size_t i)
 {
-	t_token after;
-
-	*tok = next_token(str);
-	after = next_token(str);
-	if (after.type != tok_space && after.type != tok_tab)
-	{
-		after.name = ft_strjoin(tok->name, after.name);
-		*tok = after;
-	}
-	// t_token tmp;
-
-	// *tok = next_token(str);
-	// tok->type = tok_word;
-	// if (**str != ' ' && **str != '	')
-	// {
-	// 	tmp = next_token(str);
-	// 	tok->name = ft_strjoin(tok->name, tmp.name);
-	// }
+	if (i > 0 && str[i - 1] == '\\')
+		return (1);
+	return (0);
 }
 
 size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
@@ -65,22 +45,22 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 	return (i + ft_strlen(var));
 }
 
-// ok j'ai une bete d'idee que tu feras apres manger ...
-// en fait les expander vont prendre les next arg et soit modifer le type du tok envoye soit modifier le tok et c'est comme ca que ca va changer ... on peut essayer pour backslash
-// si c'est une erreur on envoie le token error ! je compte sur toi
 int		environnment_expander(t_token *tok, t_list *env, s_pipe *spipe)
-{
+{//a faire $?
 	size_t	i;
 	int		quote;
 
 	i = 0;
-	quote = 0;
+	quote = 1;
 	while (tok->name[i] != '\0')
 	{
 		if (tok->name[i] == '\'')
-			quote = !quote;
-		if (tok->name[i] == '$' && !quote && valid_env(&tok->name[i + 1]))
+			quote *= -1;
+		if (tok->name[i] == '$' && quote == 1 && check_env(&tok->name[i + 1]))
+		{
 			i = ft_subvar(i, tok, env, spipe);
+			continue ;
+		}
 		i++;
 	}
 	if (tok->name[0] == '\0')
@@ -88,32 +68,7 @@ int		environnment_expander(t_token *tok, t_list *env, s_pipe *spipe)
 	return (1);
 }
 
-void	smplquote_expander(char **result, t_token *tok)
-{
-	size_t i;
-
-	i = 0;
-	while (tok->name[i] != '\'')
-		i++;
-	tok->name[i] = '\0';
-	*result = ft_strjoin(*result, tok->name);
-	tok->name = &tok->name[i+1];
-}
-
-void	dblquote_expander(char **result, t_token *tok, t_list *env, s_pipe *spipe)
-{
-	size_t i;
-	int		backslash;
-
-	i = 0;
-	while (tok->name[i] != '"')
-		i++;
-	tok->name[i] = '\0';
-	*result = ft_strjoin(*result, tok->name);
-	tok->name = &tok->name[i+1];
-}
-
-int		expansion(t_command *command, t_token *tok, t_list *env, s_pipe *spipe)
+int		expansion(t_token *tok, t_list *env, s_pipe *spipe)
 {
 	char	*result;
 	char	quote;
@@ -128,14 +83,18 @@ int		expansion(t_command *command, t_token *tok, t_list *env, s_pipe *spipe)
 			quote = tok->name[i];
 			tok->name[i] = '\0';
 			result = ft_strjoin(result, tok->name);
-			tok->name = ft_strdup(&tok->name[i + 1]); //free
-			if (quote == '"')
-				dblquote_expander(&result, tok, env, spipe);
-			else
-				smplquote_expander(&result, tok);
+			tok->name = &tok->name[i + 1];
+			i = 0;
+			while (tok->name[i] != quote || backslash(tok->name, i))
+				i++;
+			tok->name[i] = '\0';
+			result = ft_strjoin(result, tok->name);
+			tok->name = &tok->name[i + 1];
+			i = 0;
 		}
 		i++;
 	}
-	tok->name = ft_strjoin(result, tok->name); //free
+	result = ft_strjoin(result, tok->name);
+	tok->name = result;
 	return (1);
 }
