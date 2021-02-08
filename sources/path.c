@@ -50,10 +50,12 @@ char		*rel_path(char **env, t_parser comm, struct stat buf)
 	int ret;
 	int child;
 
+	if (!(comm.argument[0][0] ==  '.' && comm.argument[0][1] == '/'))
+		return (NULL);
 	child = fork();
 	if (child == 0)
 	{
-		if (!stat(comm.argument[0], &buf))
+		if (!lstat(comm.argument[0], &buf))
 			exit(EXIT_SUCCESS);
 		exit(EXIT_FAILURE);
 	}
