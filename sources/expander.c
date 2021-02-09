@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/09 15:23:13 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/09 17:03:32 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 	char	*var;
 
 	tok->name[i] = '\0';
-	ret = 1;
+	ret = ;
 	while (tok->name[i + 1 + ret] && tok->name[i + 1] != '?')
 	{
 		if (!ft_isalnum(tok->name[i + 1 + ret]) && tok->name[i + 1 + ret] != '_')
