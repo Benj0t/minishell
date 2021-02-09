@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/08 15:38:10 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/09 15:23:13 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,22 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 	char	*var;
 
 	tok->name[i] = '\0';
-	ret = 0;
-	while (tok->name[i + 1 + ret])
+	ret = 1;
+	while (tok->name[i + 1 + ret] && tok->name[i + 1] != '?')
 	{
 		if (!ft_isalnum(tok->name[i + 1 + ret]) && tok->name[i + 1 + ret] != '_')
 			break;
 		ret++;
 	}
 	tmp = ft_substr(&tok->name[i + 1], 0, ret);
-	var = get_env_var(tmp, env);
-	if (var == NULL)
-		var = "";
+	if (tmp[0] == '?')
+		var = ft_itoa(spipe->last_ret);
+	else
+	{
+		var = get_env_var(tmp, env);
+		if (var == NULL)
+			var = "";
+	}
 	free(tmp);
 	tmp = ft_strjoin(tok->name, var);
 	tok->name = ft_strjoin(tmp, &tok->name[i + 1 + ret]);
@@ -68,7 +73,7 @@ int		environnment_expander(t_token *tok, t_list *env, s_pipe *spipe)
 	return (1);
 }
 
-int		expansion(t_token *tok, t_list *env, s_pipe *spipe)
+int		expansion(t_token *tok)
 {
 	char	*result;
 	char	quote;

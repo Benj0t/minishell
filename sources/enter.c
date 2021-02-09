@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/05 11:18:10 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/09 16:15:44 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_command	*setup_command(void)
 }
 
 //start du parser
-int		parser(char *str, t_list *env, t_redir *redir, s_pipe *spipe)
+int		parser(char *str, t_redir *redir, s_pipe *spipe)
 {
 	t_command	*command;
 
