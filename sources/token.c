@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/08 15:25:18 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/10 14:07:26 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char	in_list(char c, char *str)
 	while (*str)
 	{
 		if (*str == c)
-			return ((int)*str);
+			return (1);
 		str++;
 	}
 	return (0);
@@ -67,6 +67,17 @@ int			is_quote(char c)
 	return (0);
 }
 
+int			is_backslash(char *str, size_t i)
+{
+	if ((str[i + 1] == '\\' && (str[i] != ' ' && str[i] != '	')) || str[i - 1] == '\\')
+	{
+		if (backslash(str, i - 1))
+			return (0);
+		return (1);
+	}
+	return (0);
+}
+
 t_token		next_token(char **str)
 {
 	t_token	tok;
@@ -78,7 +89,7 @@ t_token		next_token(char **str)
 	tok.type = tok_eof;
 	if (str[0][i] == '\0')
 		return (tok);
-	while (!in_list(str[0][i], T_ALL) && str[0][i] != '\0')
+	while ((!in_list(str[0][i], T_ALL) && str[0][i] != '\0') || is_backslash(str[0], i))
 	{
 		if (is_quote(str[0][i]))
 		{
@@ -93,7 +104,7 @@ t_token		next_token(char **str)
 			}
 			if (str[0][i] == '\0')
 			{
-				tok.name = "finir le quote s'il vou plait monsieur";
+				tok.name = ft_strdup(&quote);
 				tok.type = tok_error;
 				return (tok);
 			}

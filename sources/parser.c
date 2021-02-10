@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/09 15:30:26 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:02:42 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,13 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 	tok = next_token(str);
 	if (tok.type == tok_space || tok.type == tok_tab)
 		tok = next_token(str);
-	if (tok.type == tok_backslash)
-	{
-		tok = next_token(str);
-		tok.type = tok_word;
-	}
 	if (tok.type == tok_eof)
 		return (0);
 	if (tok.type > T_NOWORD && command->argument == NULL)
 		return (error_parser(EUNEXPECTED, tok.name));
 	if (tok.type == tok_word)
 	{
-		if (environnment_expander(&tok, env, spipe) && expansion(&tok))
+		if (environnment_expander(&tok, env, spipe) && expansion(&tok) && backslash_remove(&tok))
 			ft_lstadd_back(&command->argument, ft_lstnew(tok.name));
 	}
 	if (tok.type == tok_out)
@@ -62,7 +57,7 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 			if (tok.type > T_NOWORD)
 				return (error_parser(EUNEXPECTED, tok.name));
 			if (environnment_expander(&tok, env, spipe) && expansion(&tok))
-				ft_lstadd_back(&command->redir_out, ft_lstnew(tok.name));
+				ft_lstadd_back(&command->redir_append, ft_lstnew(tok.name));
 		}
 		else
 		{
@@ -70,10 +65,8 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 				tok = next_token(str);
 			if (tok.type > T_NOWORD)
 				return (error_parser(EUNEXPECTED, tok.name));
-			// if (tok.type == tok_backslash)
-			// 	backslash(str, &tok);
 			if (environnment_expander(&tok, env, spipe) && expansion(&tok))
-				ft_lstadd_back(&command->redir_append, ft_lstnew(tok.name));
+				ft_lstadd_back(&command->redir_out, ft_lstnew(tok.name));
 		}
 	}
 	if (tok.type == tok_in)
@@ -83,8 +76,6 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 			tok = next_token(str);
 		if (tok.type > T_NOWORD)
 			return (error_parser(EUNEXPECTED, tok.name));
-		// if (tok.type == tok_backslash)
-		// 	backslash(str, &tok);
 		if (environnment_expander(&tok, env, spipe) && expansion(&tok))
 			ft_lstadd_back(&command->redir_in, ft_lstnew(tok.name));
 	}

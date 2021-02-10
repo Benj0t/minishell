@@ -6,14 +6,14 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 09:46:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/09 15:24:15 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/10 15:02:01 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-# define T_ALL " 	\\><;|"
+# define T_ALL " 	><;|"
 # define T_EOF '\0'
 # define T_NOWORD 5
 
@@ -24,7 +24,6 @@ typedef enum	e_ttoken
 	tok_word,
 	tok_space,
 	tok_tab,
-	tok_backslash,
 	tok_out,
 	tok_in,
 	tok_end,
@@ -46,5 +45,6 @@ int			is_quote(char c);
 int			environnment_expander(t_token *tok, t_list *env, s_pipe *spipe);
 int			backslash(char *str, size_t i);
 int			expansion(t_token *tok);
+int			backslash_remove(t_token *tok);
 
 #endif

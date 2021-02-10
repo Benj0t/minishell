@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/09 17:03:32 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/10 16:02:34 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@
 int		backslash(char *str, size_t i)
 {
 	if (i > 0 && str[i - 1] == '\\')
+	{
+		if (backslash(str, i - 1))
+			return (0);
 		return (1);
+	}
 	return (0);
 }
 
@@ -27,7 +31,7 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 	char	*var;
 
 	tok->name[i] = '\0';
-	ret = ;
+	ret = 1;
 	while (tok->name[i + 1 + ret] && tok->name[i + 1] != '?')
 	{
 		if (!ft_isalnum(tok->name[i + 1 + ret]) && tok->name[i + 1 + ret] != '_')
@@ -61,7 +65,7 @@ int		environnment_expander(t_token *tok, t_list *env, s_pipe *spipe)
 	{
 		if (tok->name[i] == '\'')
 			quote *= -1;
-		if (tok->name[i] == '$' && quote == 1 && check_env(&tok->name[i + 1]))
+		if (tok->name[i] == '$' && quote == 1 && check_env(&tok->name[i + 1]) && !backslash(tok->name, i))
 		{
 			i = ft_subvar(i, tok, env, spipe);
 			continue ;
@@ -101,5 +105,49 @@ int		expansion(t_token *tok)
 	}
 	result = ft_strjoin(result, tok->name);
 	tok->name = result;
+	return (1);
+}
+
+void	remove_char(char **s, size_t here)
+{
+	char	*result;
+	char	*base;
+	size_t	i;
+
+	i = 0;
+	result = ft_calloc(ft_strlen(*s), sizeof(char));
+	base = result;
+	if (result == NULL)
+		*s = NULL;
+	while (s[0][i])
+	{
+		if (i != here)
+			*result++ = s[0][i];
+		i++;
+	}
+	*result = '\0';
+	free(*s);
+	*s = base;
+}
+
+int		backslash_remove(t_token *tok)
+{
+	char	*result;
+	int		check;
+	size_t	i;
+
+	i = 0;
+	check = 1;
+	while (tok->name[i] != '\0')
+	{
+		while (tok->name[i] == '\\')
+		{
+			check *= -1;
+			if (check == -1)
+				remove_char(&tok->name, i);
+			i++;
+		}
+		i++;
+	}
 	return (1);
 }
