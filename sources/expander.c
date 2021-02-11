@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/11 10:02:26 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/11 15:42:23 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 
 	tok->name[i] = '\0';
 	ret = 1;
-	while (tok->name[i + 1 + ret] && tok->name[i + 1] != '?')
+	while (tok->name[i + 1 + ret] && tok->name[i + 1] != '?' && !ft_isdigit(tok->name[i + 1]))
 	{
 		if (!ft_isalnum(tok->name[i + 1 + ret]) && tok->name[i + 1 + ret] != '_')
 			break;
@@ -77,35 +77,27 @@ int		environnment_expander(t_token *tok, t_list *env, s_pipe *spipe)
 	return (1);
 }
 
-int		expansion(t_token *tok)
+void	add_char(char **s, size_t here)
 {
 	char	*result;
-	char	quote;
+	char	*base;
 	size_t	i;
 
 	i = 0;
-	result = ft_strdup("");
-	while (tok->name[i] != '\0')
+	result = ft_calloc(ft_strlen(*s) + 1, sizeof(char));
+	base = result;
+	if (result == NULL)
+		*s = NULL;
+	while (s[0][i])
 	{
-		if (is_quote(tok->name[i]))
-		{
-			quote = tok->name[i];
-			tok->name[i] = '\0';
-			result = ft_strjoin(result, tok->name);
-			tok->name = &tok->name[i + 1];
-			i = 0;
-			while (tok->name[i] != quote || backslash(tok->name, i))
-				i++;
-			tok->name[i] = '\0';
-			result = ft_strjoin(result, tok->name);
-			tok->name = &tok->name[i + 1];
-			i = 0;
-		}
+		if (i == here)
+			*result++ = '\\';
+		*result++ = s[0][i];
 		i++;
 	}
-	result = ft_strjoin(result, tok->name);
-	tok->name = result;
-	return (1);
+	*result = '\0';
+	free(*s);
+	*s = base;
 }
 
 void	remove_char(char **s, size_t here)
@@ -130,22 +122,59 @@ void	remove_char(char **s, size_t here)
 	*s = base;
 }
 
-int		backslash_remove(t_token *tok)
+int		expansion(t_token *tok)
 {
 	char	*result;
-	int		check;
+	char	quote;
 	size_t	i;
 
 	i = 0;
-	check = 1;
+	result = ft_strdup("");
 	while (tok->name[i] != '\0')
 	{
-		while (tok->name[i] == '\\')
+		if (is_quote(tok->name[i]))
 		{
-			check *= -1;
-			if (check == -1)
-				remove_char(&tok->name, i);
+			quote = tok->name[i];
+			tok->name[i] = '\0';
+			result = ft_strjoin(result, tok->name);
+			tok->name = ft_strdup(&tok->name[i + 1]);
+			i = 0;
+			while (tok->name[i] != quote || backslash(tok->name, i))
+				i++;
+			tok->name[i] = '\0';
+			result = ft_strjoin(result, tok->name);
+			tok->name = ft_strdup(&tok->name[i + 1]);
+			i = 0;
+		}
+		i++;
+	}
+	result = ft_strjoin(result, tok->name);
+	tok->name = result;
+	return (1);
+}
+
+int		backslash_remove(t_token *tok)
+{
+	char	*result;
+	char	quote;
+	size_t	i;
+
+	i = 0;
+	while (tok->name[i] != '\0')
+	{
+		if (tok->name[i] == '"')
+		{
 			i++;
+			while (tok->name[i] != '"')
+				i++;
+			i++;
+		}
+		if (tok->name[i] == '\\' && quote != '\'')
+		{
+			if (tok->name[i + 1] == '\\')
+				remove_char(&tok->name, i + 1);
+			else
+				remove_char(&tok->name, i);
 		}
 		i++;
 	}
