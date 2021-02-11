@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/11 15:42:23 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/11 22:11:12 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,13 @@ int		expansion(t_token *tok)
 			tok->name = ft_strdup(&tok->name[i + 1]);
 			i = 0;
 			while (tok->name[i] != quote || backslash(tok->name, i))
+			{
+				if (backslash(tok->name, i) && (tok->name[i] == '$' || tok->name[i] == '"' || tok->name[i] == '\\'))
+				{
+					remove_char(&tok->name, i - 1);
+				}
 				i++;
+			}
 			tok->name[i] = '\0';
 			result = ft_strjoin(result, tok->name);
 			tok->name = ft_strdup(&tok->name[i + 1]);
