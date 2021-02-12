@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/11 22:11:12 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/12 15:48:57 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int		environnment_expander(t_token *tok, t_list *env, s_pipe *spipe)
 	quote = 1;
 	while (tok->name[i] != '\0')
 	{
-		if (tok->name[i] == '\'')
+		if (tok->name[i] == '\'' && !backslash(tok->name, i))
 			quote *= -1;
 		if (tok->name[i] == '$' && quote == 1 && check_env(&tok->name[i + 1]) && !backslash(tok->name, i))
 		{
@@ -132,29 +132,37 @@ int		expansion(t_token *tok)
 	result = ft_strdup("");
 	while (tok->name[i] != '\0')
 	{
-		if (is_quote(tok->name[i]))
+		if (is_quote(tok->name[i]) && tok->name[i - 1] != '\\')
 		{
 			quote = tok->name[i];
 			tok->name[i] = '\0';
 			result = ft_strjoin(result, tok->name);
-			tok->name = ft_strdup(&tok->name[i + 1]);
+			tok->name = ft_strdup(&tok->name[i + 1]);//free
 			i = 0;
-			while (tok->name[i] != quote || backslash(tok->name, i))
+			while (tok->name[i] != quote || tok->name[i - 1] == '\\')
 			{
-				if (backslash(tok->name, i) && (tok->name[i] == '$' || tok->name[i] == '"' || tok->name[i] == '\\'))
+				if (quote == '"' && tok->name[i - 1] == '\\' && (tok->name[i] == '$' || tok->name[i] == '"' || tok->name[i] == '\\'))
 				{
 					remove_char(&tok->name, i - 1);
+					if (tok->name[i] == '"')
+						continue;
 				}
 				i++;
 			}
 			tok->name[i] = '\0';
-			result = ft_strjoin(result, tok->name);
+			result = ft_strjoin(result, tok->name); //free
 			tok->name = ft_strdup(&tok->name[i + 1]);
 			i = 0;
+		}
+		if (is_quote(tok->name[i]) && tok->name[i - 1] == '\\')
+		{
+			remove_char(&tok->name, i - 1);
+			continue;
 		}
 		i++;
 	}
 	result = ft_strjoin(result, tok->name);
+	free(tok->name);
 	tok->name = result;
 	return (1);
 }
@@ -168,19 +176,18 @@ int		backslash_remove(t_token *tok)
 	i = 0;
 	while (tok->name[i] != '\0')
 	{
-		if (tok->name[i] == '"')
+		if ((tok->name[i] == '"' || tok->name[i] == '\'') && tok->name[i - 1] != '\\')
 		{
+			quote = tok->name[i];
 			i++;
-			while (tok->name[i] != '"')
+			while (tok->name[i] != quote || backslash(tok->name, i))
 				i++;
 			i++;
 		}
-		if (tok->name[i] == '\\' && quote != '\'')
+		if (!is_quote(tok->name[i]))
 		{
-			if (tok->name[i + 1] == '\\')
-				remove_char(&tok->name, i + 1);
-			else
-				remove_char(&tok->name, i);
+			if (tok->name[i - 1] == '\\')
+				remove_char(&tok->name, i - 1);
 		}
 		i++;
 	}

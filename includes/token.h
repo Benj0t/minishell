@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 09:46:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/11 12:44:25 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/12 14:46:30 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # define T_ALL " 	><;|"
 # define T_EOF '\0'
-# define T_NOWORD 5
+# define T_NOWORD 4
 
 # define EUNEXPECTED "syntax error near unexpected token"
 
@@ -40,7 +40,6 @@ typedef struct	s_token
 }				t_token;
 
 t_token		next_token(char **str);
-t_token		view_next_token(const char *str);
 int			is_quote(char c);
 int			environnment_expander(t_token *tok, t_list *env, s_pipe *spipe);
 int			backslash(char *str, size_t i);

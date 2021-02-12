@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/09 12:35:49 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/12 15:40:52 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int		prompt_test(int check, char *str, char **line, int fd)
 	if ((check == 0) && (ft_strlen(*line) == 0))
 	{
 		write(1, "exit\n", 5);
+		free(*line);
 		exit(9);
 	}
 	if (check == 0)

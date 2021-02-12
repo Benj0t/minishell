@@ -23,7 +23,6 @@ void	sig_handler(int sigid)
 		ft_putstr_fd("\n> ", 2);
 		close(STDIN_FILENO);
 		dup(STDOUT_FILENO);
-		//kill(child, SIGTERM);
 	}
 	return ;
 }

@@ -84,7 +84,7 @@ exec_test 'ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|
 
 # ENV EXPANSIONS + ESCAPE
 exec_test 'echo test     \    test' #ok
-exec_test 'echo \"test' #nop parser
+exec_test 'echo \"test' #ok
 exec_test 'echo $TEST' #ok
 exec_test 'echo "$TEST"' #ok
 exec_test "echo '$TEST'" #ok
@@ -100,7 +100,7 @@ exec_test 'echo "$=TEST"' #ok -> $=TEST pas =TEST
 exec_test 'echo "$"' #ok -> $
 exec_test 'echo "$?TEST"' #ok -> $? a gerer
 exec_test 'echo $TEST $TEST' #ok
-exec_test 'echo "$1TEST"' #nop -> comment gerer
+exec_test 'echo "$1TEST"' #ok -> comment gerer
 exec_test 'echo "$T1TEST"' #ok
 
 # ENV EXPANSIONS #impossible test
@@ -186,6 +186,7 @@ exec_test "echo s'h'e'l'l" #ok
 #exec_test echo a'b'c"d"e'f'g"h"i'j'k"l"m'n'o"p'q'r"s't'u"v"w"x"y'z' #ok
 exec_test 'echo \$SHELL' #nop backslash
 exec_test 'echo "a\\b"' #nop backslash
+#echo "a\\ \ b c\" \'$SHELL\'"
 #exec_test "echo \"a\\ \ b c\" \'$SHELL\'\"" #nop backslash
 exec_test "echo $\"SHELL\"" #ok
 exec_test "echo $\'SHELL\'" #ok

@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/11 12:44:20 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/12 15:17:28 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,32 +34,6 @@ static t_ttoken	search_type(char c)
 	return (i+1);
 }
 
-t_token		view_next_token(const char *str)
-{
-	t_token	tok;
-	size_t	i;
-
-	i = 0;
-	tok.name = NULL;
-	tok.type = tok_eof;
-	if (str[i] == '\0')
-	{
-		str = NULL;
-		return (tok);
-	}
-	while (!in_list(str[i], T_ALL))
-		i++;
-	if (in_list(str[i], T_ALL) && i == 0)
-	{
-		tok.name = ft_substr(str, 0, 1);
-		tok.type = search_type(*tok.name);
-		return (tok);
-	}
-	tok.type = tok_word;
-	tok.name = ft_substr(str, 0, i);
-	return (tok);
-}
-
 int			is_quote(char c)
 {
 	if (c == '"' || c == '\'')
@@ -82,6 +56,7 @@ t_token		next_token(char **str)
 {
 	t_token	tok;
 	size_t	i;
+	char	*tmp;
 	char	quote;
 
 	i = 0;
@@ -91,7 +66,7 @@ t_token		next_token(char **str)
 		return (tok);
 	while ((!in_list(str[0][i], T_ALL) && str[0][i] != '\0') || is_backslash(str[0], i))
 	{
-		if (is_quote(str[0][i]))
+		if (is_quote(str[0][i]) && !backslash(str[0], i))
 		{
 			quote = str[0][i];
 			i++;
@@ -115,13 +90,15 @@ t_token		next_token(char **str)
 	{
 		tok.name = ft_substr(*str, 0, 1);
 		tok.type = search_type(*tok.name);
-		*str = ft_strdup(&str[0][1]); //free
-		// printf("-%s-%d\n", tok.name, tok.type);
+		tmp = ft_strdup(&str[0][1]);
+		free(*str);
+		*str = tmp;
 		return (tok);
 	}
 	tok.type = tok_word;
 	tok.name = ft_substr(*str, 0, i);
-	*str = ft_strdup(&str[0][i]); //free
-	// printf("-%s-%d\n", tok.name, tok.type);
+	tmp = ft_strdup(&str[0][i]);
+	free(*str);
+	*str = tmp;
 	return (tok);
 }

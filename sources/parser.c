@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/11 15:43:17 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/12 15:47:37 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int		error_parser(char *str, char *name)
 		printf("minishell: %s\n", name);
 	else
 		printf("minishell: %s `%s`\n", str, name);
+	free(name);
 	return (1);
 }
 
@@ -36,7 +37,10 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 
 	tok = next_token(str);
 	if (tok.type == tok_space || tok.type == tok_tab)
+	{
+		free(tok.name);
 		tok = next_token(str);
+	}
 	if (tok.type == tok_eof)
 		return (0);
 	if (tok.type > T_NOWORD && command->argument == NULL)
@@ -85,12 +89,12 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 		return (parser_token(str, command->pipe, env, spipe));
 	}
 	if (tok.type == tok_end)
+	{
+		free(tok.name);
 		return (0);
+	}
 	if (tok.type == tok_error)
 		return (error_parser(NULL, tok.name));
+	free(tok.name);
 	return (parser_token(str, command, env, spipe));
 }
-
-/*
-	verif si command->argument != NULL si redir out ou redir in
-*/
