@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/13 13:03:34 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/13 15:02:15 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 	tok = next_token(str);
 	if (tok.type == tok_space || tok.type == tok_tab)
 	{
-		free(tok.name);
+		//free(tok.name);
 		tok = next_token(str);
 	}
 	if (tok.type == tok_eof)
@@ -90,7 +90,7 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 	}
 	if (tok.type == tok_end)
 	{
-		free(tok.name);
+		//free(tok.name);
 		return (0);
 	}
 	if (tok.type == tok_error)
