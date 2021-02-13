@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/12 15:48:57 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/13 12:58:18 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int		expansion(t_token *tok)
 		}
 		i++;
 	}
-	result = ft_strjoin(result, tok->name);
+	result = ft_strjoin(result, tok->name); //free
 	free(tok->name);
 	tok->name = result;
 	return (1);
