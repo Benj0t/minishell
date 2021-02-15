@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
 /*   Updated: 2021/02/15 14:12:42 by psemsari         ###   ########.fr       */
