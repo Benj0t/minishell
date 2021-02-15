@@ -6,13 +6,13 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/01 19:01:22 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/12 22:10:24 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-pid_t child;
+pid_t		child;
 
 static void	sig_quit(int sigid)
 {

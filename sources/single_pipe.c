@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/01/25 07:57:11 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/12 22:10:17 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		pid_manager(s_pipe *spipe, int child[2])
 	{
 		waitpid(child[1], (int *)&(spipe->pid[1]), 0);
 		spipe->ret[1] = WEXITSTATUS(spipe->pid[1]);
-	}	
+	}
 }
 
 static int	left_command(s_pipe *spipe, t_redir *redir,\

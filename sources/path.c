@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2021/01/25 05:16:38 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/12 22:10:50 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ char		*rel_path(char **env, t_parser comm, struct stat buf)
 	int ret;
 	int child;
 
-	if (!(comm.argument[0][0] ==  '.' && comm.argument[0][1] == '/'))
+	if (!(comm.argument[0][0] == '.' && comm.argument[0][1] == '/'))
 		return (NULL);
 	child = fork();
 	if (child == 0)
 	{
-		if (!lstat(comm.argument[0], &buf))
+		if (!stat(comm.argument[0], &buf))
 			exit(EXIT_SUCCESS);
 		exit(EXIT_FAILURE);
 	}

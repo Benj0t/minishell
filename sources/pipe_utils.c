@@ -6,13 +6,13 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/01/27 13:57:30 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/12 22:17:33 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		get_ret_values(s_pipe *spipe)
+void	get_ret_values(s_pipe *spipe)
 {
 	int i;
 
@@ -26,4 +26,19 @@ void		get_ret_values(s_pipe *spipe)
 		}
 		i++;
 	}
+}
+
+int		listlen(t_command *list)
+{
+	int i;
+
+	i = 1;
+	if (!list)
+		return (0);
+	while (list->pipe != NULL)
+	{
+		i++;
+		list = list->pipe;
+	}
+	return (i);
 }

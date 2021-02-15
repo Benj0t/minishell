@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/01 19:01:04 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/12 22:13:53 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,6 @@ int		builtins(t_command *cmd, t_list *env, s_pipe *spipe)
 	if (ft_strncmp(parse.command, "exit", 5) == 0)
 		return (ft_exit(parse.argument));
 	return (-1);
-}
-
-int		listlen(t_command *list)
-{
-	int i;
-
-	i = 1;
-	if (!list)
-		return (0);
-	while (list->pipe != NULL)
-	{
-		i++;
-		list = list->pipe;
-	}
-	return (i);
 }
 
 int		simple_command(t_list *env, t_command *cmd,\
