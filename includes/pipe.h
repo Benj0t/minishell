@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/25 07:24:21 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/15 12:50:47 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	dealloc_tab(char **tab);
 char    *init_path(char **env, t_parser command, s_pipe *spipe);
 char	**set_local_env(t_list *env, s_pipe *spipe);
 int		builtins(t_command *cmd, t_list *env, s_pipe *spipe);
-int		parser(char *str, t_list *env, t_redir *redir, s_pipe *spipe);
+int		parser(char **str, t_redir *redir, s_pipe *spipe);
 int     ft_ret(int *ret);
 void	end_redir(t_redir *redir);
 int     exec_redir(t_command *cmd, t_redir *redir);

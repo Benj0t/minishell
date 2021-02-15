@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/08 11:55:24 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/12 12:32:21 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,17 @@ int			check_env(char *s)
 	size_t i;
 
 	i = 0;
-	if (ft_isdigit(s[i]))
-		return (0);
+	if (ft_isdigit(s[i]) || s[i] == '?')
+		return (1);
 	while (s[i])
 	{
 			if (!ft_isalnum(s[i]) && s[i] != '_')
-				return (i);
+			{
+				if (i == 0)
+					return (0);
+				else
+					break;
+			}
 		i++;
 	}
 	return (i);

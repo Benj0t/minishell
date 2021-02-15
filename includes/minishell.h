@@ -24,6 +24,9 @@ typedef struct	s_parser
 		char	**argument;
 }				t_parser;
 
+extern t_list *env;
+
+# include <unistd.h>
 # include <sys/types.h>
 # include <signal.h>
 # include <sys/stat.h>

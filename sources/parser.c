@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/12 21:13:21 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/15 14:12:42 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ int		error_parser(char *str, char *name)
 		printf("minishell: %s\n", name);
 	else
 		printf("minishell: %s `%s`\n", str, name);
+	free(name);
 	return (1);
 }
-
 //probleme : quand il n'y a pas d'espace tout les elements sont un seul argument
 int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 {
@@ -36,11 +36,9 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 
 	tok = next_token(str);
 	if (tok.type == tok_space || tok.type == tok_tab)
-		tok = next_token(str);
-	if (tok.type == tok_backslash)
 	{
+		free(tok.name);
 		tok = next_token(str);
-		tok.type = tok_word;
 	}
 	if (tok.type == tok_eof)
 		return (0);
@@ -48,55 +46,66 @@ int		parser_token(char **str, t_command *command, t_list *env, s_pipe *spipe)
 		return (error_parser(EUNEXPECTED, tok.name));
 	if (tok.type == tok_word)
 	{
-		if (environnment_expander(&tok, env, spipe) && expansion(&tok, env, spipe))
+		if (environnment_expander(&tok, env, spipe) && backslash_remove(&tok) && expansion(&tok))
 			ft_lstadd_back(&command->argument, ft_lstnew(tok.name));
+		return (parser_token(str, command, env, spipe));
 	}
 	if (tok.type == tok_out)
 	{
+		free(tok.name);
 		tok = next_token(str);
 		if (tok.type == tok_out)
 		{
+			free(tok.name);
 			tok = next_token(str);
 			if (tok.type == tok_space || tok.type == tok_tab)
+			{
+				free(tok.name);
 				tok = next_token(str);
+			}
 			if (tok.type > T_NOWORD)
 				return (error_parser(EUNEXPECTED, tok.name));
-			ft_lstadd_back(&command->redir_append, ft_lstnew(tok.name));
+			if (environnment_expander(&tok, env, spipe) && expansion(&tok))
+				ft_lstadd_back(&command->redir_append, ft_lstnew(tok.name));
+			return (parser_token(str, command, env, spipe));
 		}
 		else
 		{
 			if (tok.type == tok_space || tok.type == tok_tab)
+			{
+				free(tok.name);
 				tok = next_token(str);
+			}
 			if (tok.type > T_NOWORD)
 				return (error_parser(EUNEXPECTED, tok.name));
-			// if (tok.type == tok_backslash)
-			// 	backslash(str, &tok);
-			ft_lstadd_back(&command->redir_out, ft_lstnew(tok.name));
+			if (environnment_expander(&tok, env, spipe) && expansion(&tok))
+				ft_lstadd_back(&command->redir_out, ft_lstnew(tok.name));
+			return (parser_token(str, command, env, spipe));
 		}
 	}
 	if (tok.type == tok_in)
 	{
+		free(tok.name);
 		tok = next_token(str);
 		if (tok.type == tok_space || tok.type == tok_tab)
+		{
+			free(tok.name);
 			tok = next_token(str);
+		}
 		if (tok.type > T_NOWORD)
 			return (error_parser(EUNEXPECTED, tok.name));
-		// if (tok.type == tok_backslash)
-		// 	backslash(str, &tok);
-		ft_lstadd_back(&command->redir_in, ft_lstnew(tok.name));
+		if (environnment_expander(&tok, env, spipe) && expansion(&tok))
+			ft_lstadd_back(&command->redir_in, ft_lstnew(tok.name));
+		return (parser_token(str, command, env, spipe));
 	}
 	if (tok.type == tok_pipe)
 	{
+		free(tok.name);
 		command->pipe = setup_command();
 		return (parser_token(str, command->pipe, env, spipe));
 	}
-	if (tok.type == tok_end)
-		return (0);
 	if (tok.type == tok_error)
 		return (error_parser(NULL, tok.name));
+	free(tok.name);
 	return (parser_token(str, command, env, spipe));
 }
-
-/*
-	verif si command->argument != NULL si redir out ou redir in
-*/
