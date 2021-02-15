@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 22:17:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/12 22:42:22 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/15 15:47:00 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int main(int ac, char **av, char **envp)
 	{
 		ft_putstr_fd("> ", 2);
 		gnl_prompt(0, &str, &spipe.last_ret);
-		parser(str, env, &redir, &spipe);
+		parser(&str, &redir, &spipe);
 		free(str);
 	}
 	free(str);

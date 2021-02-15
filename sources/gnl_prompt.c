@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/15 13:56:41 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/15 15:47:34 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int		prompt_test(int check, char *str, char **line, int *last_ret)
 		return (-1);
 	ft_memset(str, 0, BUFFER_SIZE);
 	check = read(0, str, BUFFER_SIZE);
-	printf("%d\n", ft_strlen(*line));
 	if (signal_c == 1)
 	{
 		*last_ret = 130;
