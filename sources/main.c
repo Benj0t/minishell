@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 22:17:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/15 15:47:00 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/15 16:07:23 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 t_list		*env;
 
-int main(int ac, char **av, char **envp)
+int		main(int ac, char **av, char **envp)
 {
 	char		*str;
 	t_redir		redir;

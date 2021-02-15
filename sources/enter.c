@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enter.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/15 15:49:18 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/15 20:54:46 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,6 @@ int		parser(char **str, t_redir *redir, s_pipe *spipe)
 			clear_multi_command(command);
 			return (1);
 		}
-		//print_multi_command(command);
-		//printf("EXEC\n");
 		execution(env, command, redir, spipe);
 		clear_multi_command(command);
 	}

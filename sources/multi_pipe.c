@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:19:00 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/12 22:07:58 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/15 21:06:44 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,14 @@ int			multi_pipe(t_list *env, t_command *cmd,\
 			ret = first_command(env, tmp, spipe, redir);
 			tmp = tmp->pipe;
 		}
-		if (i > 0 && ret == 1)
+		if (i > 0)
+		{
 			ret = middle_commands(env, tmp, spipe, redir);
+		}
 		tmp = tmp->pipe;
 		i++;
 	}
-	if (ret == 1)
-		ret = last_command(env, tmp, spipe, redir);
+	ret = last_command(env, tmp, spipe, redir);
 	spipe->i_pipe++;
 	get_ret_values(spipe);
 	return (1);
