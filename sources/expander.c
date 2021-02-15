@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/13 12:58:18 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/15 15:00:20 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 {
 	size_t	ret;
 	char	*tmp;
+	char	*tmp2;
 	char	*var;
 
 	tok->name[i] = '\0';
@@ -49,7 +50,9 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 	}
 	free(tmp);
 	tmp = ft_strjoin(tok->name, var);
-	tok->name = ft_strjoin(tmp, &tok->name[i + 1 + ret]);
+	tmp2 = ft_strjoin(tmp, &tok->name[i + 1 + ret]);
+	free(tok->name);
+	tok->name = tmp2;
 	free(tmp);
 	return (i + ft_strlen(var));
 }
@@ -125,6 +128,7 @@ void	remove_char(char **s, size_t here)
 int		expansion(t_token *tok)
 {
 	char	*result;
+	char	*tmp;
 	char	quote;
 	size_t	i;
 
@@ -136,8 +140,12 @@ int		expansion(t_token *tok)
 		{
 			quote = tok->name[i];
 			tok->name[i] = '\0';
-			result = ft_strjoin(result, tok->name);
-			tok->name = ft_strdup(&tok->name[i + 1]);//free
+			tmp = ft_strjoin(result, tok->name);
+			free(result);
+			result = tmp;
+			tmp = ft_strdup(&tok->name[i + 1]);
+			free(tok->name);
+			tok->name = tmp;
 			i = 0;
 			while (tok->name[i] != quote || tok->name[i - 1] == '\\')
 			{
@@ -150,8 +158,12 @@ int		expansion(t_token *tok)
 				i++;
 			}
 			tok->name[i] = '\0';
-			result = ft_strjoin(result, tok->name); //free
-			tok->name = ft_strdup(&tok->name[i + 1]);
+			tmp = ft_strjoin(result, tok->name);
+			free(result);
+			result = tmp;
+			tmp = ft_strdup(&tok->name[i + 1]);
+			free(tok->name);
+			tok->name = tmp;
 			i = 0;
 		}
 		if (is_quote(tok->name[i]) && tok->name[i - 1] == '\\')
@@ -161,7 +173,9 @@ int		expansion(t_token *tok)
 		}
 		i++;
 	}
-	result = ft_strjoin(result, tok->name); //free
+	tmp = ft_strjoin(result, tok->name);
+	free(result);
+	result = tmp;
 	free(tok->name);
 	tok->name = result;
 	return (1);

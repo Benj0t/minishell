@@ -52,7 +52,8 @@ int main(int ac, char **av, char **envp)
 		// if (child == 0)
 		// {
 		gnl_prompt(0, &str);
-		parser(str, &redir, &spipe);
+		parser(&str, &redir, &spipe);
+		//printf("%p\n", str);
 		free(str);
 		// }
 		//waitpid(child, &pid, 0);

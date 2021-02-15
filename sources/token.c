@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/13 15:03:35 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/15 12:54:12 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,16 @@ t_token		next_token(char **str)
 		tok.name = ft_substr(*str, 0, 1);
 		tok.type = search_type(*tok.name);
 		tmp = ft_strdup(&str[0][1]);
-		//free(*str);
+		//printf("%p-%s-\n", tmp, &str[0][i]);
+		free(*str);
 		*str = tmp;
 		return (tok);
 	}
 	tok.type = tok_word;
 	tok.name = ft_substr(*str, 0, i);
 	tmp = ft_strdup(&str[0][i]);
-	//free(*str);
+	//printf("%p-%s-\n", tmp, &str[0][i]);
+	free(*str);
 	*str = tmp;
 	return (tok);
 }
