@@ -6,20 +6,18 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/12 22:10:24 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/15 21:05:11 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-pid_t		child;
-
 static void	sig_quit(int sigid)
 {
-	if (sigid == SIGQUIT && child != 0)
+	if (sigid == SIGQUIT)
 	{
 		write(1, "\n", 1);
-		kill(child, SIGTERM);
+		exit(9);
 	}
 }
 
@@ -75,10 +73,8 @@ int			first_command(t_list *env, t_command *cmd,\
 	spipe->ret[spipe->index] = builtins(cmd, env, spipe);
 	signal(SIGQUIT, &sig_quit);
 	spipe->child[spipe->i_comm++] = fork();
-	if (spipe->child[spipe->i_comm - 1])
-		child = spipe->child[spipe->i_comm - 1];
 	if (spipe->ret[spipe->index++] == -1 &&\
-		(spipe->child[spipe->i_comm++] == 0))
+		(spipe->child[spipe->i_comm - 1] == 0))
 		exec_fcomm_1(redir, spipe, comm1);
 	end_redir(redir);
 	if (redir->std_out != -1)
