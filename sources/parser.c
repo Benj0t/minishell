@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/16 15:55:39 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/16 19:45:12 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@
 
 #include "minishell.h"
 #include "token.h"
+
+void	malloc_fail(t_token tok, t_managparse *manag)
+{
+	clear_multi_command(manag->command);
+	ft_lstclear(&env, free);
+	printf("malloc_failed\n");
+	exit(1);
+}
 
 int		error_parser(char *str, char *name)
 {

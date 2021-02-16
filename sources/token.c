@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/16 15:42:37 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/16 19:46:24 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ t_token		next_token(t_managparse *manag)
 			if (manag->str[i] == '\0')
 			{
 				tok.name = ft_strdup(&quote); //malloc
+				if (tok.name == NULL)
+					malloc_fail(tok, manag);
 				tok.type = tok_error;
 				return (tok);
 			}
@@ -89,15 +91,23 @@ t_token		next_token(t_managparse *manag)
 	if (in_list(manag->str[i], T_ALL) && i == 0)
 	{
 		tok.name = ft_substr(manag->str, 0, 1); //malloc
+		if (tok.name == NULL)
+			malloc_fail(tok, manag);
 		tok.type = search_type(*tok.name);
 		tmp = ft_strdup(&manag->str[1]); //malloc
+		if (tmp == NULL)
+			malloc_fail(tok, manag);
 		free(manag->str);
 		manag->str = tmp;
 		return (tok);
 	}
 	tok.type = tok_word;
 	tok.name = ft_substr(manag->str, 0, i); //malloc
+	if (tok.name == NULL)
+		malloc_fail(tok, manag);
 	tmp = ft_strdup(&manag->str[i]); //malloc
+	if (tmp == NULL)
+		malloc_fail(tok, manag);
 	free(manag->str);
 	manag->str = tmp;
 	return (tok);
