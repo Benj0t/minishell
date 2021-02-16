@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enter.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/15 20:54:46 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/16 14:58:28 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_command	*setup_command(void)
 {
 	t_command	*ret;
 
-	ret = malloc(sizeof(t_command));
+	ret = malloc(sizeof(t_command)); //malloc
 	ret->argument = NULL;
 	ret->redir_in = NULL;
 	ret->redir_out = NULL;
@@ -84,18 +84,23 @@ t_command	*setup_command(void)
 //start du parser
 int		parser(char **str, t_redir *redir, s_pipe *spipe)
 {
-	t_command	*command;
+	t_managparse	manag;
 
-	while (**str)
+	manag.str = *str;
+	while (*manag.str)
 	{
-		command = setup_command();
-		if (parser_token(str, command, env, spipe))
+		manag.command = setup_command();
+		if (parser_token(&manag))
 		{
-			clear_multi_command(command);
+			clear_multi_command(manag.command);
+			*str = manag.str;
 			return (1);
 		}
-		execution(env, command, redir, spipe);
-		clear_multi_command(command);
+		//debug
+		print_multi_command(manag.command);
+		//execution(env, manag.command, redir, spipe);
+		clear_multi_command(manag.command);
 	}
+	*str = manag.str;
 	return (0);
 }

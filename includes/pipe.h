@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/15 12:50:47 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/16 14:57:55 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,14 @@ typedef struct	s_redir
 	int			save_stdin;
    	int 		save_stdout;
 }				t_redir;
+
+typedef struct	s_managparse
+{
+	t_command	*command;
+	t_redir		redir;
+	s_pipe		spipe;
+	char		*str;
+}				t_managparse;
 
 void	end_redir(t_redir *redir);
 char    **set_local_env(t_list *env, s_pipe *spipe);

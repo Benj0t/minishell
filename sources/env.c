@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/12 12:32:21 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/16 14:05:40 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,9 +124,9 @@ t_list	*envp_to_list(char **envp)
 		c = ft_strchr(envp[i], '=');
 		c[0] = '\0';
 		if (i == 0)
-			ret = ft_lstnew(malloc_varenv(envp[i], &c[1]));
+			ret = ft_lstnew(malloc_varenv(envp[i], &c[1])); //malloc
 		else
-			ft_lstadd_back(&ret, ft_lstnew(malloc_varenv(envp[i], &c[1])));
+			ft_lstadd_back(&ret, ft_lstnew(malloc_varenv(envp[i], &c[1]))); //malloc
 		i++;
 	}
 	return (ret);
@@ -139,12 +139,12 @@ char	**list_to_envp(t_list *env)
 	char	**ret;
 
 	len = ft_lstsize(env);
-	ret = (char **)malloc(sizeof(char *) * (len + 1));
+	ret = (char **)malloc(sizeof(char *) * (len + 1)); //malloc
 	i = 0;
 	while (env != NULL)
 	{
 		ret[i] = ft_strjoin_c(((t_var_env *)env->content)->key,
-					((t_var_env *)env->content)->var, '=');
+					((t_var_env *)env->content)->var, '='); //malloc
 		env = env->next;
 		i++;
 	}

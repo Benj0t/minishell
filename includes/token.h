@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 09:46:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/12 14:46:30 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/16 15:55:54 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ typedef struct	s_token
 	t_ttoken	type;
 }				t_token;
 
-t_token		next_token(char **str);
+t_token		next_token(t_managparse *manag);
 int			is_quote(char c);
-int			environnment_expander(t_token *tok, t_list *env, s_pipe *spipe);
+int			environnment_expander(t_token *tok, t_managparse *manag);
 int			backslash(char *str, size_t i);
-int			expansion(t_token *tok);
-int			backslash_remove(t_token *tok);
+int			expansion(t_token *tok, t_managparse *manag);
+int			backslash_remove(t_token *tok, t_managparse *manag);
 
 #endif

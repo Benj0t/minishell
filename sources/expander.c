@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/15 15:00:20 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/16 15:55:00 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 			break;
 		ret++;
 	}
-	tmp = ft_substr(&tok->name[i + 1], 0, ret);
+	tmp = ft_substr(&tok->name[i + 1], 0, ret); //malloc
 	if (tmp[0] == '?')
 		var = ft_itoa(spipe->last_ret);
 	else
@@ -49,15 +49,15 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 			var = "";
 	}
 	free(tmp);
-	tmp = ft_strjoin(tok->name, var);
-	tmp2 = ft_strjoin(tmp, &tok->name[i + 1 + ret]);
+	tmp = ft_strjoin(tok->name, var); //malloc
+	tmp2 = ft_strjoin(tmp, &tok->name[i + 1 + ret]); //malloc
 	free(tok->name);
 	tok->name = tmp2;
 	free(tmp);
 	return (i + ft_strlen(var));
 }
 
-int		environnment_expander(t_token *tok, t_list *env, s_pipe *spipe)
+int		environnment_expander(t_token *tok, t_managparse *manag)
 {//a faire $?
 	size_t	i;
 	int		quote;
@@ -70,7 +70,7 @@ int		environnment_expander(t_token *tok, t_list *env, s_pipe *spipe)
 			quote *= -1;
 		if (tok->name[i] == '$' && quote == 1 && check_env(&tok->name[i + 1]) && !backslash(tok->name, i))
 		{
-			i = ft_subvar(i, tok, env, spipe);
+			i = ft_subvar(i, tok, env, &manag->spipe);
 			continue ;
 		}
 		i++;
@@ -80,7 +80,7 @@ int		environnment_expander(t_token *tok, t_list *env, s_pipe *spipe)
 	return (1);
 }
 
-void	add_char(char **s, size_t here)
+void	add_char(char **s, size_t here) //besoin ?
 {
 	char	*result;
 	char	*base;
@@ -110,7 +110,7 @@ void	remove_char(char **s, size_t here)
 	size_t	i;
 
 	i = 0;
-	result = ft_calloc(ft_strlen(*s), sizeof(char));
+	result = ft_calloc(ft_strlen(*s), sizeof(char)); //malloc
 	base = result;
 	if (result == NULL)
 		*s = NULL;
@@ -125,7 +125,7 @@ void	remove_char(char **s, size_t here)
 	*s = base;
 }
 
-int		expansion(t_token *tok)
+int		expansion(t_token *tok, t_managparse *manag)
 {
 	char	*result;
 	char	*tmp;
@@ -133,17 +133,17 @@ int		expansion(t_token *tok)
 	size_t	i;
 
 	i = 0;
-	result = ft_strdup("");
+	result = ft_strdup(""); //malloc
 	while (tok->name[i] != '\0')
 	{
 		if (is_quote(tok->name[i]) && tok->name[i - 1] != '\\')
 		{
 			quote = tok->name[i];
 			tok->name[i] = '\0';
-			tmp = ft_strjoin(result, tok->name);
+			tmp = ft_strjoin(result, tok->name); //malloc
 			free(result);
 			result = tmp;
-			tmp = ft_strdup(&tok->name[i + 1]);
+			tmp = ft_strdup(&tok->name[i + 1]); //malloc
 			free(tok->name);
 			tok->name = tmp;
 			i = 0;
@@ -158,10 +158,10 @@ int		expansion(t_token *tok)
 				i++;
 			}
 			tok->name[i] = '\0';
-			tmp = ft_strjoin(result, tok->name);
+			tmp = ft_strjoin(result, tok->name); //malloc
 			free(result);
 			result = tmp;
-			tmp = ft_strdup(&tok->name[i + 1]);
+			tmp = ft_strdup(&tok->name[i + 1]); //malloc
 			free(tok->name);
 			tok->name = tmp;
 			i = 0;
@@ -173,7 +173,7 @@ int		expansion(t_token *tok)
 		}
 		i++;
 	}
-	tmp = ft_strjoin(result, tok->name);
+	tmp = ft_strjoin(result, tok->name); //malloc
 	free(result);
 	result = tmp;
 	free(tok->name);
@@ -181,7 +181,7 @@ int		expansion(t_token *tok)
 	return (1);
 }
 
-int		backslash_remove(t_token *tok)
+int		backslash_remove(t_token *tok, t_managparse *manag)
 {
 	char	*result;
 	char	quote;
@@ -198,7 +198,7 @@ int		backslash_remove(t_token *tok)
 				i++;
 			i++;
 		}
-		if (!is_quote(tok->name[i]))
+		if (!is_quote(tok->name[i]) && i > 0)
 		{
 			if (tok->name[i - 1] == '\\')
 				remove_char(&tok->name, i - 1);

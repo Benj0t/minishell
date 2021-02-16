@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/15 12:54:12 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/16 15:42:37 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int			is_quote(char c)
 
 int			is_backslash(char *str, size_t i)
 {
-	if ((str[i + 1] == '\\' && (str[i] != ' ' && str[i] != '	')) || str[i - 1] == '\\')
+	if ((str[i + 1] == '\\' && (str[i] != ' ' && str[i] != '	')) || (i > 0 && str[i - 1] == '\\'))
 	{
 		if (backslash(str, i - 1))
 			return (0);
@@ -52,7 +52,7 @@ int			is_backslash(char *str, size_t i)
 	return (0);
 }
 
-t_token		next_token(char **str)
+t_token		next_token(t_managparse *manag)
 {
 	t_token	tok;
 	size_t	i;
@@ -62,45 +62,43 @@ t_token		next_token(char **str)
 	i = 0;
 	tok.name = NULL;
 	tok.type = tok_eof;
-	if (str[0][i] == '\0')
+	if (manag->str[i] == '\0')
 		return (tok);
-	while ((!in_list(str[0][i], T_ALL) && str[0][i] != '\0') || is_backslash(str[0], i))
+	while ((!in_list(manag->str[i], T_ALL) && manag->str[i] != '\0') || is_backslash(manag->str, i))
 	{
-		if (is_quote(str[0][i]) && !backslash(str[0], i))
+		if (is_quote(manag->str[i]) && !backslash(manag->str, i))
 		{
-			quote = str[0][i];
+			quote = manag->str[i];
 			i++;
-			while (str[0][i] != '\0')
+			while (manag->str[i] != '\0')
 			{
-				if (str[0][i] == quote)
-					if (!backslash(str[0], i))
+				if (manag->str[i] == quote)
+					if (!backslash(manag->str, i))
 						break;
 				i++;
 			}
-			if (str[0][i] == '\0')
+			if (manag->str[i] == '\0')
 			{
-				tok.name = ft_strdup(&quote);
+				tok.name = ft_strdup(&quote); //malloc
 				tok.type = tok_error;
 				return (tok);
 			}
 		}
 		i++;
 	}
-	if (in_list(str[0][i], T_ALL) && i == 0)
+	if (in_list(manag->str[i], T_ALL) && i == 0)
 	{
-		tok.name = ft_substr(*str, 0, 1);
+		tok.name = ft_substr(manag->str, 0, 1); //malloc
 		tok.type = search_type(*tok.name);
-		tmp = ft_strdup(&str[0][1]);
-		//printf("%p-%s-\n", tmp, &str[0][i]);
-		free(*str);
-		*str = tmp;
+		tmp = ft_strdup(&manag->str[1]); //malloc
+		free(manag->str);
+		manag->str = tmp;
 		return (tok);
 	}
 	tok.type = tok_word;
-	tok.name = ft_substr(*str, 0, i);
-	tmp = ft_strdup(&str[0][i]);
-	//printf("%p-%s-\n", tmp, &str[0][i]);
-	free(*str);
-	*str = tmp;
+	tok.name = ft_substr(manag->str, 0, i); //malloc
+	tmp = ft_strdup(&manag->str[i]); //malloc
+	free(manag->str);
+	manag->str = tmp;
 	return (tok);
 }
