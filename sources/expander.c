@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/16 15:55:00 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/17 12:03:04 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		backslash(char *str, size_t i)
 	return (0);
 }
 
-size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
+size_t	ft_subvar(size_t i, t_token *tok, t_managparse *manag)
 {
 	size_t	ret;
 	char	*tmp;
@@ -33,15 +33,23 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 
 	tok->name[i] = '\0';
 	ret = 1;
-	while (tok->name[i + 1 + ret] && tok->name[i + 1] != '?' && !ft_isdigit(tok->name[i + 1]))
+	while (tok->name[i + 1 + ret] && tok->name[i + 1] != '?' \
+		&& !ft_isdigit(tok->name[i + 1]))
 	{
-		if (!ft_isalnum(tok->name[i + 1 + ret]) && tok->name[i + 1 + ret] != '_')
-			break;
+		if (!ft_isalnum(tok->name[i + 1 + ret]) \
+			&& tok->name[i + 1 + ret] != '_')
+			break ;
 		ret++;
 	}
-	tmp = ft_substr(&tok->name[i + 1], 0, ret); //malloc
+	tmp = ft_substr(&tok->name[i + 1], 0, ret);
+	if (tmp == NULL)
+		malloc_fail(*tok, manag);
 	if (tmp[0] == '?')
-		var = ft_itoa(spipe->last_ret);
+	{
+		var = ft_itoa(manag->spipe.last_ret);
+		if (var == NULL)
+			malloc_fail(*tok, manag);
+	}
 	else
 	{
 		var = get_env_var(tmp, env);
@@ -49,8 +57,12 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 			var = "";
 	}
 	free(tmp);
-	tmp = ft_strjoin(tok->name, var); //malloc
-	tmp2 = ft_strjoin(tmp, &tok->name[i + 1 + ret]); //malloc
+	tmp = ft_strjoin(tok->name, var);
+	if (tmp == NULL)
+		malloc_fail(*tok, manag);
+	tmp2 = ft_strjoin(tmp, &tok->name[i + 1 + ret]);
+	if (tmp2 == NULL)
+		malloc_fail(*tok, manag);
 	free(tok->name);
 	tok->name = tmp2;
 	free(tmp);
@@ -58,7 +70,7 @@ size_t	ft_subvar(size_t i, t_token *tok, t_list *env, s_pipe *spipe)
 }
 
 int		environnment_expander(t_token *tok, t_managparse *manag)
-{//a faire $?
+{
 	size_t	i;
 	int		quote;
 
@@ -68,9 +80,10 @@ int		environnment_expander(t_token *tok, t_managparse *manag)
 	{
 		if (tok->name[i] == '\'' && !backslash(tok->name, i))
 			quote *= -1;
-		if (tok->name[i] == '$' && quote == 1 && check_env(&tok->name[i + 1]) && !backslash(tok->name, i))
+		if (tok->name[i] == '$' && quote == 1 && check_env(&tok->name[i + 1]) \
+			&& !backslash(tok->name, i))
 		{
-			i = ft_subvar(i, tok, env, &manag->spipe);
+			i = ft_subvar(i, tok, manag);
 			continue ;
 		}
 		i++;
@@ -80,37 +93,16 @@ int		environnment_expander(t_token *tok, t_managparse *manag)
 	return (1);
 }
 
-void	add_char(char **s, size_t here) //besoin ?
+int		remove_char(char **s, size_t here)
 {
 	char	*result;
 	char	*base;
 	size_t	i;
 
 	i = 0;
-	result = ft_calloc(ft_strlen(*s) + 1, sizeof(char));
-	base = result;
+	result = ft_calloc(ft_strlen(*s), sizeof(char));
 	if (result == NULL)
-		*s = NULL;
-	while (s[0][i])
-	{
-		if (i == here)
-			*result++ = '\\';
-		*result++ = s[0][i];
-		i++;
-	}
-	*result = '\0';
-	free(*s);
-	*s = base;
-}
-
-void	remove_char(char **s, size_t here)
-{
-	char	*result;
-	char	*base;
-	size_t	i;
-
-	i = 0;
-	result = ft_calloc(ft_strlen(*s), sizeof(char)); //malloc
+		return (1);
 	base = result;
 	if (result == NULL)
 		*s = NULL;
@@ -123,6 +115,7 @@ void	remove_char(char **s, size_t here)
 	*result = '\0';
 	free(*s);
 	*s = base;
+	return (0);
 }
 
 int		expansion(t_token *tok, t_managparse *manag)
@@ -133,47 +126,63 @@ int		expansion(t_token *tok, t_managparse *manag)
 	size_t	i;
 
 	i = 0;
-	result = ft_strdup(""); //malloc
+	result = ft_strdup("");
+	if (result == NULL)
+		malloc_fail(*tok, manag);
 	while (tok->name[i] != '\0')
 	{
 		if (is_quote(tok->name[i]) && tok->name[i - 1] != '\\')
 		{
 			quote = tok->name[i];
 			tok->name[i] = '\0';
-			tmp = ft_strjoin(result, tok->name); //malloc
+			tmp = ft_strjoin(result, tok->name);
+			if (tmp == NULL)
+				malloc_fail(*tok, manag);
 			free(result);
 			result = tmp;
-			tmp = ft_strdup(&tok->name[i + 1]); //malloc
+			tmp = ft_strdup(&tok->name[i + 1]);
+			if (tmp == NULL)
+				malloc_fail(*tok, manag);
 			free(tok->name);
 			tok->name = tmp;
 			i = 0;
 			while (tok->name[i] != quote || tok->name[i - 1] == '\\')
 			{
-				if (quote == '"' && tok->name[i - 1] == '\\' && (tok->name[i] == '$' || tok->name[i] == '"' || tok->name[i] == '\\'))
+				if (quote == '"' && tok->name[i - 1] == '\\' && \
+					(tok->name[i] == '$' || tok->name[i] == '"' \
+					|| tok->name[i] == '\\'))
 				{
-					remove_char(&tok->name, i - 1);
+					if (remove_char(&tok->name, i - 1))
+						malloc_fail(*tok, manag);
 					if (tok->name[i] == '"')
 						continue;
 				}
 				i++;
 			}
 			tok->name[i] = '\0';
-			tmp = ft_strjoin(result, tok->name); //malloc
+			tmp = ft_strjoin(result, tok->name);
+			if (tmp == NULL)
+				malloc_fail(*tok, manag);
 			free(result);
 			result = tmp;
-			tmp = ft_strdup(&tok->name[i + 1]); //malloc
+			tmp = ft_strdup(&tok->name[i + 1]);
+			if (tmp == NULL)
+				malloc_fail(*tok, manag);
 			free(tok->name);
 			tok->name = tmp;
 			i = 0;
 		}
 		if (is_quote(tok->name[i]) && tok->name[i - 1] == '\\')
 		{
-			remove_char(&tok->name, i - 1);
+			if (remove_char(&tok->name, i - 1))
+				malloc_fail(*tok, manag);
 			continue;
 		}
 		i++;
 	}
-	tmp = ft_strjoin(result, tok->name); //malloc
+	tmp = ft_strjoin(result, tok->name);
+	if (tmp == NULL)
+		malloc_fail(*tok, manag);
 	free(result);
 	result = tmp;
 	free(tok->name);
@@ -190,7 +199,8 @@ int		backslash_remove(t_token *tok, t_managparse *manag)
 	i = 0;
 	while (tok->name[i] != '\0')
 	{
-		if ((tok->name[i] == '"' || tok->name[i] == '\'') && tok->name[i - 1] != '\\')
+		if ((tok->name[i] == '"' || tok->name[i] == '\'') \
+			&& tok->name[i - 1] != '\\')
 		{
 			quote = tok->name[i];
 			i++;
@@ -201,7 +211,8 @@ int		backslash_remove(t_token *tok, t_managparse *manag)
 		if (!is_quote(tok->name[i]) && i > 0)
 		{
 			if (tok->name[i - 1] == '\\')
-				remove_char(&tok->name, i - 1);
+				if (remove_char(&tok->name, i - 1))
+					malloc_fail(*tok, manag);
 		}
 		i++;
 	}

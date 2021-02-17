@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/08 09:46:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/16 15:55:54 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/17 10:19:08 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,6 @@ int			environnment_expander(t_token *tok, t_managparse *manag);
 int			backslash(char *str, size_t i);
 int			expansion(t_token *tok, t_managparse *manag);
 int			backslash_remove(t_token *tok, t_managparse *manag);
+void		malloc_fail(t_token tok, t_managparse *manag);
 
 #endif

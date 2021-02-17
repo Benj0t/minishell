@@ -43,28 +43,6 @@ extern t_list *env;
 # include <sys/stat.h>
 # include <sys/param.h>
 
-// typedef struct			s_parser
-// {
-// 	char				*command;
-// 	char				**argument;
-// }						t_parser;
-
-// typedef struct	s_command
-// {
-// 		t_list				*argument;
-// 		t_list				*redir_append;
-// 		t_list				*redir_out;
-// 		t_list				*redir_in;
-// 		struct s_command	*pipe;
-// }				t_command;
-/*
-typedef struct		s_list
-{
-	void			*content;
-	struct s_list	*next;
-}					t_list;
-*/
-
 int			listlen(t_command *list);
 int			gnl_prompt(int fd, char **line, int *last_ret);
 int			prompt_rec(int check, char *str, char **line, int *last_ret);
@@ -83,6 +61,7 @@ int			list_env(t_list *env);
 void		modified_env(char *key, char* var, t_list *env);
 int			ft_echo(char **arg);
 int			ft_exit(char **arg);
+void		clear_multi_command(t_command *command);
 
 # include "path.h"
 # include "pipe.h"

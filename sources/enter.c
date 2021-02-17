@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/16 14:58:28 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/17 10:50:41 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ t_command	*setup_command(void)
 {
 	t_command	*ret;
 
-	ret = malloc(sizeof(t_command)); //malloc
+	ret = malloc(sizeof(t_command));
+	if (ret == NULL)
+		return (NULL);
 	ret->argument = NULL;
 	ret->redir_in = NULL;
 	ret->redir_out = NULL;
