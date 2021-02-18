@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnl_prompt.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/15 15:47:34 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/17 23:27:37 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	signal_c;
 void	sig_handler(int sigid)
 {
 	signal_c = 1;
-	ft_putstr_fd("\n> ", 1);
+	ft_putstr_fd("\n> ", 2);
 	return ;
 }
 
@@ -50,7 +50,7 @@ int		prompt_test(int check, char *str, char **line, int *last_ret)
 	if ((check == 0) && (ft_strlen(*line) == 0))
 	{
 		*last_ret = 130;
-		write(1, "exit\n", 5);
+		write(2, "exit\n", 5);
 		free(*line);
 		ft_lstclear(&env, free);
 		exit(9);

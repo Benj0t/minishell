@@ -9,7 +9,7 @@ int		ft_pwd(void)
 	if (pwd == NULL)
 		return (-1);
 	else
-		ft_putstr_fd(pwd, 1);
+		ft_putstr_fd(pwd, 2);
 	free(pwd);
 	return (0);
 }

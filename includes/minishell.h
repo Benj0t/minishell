@@ -65,6 +65,7 @@ typedef struct		s_list
 }					t_list;
 */
 
+int			scan_builtins(t_command *cmd, t_list *env, s_pipe *spipe);
 int			listlen(t_command *list);
 int			gnl_prompt(int fd, char **line, int *last_ret);
 int			prompt_rec(int check, char *str, char **line, int *last_ret);

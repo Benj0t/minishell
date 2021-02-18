@@ -6,26 +6,11 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/01 18:57:15 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/18 05:44:46 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int			init_pipe(s_pipe *spipe)
-{
-	int i;
-
-	i = 0;
-	while (i < spipe->n_pipe)
-	{
-		if (!(spipe->p[i] = (int *)malloc(sizeof(int) * (2))))
-			return (0);
-		if (pipe(spipe->p[i++]) < 0)
-			return (0);
-	}
-	return (1);
-}
 
 int			init_spipe(s_pipe *spipe)
 {
@@ -34,10 +19,6 @@ int			init_spipe(s_pipe *spipe)
 	spipe->path = NULL;
 	spipe->l_env = NULL;
 	i = 0;
-	if (!(spipe->p = (int **)malloc(sizeof(int *) * (spipe->n_pipe))))
-		return (0);
-	if (!init_pipe(spipe))
-		return (0);
 	if (!(spipe->child = (pid_t *)malloc(sizeof(pid_t) * (spipe->n_comm))))
 		return (0);
 	if (!(spipe->pid = (int *)malloc(sizeof(int) * (spipe->n_comm))))
@@ -59,9 +40,6 @@ void		free_spipe(s_pipe *spipe)
 	int i;
 
 	i = 0;
-	if (spipe->n_pipe)
-		while (i < spipe->n_pipe)
-			free(spipe->p[i++]);
 	free(spipe->child);
 	free(spipe->pid);
 	free(spipe->ret);

@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/15 16:05:43 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/17 23:53:16 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,24 @@ void	sig_quit(int sigid)
 	}
 }
 
+int		scan_builtins(t_command *cmd, t_list *env, s_pipe *spipe)
+{
+	t_parser parse;
+
+	parse = get_command(cmd->argument);
+	if (ft_strncmp(parse.command, "cd", 3) == 0)
+		return (1);
+	if (ft_strncmp(parse.command, "unset", 6) == 0)
+		return (1);
+	if (ft_strncmp(parse.command, "env", 4) == 0)
+		return (1);
+	if (ft_strncmp(parse.command, "echo", 5) == 0)
+		return (1);
+	if (ft_strncmp(parse.command, "exit", 5) == 0)
+		return (1);
+	return (-1);
+}
+
 int		builtins(t_command *cmd, t_list *env, s_pipe *spipe)
 {
 	t_parser parse;
@@ -30,9 +48,9 @@ int		builtins(t_command *cmd, t_list *env, s_pipe *spipe)
 	parse = get_command(cmd->argument);
 	if (ft_strncmp(parse.command, "cd", 3) == 0 && listlen(cmd) < 2)
 		return (ft_cd(parse.argument, env));
-	if (ft_strncmp(parse.command, "unset", 6) == 0)
+	if (ft_strncmp(parse.command, "unset", 6) == 0 && listlen(cmd) < 2)
 		return (unset(parse.argument, env));
-	if (ft_strncmp(parse.command, "env", 4) == 0)
+	if (ft_strncmp(parse.command, "env", 4) == 0 && listlen(cmd) < 2)
 		return (list_env(env));
 	if (ft_strncmp(parse.command, "echo", 5) == 0)
 		return (ft_echo(parse.argument));
@@ -50,7 +68,8 @@ int		simple_command(t_list *env, t_command *cmd,\
 	child = 0;
 	comm1 = get_command(cmd->argument);
 	set_local_env(env, spipe);
-	exec_redir(cmd, redir);
+	if (exec_redir(cmd, redir) == -1)
+		return (0);
 	ret = builtins(cmd, env, spipe);
 	if (ret == -1)
 	{
@@ -80,6 +99,7 @@ int		ft_ret(int *ret)
 int		execution(t_list *env, t_command *cmd, t_redir *redir, s_pipe *spipe)
 {
 	int i;
+	int ret;
 
 	i = 0;
 	if (cmd->argument == NULL)
@@ -101,6 +121,6 @@ int		execution(t_list *env, t_command *cmd, t_redir *redir, s_pipe *spipe)
 		multi_pipe(env, cmd, spipe, redir);
 	}
 	spipe->last_ret = spipe->ret[spipe->n_comm - 1];
-	free_spipe(spipe);
+	//free_spipe(spipe);
 	return (1);
 }

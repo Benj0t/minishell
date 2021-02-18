@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/12 22:10:17 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/18 04:00:59 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static int	left_command(s_pipe *spipe, t_redir *redir,\
 			return (0);
 		}
 	}
-	end_redir(redir);
 	return (child);
 }
 
@@ -67,7 +66,6 @@ static int	right_command(s_pipe *spipe, t_redir *redir,\
 	}
 	close(p[0]);
 	close(p[1]);
-	end_redir(redir);
 	return (child);
 }
 
@@ -77,20 +75,32 @@ int			single_pipe(t_list *env, t_command *command,\
 	int			p[2];
 	int			child[2];
 
-	exec_redir(command, redir);
+	if (exec_redir(command, redir) == -1)
+		return (-1);
 	if (pipe(p) < 0)
 		return (-1);
 	set_local_env(env, spipe);
-	spipe->ret[0] = builtins(command, env, spipe);
-	child[0] = left_command(spipe, redir, command, p);
-	if (child[0] == -1)
+	if ((spipe->ret[0] = scan_builtins(command, env, spipe)) == 1)
+	{
+		if (redir->std_in == -1 && redir->std_out == -1)
+			dup2(p[1], 1);
+		builtins(command, env, spipe);
+	}
+	if ((child[0] = left_command(spipe, redir, command, p)) == -1)
 		return (0);
+	end_redir(redir);
 	set_local_env(env, spipe);
-	exec_redir(command->pipe, redir);
-	spipe->ret[1] = builtins(command, env, spipe);
-	child[1] = right_command(spipe, redir, command, p);
-	if (child[1] == -1)
+	if (exec_redir(command, redir) == -1)
+		return (-1);
+	if ((spipe->ret[1] = scan_builtins(command, env, spipe)) == 1)
+	{
+		if (redir->std_in == -1)
+			dup2(p[0], 0);
+			spipe->ret[1] = builtins(command->pipe, env, spipe);
+	}
+	if ((child[1] = right_command(spipe, redir, command, p)) == -1)
 		return (0);
+	end_redir(redir);
 	pid_manager(spipe, child);
 	return (1);
 }
