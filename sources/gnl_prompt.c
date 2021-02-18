@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/15 15:47:34 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/18 15:06:11 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int		prompt_test(int check, char *str, char **line, int *last_ret)
 		*last_ret = 130;
 		write(1, "exit\n", 5);
 		free(*line);
-		ft_lstclear(&env, free);
+		ft_lstclear(&g_env, free);
 		exit(9);
 	}
 	if (check == 0)

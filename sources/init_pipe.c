@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/01 18:57:15 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/18 14:49:08 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,13 @@ char		*init_path(char **env, t_parser command, s_pipe *spipe)
 	return (spipe->path);
 }
 
-char		**set_local_env(t_list *env, s_pipe *spipe)
+char		**set_local_env(s_pipe *spipe)
 {
 	if (spipe->l_env)
 	{
 		dealloc_tab(spipe->l_env);
 		spipe->l_env = NULL;
 	}
-	spipe->l_env = list_to_envp(env);
+	spipe->l_env = list_to_envp();
 	return (spipe->l_env);
 }

@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/01/07 15:09:55 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/18 15:03:54 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 # define EENOUGH "unset: not enough arguments"
 
-int		unset(char **arg, t_list *env)
+int		unset(char **arg)
 {
 	t_var_env	*var_env;
 	t_list		*before;
@@ -25,20 +25,20 @@ int		unset(char **arg, t_list *env)
 		ft_putstr_fd(EENOUGH, 2);
 		return (1);
 	}
-	base = env;
+	base = g_env;
 	while (*arg != NULL)
 	{
-		env = base;
-		var_env = (t_var_env *)env->content;
+		g_env = base;
+		var_env = (t_var_env *)g_env->content;
 		while (ft_strncmp(var_env->key, *arg, ft_strlen(var_env->key)))
 		{
-			before = env;
-			env = env->next;
-			if (env == NULL)
+			before = g_env;
+			g_env = g_env->next;
+			if (g_env == NULL)
 				return (1);
-			var_env = (t_var_env *)env->content;
+			var_env = (t_var_env *)g_env->content;
 		}
-		before->next = env->next; //free
+		before->next = g_env->next; //free
 		arg++;
 	}
 	return (0);

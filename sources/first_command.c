@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/15 21:05:11 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/18 14:48:44 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,15 @@ void		exec_fcomm_2(t_redir *redir, s_pipe *spipe, t_parser comm2)
 			comm2.argument, spipe->l_env);
 }
 
-static int	second_command(t_list *env, t_command *cmd,\
+static int	second_command(t_command *cmd,\
 			s_pipe *spipe, t_redir *redir)
 {
 	t_parser	comm2;
 
 	comm2 = get_command(cmd->pipe->argument);
-	set_local_env(env, spipe);
+	set_local_env(spipe);
 	exec_redir(cmd->pipe, redir);
-	spipe->ret[spipe->index] = builtins(cmd, env, spipe);
+	spipe->ret[spipe->index] = builtins(cmd, spipe);
 	if (spipe->ret[spipe->index++] == -1 &&\
 		(spipe->child[spipe->i_comm++] = fork()) == 0)
 		exec_fcomm_2(redir, spipe, comm2);
@@ -62,15 +62,15 @@ static int	second_command(t_list *env, t_command *cmd,\
 	return (1);
 }
 
-int			first_command(t_list *env, t_command *cmd,\
+int			first_command(t_command *cmd,\
 			s_pipe *spipe, t_redir *redir)
 {
 	t_parser comm1;
 
 	exec_redir(cmd, redir);
 	comm1 = get_command(cmd->argument);
-	set_local_env(env, spipe);
-	spipe->ret[spipe->index] = builtins(cmd, env, spipe);
+	set_local_env(spipe);
+	spipe->ret[spipe->index] = builtins(cmd, spipe);
 	signal(SIGQUIT, &sig_quit);
 	spipe->child[spipe->i_comm++] = fork();
 	if (spipe->ret[spipe->index++] == -1 &&\
@@ -79,5 +79,5 @@ int			first_command(t_list *env, t_command *cmd,\
 	end_redir(redir);
 	if (redir->std_out != -1)
 		return (0);
-	return (second_command(env, cmd, spipe, redir));
+	return (second_command(cmd, spipe, redir));
 }

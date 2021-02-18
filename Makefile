@@ -31,7 +31,7 @@ FILES =		./sources/main\
 			./sources/enter\
 			./sources/parser\
 			./sources/token\
-			./sources/env\
+			./sources/environment\
 			./sources/expander\
 			./sources/multi_pipe\
 			./sources/redir\

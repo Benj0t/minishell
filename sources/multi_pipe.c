@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multi_pipe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:19:00 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/15 21:06:44 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/18 14:49:57 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ void		exec_middle_command(t_redir *redir, s_pipe *spipe, t_parser comm1)
 			comm1.argument, spipe->l_env);
 }
 
-static int	middle_commands(t_list *env, t_command *cmd,\
+static int	middle_commands(t_command *cmd,\
 			s_pipe *spipe, t_redir *redir)
 {
 	int			ret;
 	t_parser	comm1;
 
 	comm1 = get_command(cmd->argument);
-	set_local_env(env, spipe);
+	set_local_env(spipe);
 	exec_redir(cmd, redir);
-	spipe->ret[spipe->index] = builtins(cmd, env, spipe);
+	spipe->ret[spipe->index] = builtins(cmd, spipe);
 	if (spipe->ret[spipe->index++] == -1 &&\
 		(spipe->child[spipe->i_comm++] = fork()) == 0)
 		exec_middle_command(redir, spipe, comm1);
@@ -49,16 +49,16 @@ static int	middle_commands(t_list *env, t_command *cmd,\
 	return (1);
 }
 
-static int	last_command(t_list *env, t_command *cmd,\
+static int	last_command(t_command *cmd,\
 						s_pipe *spipe, t_redir *redir)
 {
 	int			ret;
 	t_parser	comm1;
 
 	comm1 = get_command(cmd->argument);
-	set_local_env(env, spipe);
+	set_local_env(spipe);
 	exec_redir(cmd, redir);
-	spipe->ret[spipe->index] = builtins(cmd, env, spipe);
+	spipe->ret[spipe->index] = builtins(cmd, spipe);
 	if (spipe->ret[spipe->index++] == -1 &&\
 		(spipe->child[spipe->i_comm++] = fork()) == 0)
 	{
@@ -77,7 +77,7 @@ static int	last_command(t_list *env, t_command *cmd,\
 	return (1);
 }
 
-int			multi_pipe(t_list *env, t_command *cmd,\
+int			multi_pipe(t_command *cmd,\
 						s_pipe *spipe, t_redir *redir)
 {
 	int			i;
@@ -91,17 +91,17 @@ int			multi_pipe(t_list *env, t_command *cmd,\
 	{
 		if (i == 0)
 		{
-			ret = first_command(env, tmp, spipe, redir);
+			ret = first_command(tmp, spipe, redir);
 			tmp = tmp->pipe;
 		}
 		if (i > 0)
 		{
-			ret = middle_commands(env, tmp, spipe, redir);
+			ret = middle_commands(tmp, spipe, redir);
 		}
 		tmp = tmp->pipe;
 		i++;
 	}
-	ret = last_command(env, tmp, spipe, redir);
+	ret = last_command(tmp, spipe, redir);
 	spipe->i_pipe++;
 	get_ret_values(spipe);
 	return (1);

@@ -24,7 +24,7 @@ typedef struct	s_parser
 		char	**argument;
 }				t_parser;
 
-extern t_list *env;
+extern t_list *g_env;
 
 # include <unistd.h>
 # include <sys/types.h>
@@ -47,18 +47,18 @@ int			listlen(t_command *list);
 int			gnl_prompt(int fd, char **line, int *last_ret);
 int			prompt_rec(int check, char *str, char **line, int *last_ret);
 int			ft_pipe(char **env, char *command1, char *command2);
-int			ft_cd(char **arg, t_list *lst_env);
+int			ft_cd(char **arg);
 int			ft_pwd(void);
-void		print_env(t_list *env);
+void		print_env(void);
 t_list		*envp_to_list(char **envp);
-void		set_env_var(char *key, char* var, t_list *env);
-char		**list_to_envp(t_list *env);
+void		set_env_var(char *key, char* var);
+char		**list_to_envp(void);
 int			valid_env(char *s);
 int			check_env(char *s);
-char		*get_env_var(char *search, t_list *lst_env);
-int			unset(char	**arg, t_list *env);
-int			list_env(t_list *env);
-void		modified_env(char *key, char* var, t_list *env);
+char		*get_env_var(char *search);
+int			unset(char	**arg);
+int			list_env(void);
+void		modified_env(char *key, char* var);
 int			ft_echo(char **arg);
 int			ft_exit(char **arg);
 void		clear_multi_command(t_command *command);

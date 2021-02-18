@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/15 16:05:43 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/18 14:54:52 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,17 @@ void	sig_quit(int sigid)
 	}
 }
 
-int		builtins(t_command *cmd, t_list *env, s_pipe *spipe)
+int		builtins(t_command *cmd, s_pipe *spipe)
 {
 	t_parser parse;
 
 	parse = get_command(cmd->argument);
 	if (ft_strncmp(parse.command, "cd", 3) == 0 && listlen(cmd) < 2)
-		return (ft_cd(parse.argument, env));
+		return (ft_cd(parse.argument));
 	if (ft_strncmp(parse.command, "unset", 6) == 0)
-		return (unset(parse.argument, env));
+		return (unset(parse.argument));
 	if (ft_strncmp(parse.command, "env", 4) == 0)
-		return (list_env(env));
+		return (list_env());
 	if (ft_strncmp(parse.command, "echo", 5) == 0)
 		return (ft_echo(parse.argument));
 	if (ft_strncmp(parse.command, "exit", 5) == 0 && listlen(cmd) < 2)
@@ -41,7 +41,7 @@ int		builtins(t_command *cmd, t_list *env, s_pipe *spipe)
 	return (-1);
 }
 
-int		simple_command(t_list *env, t_command *cmd,\
+int		simple_command(t_command *cmd,\
 						t_redir *redir, s_pipe *spipe)
 {
 	t_parser	comm1;
@@ -49,9 +49,9 @@ int		simple_command(t_list *env, t_command *cmd,\
 
 	child = 0;
 	comm1 = get_command(cmd->argument);
-	set_local_env(env, spipe);
+	set_local_env(spipe);
 	exec_redir(cmd, redir);
-	ret = builtins(cmd, env, spipe);
+	ret = builtins(cmd, spipe);
 	if (ret == -1)
 	{
 		signal(SIGQUIT, &sig_quit);
@@ -77,7 +77,7 @@ int		ft_ret(int *ret)
 	return ((unsigned char)ret[i - 1]);
 }
 
-int		execution(t_list *env, t_command *cmd, t_redir *redir, s_pipe *spipe)
+int		execution(t_command *cmd, t_redir *redir, s_pipe *spipe)
 {
 	int i;
 
@@ -91,14 +91,14 @@ int		execution(t_list *env, t_command *cmd, t_redir *redir, s_pipe *spipe)
 	if (!init_spipe(spipe))
 		return (-1);
 	if (spipe->n_comm == 1)
-		simple_command(env, cmd, redir, spipe);
+		simple_command(cmd, redir, spipe);
 	else if (spipe->n_comm == 2)
 	{
-		single_pipe(env, cmd, redir, spipe);
+		single_pipe(cmd, redir, spipe);
 	}
 	else if (spipe->n_comm > 2)
 	{
-		multi_pipe(env, cmd, spipe, redir);
+		multi_pipe(cmd, spipe, redir);
 	}
 	spipe->last_ret = spipe->ret[spipe->n_comm - 1];
 	free_spipe(spipe);
