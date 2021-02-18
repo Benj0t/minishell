@@ -38,10 +38,10 @@ extern t_list *env;
 # include <sys/wait.h>
 # include <errno.h>
 # include <string.h>
-# include "parser.h"
-# include "pipe.h"
 # include <sys/stat.h>
 # include <sys/param.h>
+# include "pipe.h"
+# include "parser.h"
 
 int			listlen(t_command *list);
 int			gnl_prompt(int fd, char **line, int *last_ret);

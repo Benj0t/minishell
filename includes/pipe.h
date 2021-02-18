@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/16 14:57:55 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/18 11:59:01 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define PIPE_H
 
 # include "minishell.h"
-# include "parser.h"
 
 // /!\ CHANGER EN T_PIPE ENCULE
 
@@ -42,14 +41,6 @@ typedef struct	s_redir
    	int 		save_stdout;
 }				t_redir;
 
-typedef struct	s_managparse
-{
-	t_command	*command;
-	t_redir		redir;
-	s_pipe		spipe;
-	char		*str;
-}				t_managparse;
-
 void	end_redir(t_redir *redir);
 char    **set_local_env(t_list *env, s_pipe *spipe);
 void   	free_spipe(s_pipe *spipe);
@@ -59,7 +50,6 @@ void	dealloc_tab(char **tab);
 char    *init_path(char **env, t_parser command, s_pipe *spipe);
 char	**set_local_env(t_list *env, s_pipe *spipe);
 int		builtins(t_command *cmd, t_list *env, s_pipe *spipe);
-int		parser(char **str, t_redir *redir, s_pipe *spipe);
 int     ft_ret(int *ret);
 void	end_redir(t_redir *redir);
 int     exec_redir(t_command *cmd, t_redir *redir);
