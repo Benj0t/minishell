@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/19 15:51:53 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/19 19:10:33 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int			valid_env(char *s)
 
 void		print_env(void)
 {
-	t_var_env *var_env;
+	t_var_env	*var_env;
 	t_list		*tmp_env;
 
 	tmp_env = g_env;
@@ -146,7 +146,7 @@ char	*get_env(const char *name)
 	if (name == NULL)
 		return (NULL);
 	tmp_env = g_env;
-	while (tmp_env->content != NULL)
+	while ((t_var_env *)tmp_env->content != NULL)
 	{
 		if (!strcmp(((t_var_env *)tmp_env->content)->key, name)) //changer strcmp
 			return (((t_var_env *)tmp_env->content)->var);
@@ -160,7 +160,7 @@ t_var_env	*getvar_env(const char *name)
 	t_list		*tmp_env;
 
 	tmp_env = g_env;
-	while (tmp_env->content != NULL)
+	while ((t_var_env *)tmp_env->content != NULL)
 	{
 		if (!strcmp(((t_var_env *)tmp_env->content)->key, name)) //changer strcmp
 			return ((t_var_env *)tmp_env->content);
@@ -178,6 +178,7 @@ int		put_env(char *string)
 		i++;
 	if (string[i] == '\0')
 		return(unset_env(string));
+	string[i] = '\0';
 	return (set_env(string, &string[i + 1], 1));
 }
 
@@ -223,7 +224,7 @@ int		unset_env(const char *name)
 	if (name == NULL || ft_strlen(name) == 0 || contains_egal(name))
 		return (-1);
 	tmp_env = g_env;
-	while (tmp_env->content != NULL)
+	while ((t_var_env *)tmp_env->content != NULL)
 	{
 		if (!strcmp(var->key, name)) //changer strcmp
 		{

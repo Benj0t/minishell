@@ -67,6 +67,8 @@ int			ft_pwd(void);
 int			list_env(void);
 int			ft_echo(char **arg);
 int			ft_exit(char **arg);
+int			ft_unset(char **arg);
+int			ft_export(char **arg);
 void		clear_multi_command(t_command *command);
 
 # include "path.h"
