@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/18 05:44:46 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/19 18:03:42 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,13 @@ void		free_spipe(s_pipe *spipe)
 char		*init_path(char **env, t_parser command, s_pipe *spipe)
 {
 	if (spipe->path)
+	{
 		free(spipe->path);
+		spipe->path = NULL;
+	}
 	spipe->path = ft_path(env, command);
 	if (!(spipe->path))
-		exit(127);
+		return (NULL);
 	return (spipe->path);
 }
 

@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/17 23:53:16 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/19 18:14:20 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int		builtins(t_command *cmd, t_list *env, s_pipe *spipe)
 	if (ft_strncmp(parse.command, "echo", 5) == 0)
 		return (ft_echo(parse.argument));
 	if (ft_strncmp(parse.command, "exit", 5) == 0 && listlen(cmd) < 2)
-		return (ft_exit(parse.argument));
+		return (ft_exit(parse.argument, spipe));
 	return (-1);
 }
 
@@ -75,8 +75,11 @@ int		simple_command(t_list *env, t_command *cmd,\
 	{
 		signal(SIGQUIT, &sig_quit);
 		if ((child = fork()) == 0)
-			execve(init_path(spipe->l_env, comm1, spipe),\
-							comm1.argument, spipe->l_env);
+		{
+			if (init_path(spipe->l_env, comm1, spipe) == NULL)
+				invalid_command(spipe, comm1);
+			execve(spipe->path,	comm1.argument, spipe->l_env);
+		}
 		waitpid(child, (int *)&(spipe->pid[0]), 0);
 		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
 	}

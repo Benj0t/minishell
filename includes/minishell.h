@@ -83,7 +83,7 @@ int			unset(char	**arg, t_list *env);
 int			list_env(t_list *env);
 void		modified_env(char *key, char* var, t_list *env);
 int			ft_echo(char **arg);
-int			ft_exit(char **arg);
+int			ft_exit(char **arg, s_pipe *spipe);
 
 # include "path.h"
 # include "pipe.h"

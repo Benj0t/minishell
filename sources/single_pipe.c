@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/18 04:00:59 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/19 18:07:43 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ static int	left_command(s_pipe *spipe, t_redir *redir,\
 	comm1 = get_command(command->argument);
 	if (spipe->ret[0] == -1 && (child = fork()) == 0)
 	{
+		if (init_path(spipe->l_env, comm1, spipe) == NULL)
+			invalid_command(spipe, comm1);
 		if (redir->std_in == -1 && redir->std_out == -1)
 			dup2(p[1], 1);
 		close(p[0]);
-		execve(init_path(spipe->l_env, comm1, spipe),\
-				comm1.argument, spipe->l_env);
+		execve(spipe->path, comm1.argument, spipe->l_env);
 		if (redir->std_out != -1)
 		{
 			end_redir(redir);
@@ -58,11 +59,12 @@ static int	right_command(s_pipe *spipe, t_redir *redir,\
 	comm2 = get_command(command->pipe->argument);
 	if (spipe->ret[1] == -1 && (child = fork()) == 0)
 	{
+		if (init_path(spipe->l_env, comm2, spipe) == NULL)
+			invalid_command(spipe, comm2);
 		if (redir->std_in == -1)
 			dup2(p[0], 0);
 		close(p[1]);
-		execve(init_path(spipe->l_env, comm2, spipe),\
-				comm2.argument, spipe->l_env);
+		execve(spipe->path, comm2.argument, spipe->l_env);
 	}
 	close(p[0]);
 	close(p[1]);
