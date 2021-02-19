@@ -16,3 +16,36 @@ export sans ""
 BEN:
 
 Check le ^\ sur les macs, car Linux (wsl) trop random, a check l implementation multipipe
+
+bugs minishell benjot :
+- export sans options
+- export toto=titi (n'export rien)
+- export fonctionne pas en fait...
+- unset ne fonctionne pas
+- exit 43; exit 44; exit 45 doit return 43, ne return actuellement rien (message d'erreur inutile)
+- commande invalide, aucun message d erreur
+- ls -la | invalid ne met aucun message d erreur mais return bien 127
+- SHLVL ne s'incrémente pas (env | grep SHLVL)
+- >>> aucun message d erreur
+- les ; ne fonctionnent pas
+- export avec les declare -x
+- ls -la ; cd ; pwd
+- echo test    \    test (c'est des tabs) : met 1 tab de trop au lieu d'un espace
+- > "echo "test"
+minishell: syntax error near unexpected token `"
+                                                \@
+> export TEST=TOTO
+> echo "$TEST"
+export ne fonctionne pas
+> echo "'$PWD'"
+'$PWD'
+doit afficher '/home/...'
+> echo "'$PWD'""'$PWD'"
+'$PWD'"$PWD"
+doit afficher deux fois le pwd avec des ''
+"echo test "" test "" test" : Core Dump
+"echo "\$TEST"" :  n'affiche pas de message d erreur si y'a pas de $TEST
+some bug parser voir tester
+tester loop
+export sans opt
+export sans ""

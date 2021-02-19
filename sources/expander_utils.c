@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 12:06:18 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/18 14:57:39 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:44:25 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*var_to_replace(t_token *tok, t_managparse *manag, char *tmp)
 	}
 	else
 	{
-		var = get_env_var(tmp);
+		var = get_env(tmp);
 		if (var == NULL)
 			var = "";
 	}

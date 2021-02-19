@@ -43,22 +43,28 @@ extern t_list *g_env;
 # include "pipe.h"
 # include "parser.h"
 
+int			check_env(char *s);
+int			valid_env(char *s);
+void		print_env(void);
+t_var_env	*malloc_varenv(const char *key, const char *str);
+void		dealloc_varenv(t_var_env *var_env);
+t_list		*envp_to_list(char **envp);
+char		**list_to_envp(void);
+void		dealloc_tab(char **tab);
+char		*get_env(const char *name);
+t_var_env	*getvar_env(const char *name);
+int			put_env(char *string);
+int			set_env(const char *name, char *value, int replace);
+int			contains_egal(const char *name);
+int			unset_env(const char *name);
+
 int			listlen(t_command *list);
 int			gnl_prompt(int fd, char **line, int *last_ret);
 int			prompt_rec(int check, char *str, char **line, int *last_ret);
 int			ft_pipe(char **env, char *command1, char *command2);
 int			ft_cd(char **arg);
 int			ft_pwd(void);
-void		print_env(void);
-t_list		*envp_to_list(char **envp);
-void		set_env_var(char *key, char* var);
-char		**list_to_envp(void);
-int			valid_env(char *s);
-int			check_env(char *s);
-char		*get_env_var(char *search);
-int			unset(char	**arg);
 int			list_env(void);
-void		modified_env(char *key, char* var);
 int			ft_echo(char **arg);
 int			ft_exit(char **arg);
 void		clear_multi_command(t_command *command);

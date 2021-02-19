@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/18 14:28:19 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:53:23 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ int		parser(char **str, t_redir *redir, s_pipe *spipe)
 			return (1);
 		}
 		//debug
-		print_multi_command(manag.command);
+		//print_multi_command(manag.command);
+		//printf("exec\n");
 		execution(manag.command, redir, spipe);
 		clear_multi_command(manag.command);
 	}

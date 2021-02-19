@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/18 14:56:53 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/19 13:23:13 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int		export(t_list *arg)
 		if (str[i] == '=')
 		{
 			str[i] = 0;
-			set_env_var(str, &str[i+1]);
+			setenv(str, &str[i+1], 1);
 			return (0);
 		}
 		arg = arg->next;

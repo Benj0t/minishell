@@ -68,8 +68,8 @@ int				ft_cd(char **arg)
 
 	errno = 0;
 	pwd = getcwd(NULL, MAXPATHLEN);
-	previous = get_env_var("OLDPWD");
-	home = get_env_var("HOME");
+	previous = getenv("OLDPWD");
+	home = getenv("HOME");
 	if (arg[1] == NULL)
 	{
 		if (home)
@@ -90,6 +90,6 @@ int				ft_cd(char **arg)
 	if (ret != 0)
 		return (cd_error(NULL));
 	if (ft_strncmp(pwd, new, MAXPATHLEN))
-		set_env_var("OLDPWD", pwd);
+		setenv("OLDPWD", pwd, 1);
 	return (0);
 }

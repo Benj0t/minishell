@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/18 15:33:37 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/19 15:51:53 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,56 +65,21 @@ void		print_env(void)
 	}
 }
 
-t_var_env	*malloc_varenv(char *key, char *str)
+t_var_env	*malloc_varenv(const char *key, const char *str)
 {
 	t_var_env	*ret;
 	ret = (t_var_env *)malloc(sizeof(t_var_env));
-	ret->key = key;
-	ret->var = str;
+	ret->key = ft_strdup(key);
+	ret->var = ft_strdup(str);
 	return (ret);
 }
 
-char	*get_env_var(char *search)
+void		dealloc_varenv(t_var_env *var_env)
 {
-	t_var_env	*var_env;
-	t_list		*tmp_env;
-	size_t		len;
-
-	tmp_env = g_env;
-	print_env();
-	var_env = (t_var_env *)tmp_env->content;
-	if (ft_strlen(var_env->key) < ft_strlen(search))
-		len = ft_strlen(search);
-	else
-		len = ft_strlen(var_env->key);
-	while (ft_strncmp(var_env->key, search, len))
-	{
-		tmp_env = tmp_env->next;
-		if (tmp_env == NULL)
-			return (NULL);
-		var_env = (t_var_env *)tmp_env->content;
-	}
-	return (var_env->var);
-}
-
-void	set_env_var(char *key, char* var)
-{
-	t_var_env	*var_env;
-	t_list		*tmp_env;
-
-	tmp_env = g_env;
-	if (get_env_var(key) != NULL)
-	{
-		var_env = (t_var_env *)tmp_env->content;
-		while (ft_strncmp(var_env->key, key, ft_strlen(var_env->key)))
-		{
-			tmp_env = tmp_env->next;
-			var_env = (t_var_env *)tmp_env->content;
-		}
-		var_env->var = var;
-	}
-	else
-		ft_lstadd_back(&tmp_env, ft_lstnew(malloc_varenv(key, var)));
+	free(var_env->key);
+	if (var_env->var != NULL)
+		free(var_env->var);
+	free(var_env);
 }
 
 t_list	*envp_to_list(char **envp)
@@ -144,15 +109,17 @@ char	**list_to_envp(void)
 	int		len;
 	int		i;
 	char	**ret;
+	t_list	*tmp;
 
-	len = ft_lstsize(g_env);
+	tmp = g_env;
+	len = ft_lstsize(tmp);
 	ret = (char **)malloc(sizeof(char *) * (len + 1)); //malloc
 	i = 0;
-	while (g_env != NULL)
+	while (tmp != NULL)
 	{
-		ret[i] = ft_strjoin_c(((t_var_env *)g_env->content)->key,
-					((t_var_env *)g_env->content)->var, '='); //malloc
-		g_env = g_env->next;
+		ret[i] = ft_strjoin_c(((t_var_env *)tmp->content)->key,
+					((t_var_env *)tmp->content)->var, '='); //malloc
+		tmp = tmp->next;
 		i++;
 	}
 	ret[len] = NULL;
@@ -170,4 +137,101 @@ void	dealloc_tab(char **tab)
 		tab++;
 	}
 	free(start);
+}
+
+char	*get_env(const char *name)
+{
+	t_list		*tmp_env;
+
+	if (name == NULL)
+		return (NULL);
+	tmp_env = g_env;
+	while (tmp_env->content != NULL)
+	{
+		if (!strcmp(((t_var_env *)tmp_env->content)->key, name)) //changer strcmp
+			return (((t_var_env *)tmp_env->content)->var);
+		tmp_env = tmp_env->next;
+	}
+	return (NULL);
+}
+
+t_var_env	*getvar_env(const char *name)
+{
+	t_list		*tmp_env;
+
+	tmp_env = g_env;
+	while (tmp_env->content != NULL)
+	{
+		if (!strcmp(((t_var_env *)tmp_env->content)->key, name)) //changer strcmp
+			return ((t_var_env *)tmp_env->content);
+		tmp_env = tmp_env->next;
+	}
+	return (NULL);
+}
+
+int		put_env(char *string)
+{
+	size_t i;
+
+	i = 0;
+	while (string[i] != '\0' && string[i] == '=')
+		i++;
+	if (string[i] == '\0')
+		return(unset_env(string));
+	return (set_env(string, &string[i + 1], 1));
+}
+
+int		set_env(const char *name, char *value, int replace)
+{
+	t_var_env *tmp;
+
+	if (value == NULL)
+		return (-1);
+	tmp = getvar_env(name);
+	if (replace && tmp)
+	{
+		free(tmp->var);
+		tmp->var = ft_strdup(value);
+		if (tmp->var == NULL)
+			return (-1);
+	}
+	else
+		ft_lstadd_back(&g_env, ft_lstnew(malloc_varenv(name, value)));
+	return (0);
+}
+
+int		contains_egal(const char *name)
+{
+	size_t i;
+
+	i = 0;
+	while (name[i])
+	{
+		if (name[i] == '=')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int		unset_env(const char *name)
+{
+	t_list		*tmp_env;
+	t_list		*tmp;
+	t_var_env	*var;
+
+	if (name == NULL || ft_strlen(name) == 0 || contains_egal(name))
+		return (-1);
+	tmp_env = g_env;
+	while (tmp_env->content != NULL)
+	{
+		if (!strcmp(var->key, name)) //changer strcmp
+		{
+			tmp->next = tmp_env->next;
+			dealloc_varenv((t_var_env *)tmp->content);
+		}
+		tmp = tmp_env;
+		tmp_env = tmp_env->next;
+	}
+	return (0);
 }
