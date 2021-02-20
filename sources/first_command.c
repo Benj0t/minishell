@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/20 02:18:11 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/20 17:17:30 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ int			first_command(t_list *env, t_command *cmd,\
 	if (pipe(spipe->curr_p) < 0 || pipe(spipe->prev_p) < 0)
 		return (0);
 	set_local_env(env, spipe);
-	signal(SIGQUIT, &sig_quit);
+	//signal(SIGQUIT, &sig_quit);
 	comm1 = get_command(cmd->argument);
-	if ((spipe->ret[spipe->index] = scan_builtins(cmd, env, spipe)) == 1)
+	if ((spipe->ret[spipe->index] = scan_builtins(cmd, env, spipe)) == 0)
 	{
 		if (redir->std_out == -1)
 			dup2(spipe->prev_p[1], 1);

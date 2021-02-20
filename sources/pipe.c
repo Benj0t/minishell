@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/20 06:42:13 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/20 16:23:54 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	sig_quit(int sigid)
 {
 	if (sigid == SIGQUIT && g_child != 0)
 	{
-		write(1, "\n", 1);
+
+		write(1, "\n", 2);
 		kill(g_child, SIGTERM);
 	}
 }

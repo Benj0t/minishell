@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 04:32:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/20 04:56:34 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/20 17:17:29 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void		exec_middle_command(t_redir *redir, s_pipe *spipe, t_parser comm1)
 void		exec_middle_builtin(s_pipe *spipe, t_list *env,\
 						t_command *cmd, t_redir *redir)
 {
-	if ((spipe->ret[spipe->index] = scan_builtins(cmd, env, spipe)) == 1)
+	if ((spipe->ret[spipe->index] = scan_builtins(cmd, env, spipe)) == 0)
 	{
 		if (redir->std_in == -1)
 			dup2(spipe->prev_p[0], 0);

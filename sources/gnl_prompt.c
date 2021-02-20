@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/20 02:16:24 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/20 17:12:53 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,17 @@ int	g_signal_c;
 
 void	sig_handler(int sigid)
 {
-	g_signal_c = 1;
-	ft_putstr_fd("\n> ", 2);
+	if (sigid == SIGINT)
+	{
+		g_signal_c = 1;
+		ft_putstr_fd("\n> ", 2);
+	}
 	return ;
+}
+
+void	ign_sig(int sigid)
+{
+	return;
 }
 
 int		prompt_malloc(char **line, char *str)
@@ -97,6 +105,7 @@ int		gnl_prompt(int fd, char **line, int *last_ret)
 	check = BUFFER_SIZE;
 	g_signal_c = 0;
 	signal(SIGINT, &sig_handler);
+	signal(SIGQUIT, &ign_sig);
 	if (line == NULL || read(fd, str, 0) || BUFFER_SIZE <= 0)
 		return (-1);
 	*line = ft_calloc(1, 1);
