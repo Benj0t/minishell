@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/19 18:03:42 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/20 06:42:20 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@ int			init_spipe(s_pipe *spipe)
 {
 	int i;
 
+	spipe->i_comm = 0;
+	spipe->i_pipe = 0;
+	spipe->n_pipe = spipe->n_comm - 1;
+	spipe->index = 0;
 	spipe->path = NULL;
 	spipe->l_env = NULL;
 	i = 0;

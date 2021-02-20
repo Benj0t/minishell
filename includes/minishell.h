@@ -72,6 +72,7 @@ int			prompt_rec(int check, char *str, char **line, int *last_ret);
 int			ft_pipe(char **env, char *command1, char *command2);
 int			ft_cd(char **arg, t_list *lst_env);
 int			ft_pwd(void);
+int			export(char **arg, t_list *env);
 void		print_env(t_list *env);
 t_list		*envp_to_list(char **envp);
 void		set_env_var(char *key, char* var, t_list *env);

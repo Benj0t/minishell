@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/19 18:08:00 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/20 02:18:11 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		exec_fcomm_2(t_redir *redir, s_pipe *spipe, t_parser comm2)
 	if (redir->std_out == -1)
 		dup2(spipe->curr_p[1], 1);
 	close(spipe->curr_p[0]);
-	execve(spipe->path,	comm2.argument, spipe->l_env);
+	execve(spipe->path, comm2.argument, spipe->l_env);
 }
 
 static int	second_command(t_list *env, t_command *cmd,\
@@ -59,14 +59,6 @@ static int	second_command(t_list *env, t_command *cmd,\
 		return (0);
 	close_pipe(spipe);
 	return (1);
-}
-
-void		close_pipe(s_pipe *spipe)
-{
-	close(spipe->prev_p[0]);
-	close(spipe->prev_p[1]);
-	spipe->prev_p[0] = spipe->curr_p[0];
-	spipe->prev_p[1] = spipe->curr_p[1];
 }
 
 void		exec_fcomm_1(t_redir *redir, s_pipe *spipe, t_parser comm1)

@@ -6,57 +6,21 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/19 18:14:20 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/20 06:42:13 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-pid_t child;
+pid_t g_child;
 
 void	sig_quit(int sigid)
 {
-	if (sigid == SIGQUIT && child != 0)
+	if (sigid == SIGQUIT && g_child != 0)
 	{
 		write(1, "\n", 1);
-		kill(child, SIGTERM);
+		kill(g_child, SIGTERM);
 	}
-}
-
-int		scan_builtins(t_command *cmd, t_list *env, s_pipe *spipe)
-{
-	t_parser parse;
-
-	parse = get_command(cmd->argument);
-	if (ft_strncmp(parse.command, "cd", 3) == 0)
-		return (1);
-	if (ft_strncmp(parse.command, "unset", 6) == 0)
-		return (1);
-	if (ft_strncmp(parse.command, "env", 4) == 0)
-		return (1);
-	if (ft_strncmp(parse.command, "echo", 5) == 0)
-		return (1);
-	if (ft_strncmp(parse.command, "exit", 5) == 0)
-		return (1);
-	return (-1);
-}
-
-int		builtins(t_command *cmd, t_list *env, s_pipe *spipe)
-{
-	t_parser parse;
-
-	parse = get_command(cmd->argument);
-	if (ft_strncmp(parse.command, "cd", 3) == 0 && listlen(cmd) < 2)
-		return (ft_cd(parse.argument, env));
-	if (ft_strncmp(parse.command, "unset", 6) == 0 && listlen(cmd) < 2)
-		return (unset(parse.argument, env));
-	if (ft_strncmp(parse.command, "env", 4) == 0 && listlen(cmd) < 2)
-		return (list_env(env));
-	if (ft_strncmp(parse.command, "echo", 5) == 0)
-		return (ft_echo(parse.argument));
-	if (ft_strncmp(parse.command, "exit", 5) == 0 && listlen(cmd) < 2)
-		return (ft_exit(parse.argument, spipe));
-	return (-1);
 }
 
 int		simple_command(t_list *env, t_command *cmd,\
@@ -65,7 +29,7 @@ int		simple_command(t_list *env, t_command *cmd,\
 	t_parser	comm1;
 	int			ret;
 
-	child = 0;
+	g_child = 0;
 	comm1 = get_command(cmd->argument);
 	set_local_env(env, spipe);
 	if (exec_redir(cmd, redir) == -1)
@@ -74,13 +38,13 @@ int		simple_command(t_list *env, t_command *cmd,\
 	if (ret == -1)
 	{
 		signal(SIGQUIT, &sig_quit);
-		if ((child = fork()) == 0)
+		if ((g_child = fork()) == 0)
 		{
 			if (init_path(spipe->l_env, comm1, spipe) == NULL)
 				invalid_command(spipe, comm1);
-			execve(spipe->path,	comm1.argument, spipe->l_env);
+			execve(spipe->path, comm1.argument, spipe->l_env);
 		}
-		waitpid(child, (int *)&(spipe->pid[0]), 0);
+		waitpid(g_child, (int *)&(spipe->pid[0]), 0);
 		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
 	}
 	end_redir(redir);
@@ -108,9 +72,6 @@ int		execution(t_list *env, t_command *cmd, t_redir *redir, s_pipe *spipe)
 	if (cmd->argument == NULL)
 		return (-1);
 	spipe->n_comm = listlen(cmd);
-	spipe->i_comm = 0;
-	spipe->i_pipe = 0;
-	spipe->n_pipe = spipe->n_comm - 1;
 	if (!init_spipe(spipe))
 		return (-1);
 	if (spipe->n_comm == 1)
@@ -122,8 +83,9 @@ int		execution(t_list *env, t_command *cmd, t_redir *redir, s_pipe *spipe)
 	else if (spipe->n_comm > 2)
 	{
 		multi_pipe(env, cmd, spipe, redir);
+		spipe->index = 0;
 	}
-	spipe->last_ret = spipe->ret[spipe->n_comm - 1];
+	spipe->last_ret = spipe->ret[spipe->index];
 	//free_spipe(spipe);
-	return (1);
+	return (0);
 }

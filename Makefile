@@ -41,6 +41,8 @@ FILES =		./sources/main\
 			./sources/init_pipe\
 			./sources/redir_utils\
 			./sources/gnl_prompt\
+			./sources/builtins\
+			./sources/middle_command\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)

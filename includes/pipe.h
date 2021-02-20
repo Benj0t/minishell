@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/19 17:46:31 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/20 04:34:03 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ void	get_ret_values(s_pipe *spipe);
 int		init_pipe(s_pipe *spipe);
 int		init_spipe(s_pipe *spipe);
 int		err_msg(char *str);
+int		middle_commands(t_list *env, t_command *cmd, s_pipe *spipe, t_redir *redir);
 void	save_std(t_redir *redir, t_list **tmp, t_command *cmd);
 #endif

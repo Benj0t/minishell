@@ -6,17 +6,17 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/17 23:27:37 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/20 02:16:24 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	signal_c;
+int	g_signal_c;
 
 void	sig_handler(int sigid)
 {
-	signal_c = 1;
+	g_signal_c = 1;
 	ft_putstr_fd("\n> ", 2);
 	return ;
 }
@@ -39,13 +39,13 @@ int		prompt_test(int check, char *str, char **line, int *last_ret)
 		return (-1);
 	ft_memset(str, 0, BUFFER_SIZE);
 	check = read(0, str, BUFFER_SIZE);
-	if (signal_c == 1)
+	if (g_signal_c == 1)
 	{
 		*last_ret = 130;
 		if (*line)
 			free(*line);
 		*line = ft_calloc(1, 1);
-		signal_c = 0;
+		g_signal_c = 0;
 	}
 	if ((check == 0) && (ft_strlen(*line) == 0))
 	{
@@ -95,7 +95,7 @@ int		gnl_prompt(int fd, char **line, int *last_ret)
 	ssize_t		check;
 
 	check = BUFFER_SIZE;
-	signal_c = 0;
+	g_signal_c = 0;
 	signal(SIGINT, &sig_handler);
 	if (line == NULL || read(fd, str, 0) || BUFFER_SIZE <= 0)
 		return (-1);

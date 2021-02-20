@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 05:39:44 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/17 23:53:16 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/20 02:14:30 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	end_redir(t_redir *redir)
 	dup2(redir->save_stdin, 0);
 	close(redir->save_stdin);
 	close(redir->std_in);
-
 	dup2(redir->save_stdout, 1);
 	close(redir->save_stdout);
 	close(redir->std_out);

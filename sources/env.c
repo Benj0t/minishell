@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/12 12:32:21 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/19 18:41:14 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void		print_env(t_list *env)
 	while (env != NULL)
 	{
 		var_env = (t_var_env *)env->content;
+		ft_putstr_fd("declare -x ", 1);
 		ft_putstr_fd(var_env->key, 1);
 		ft_putchar_fd('=', 1);
 		ft_putendl_fd(var_env->var, 1);
