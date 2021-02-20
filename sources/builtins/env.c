@@ -2,6 +2,6 @@
 
 int		list_env(void)
 {
-	print_env();
+	print_env(NULL, g_env);
 	return (0);
 }
