@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/20 18:40:21 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/20 21:12:41 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int			valid_env(char *s)
 	return (i);
 }
 
-void		print_env(char	*prefix, t_list *env)
+void		print_env(char	*prefix, t_list *env, int print_null)
 {
 	t_var_env	*var_env;
 	t_list		*tmp_env;
@@ -58,10 +58,10 @@ void		print_env(char	*prefix, t_list *env)
 	while (tmp_env != NULL)
 	{
 		var_env = (t_var_env *)tmp_env->content;
-		if (prefix)
-			printf("%s %s=%s\n", prefix, var_env->key, var_env->var);
-		else
-			printf("%s=%s\n", var_env->key, var_env->var);
+		if (var_env->var)
+			printf("%s%s=%s\n", prefix, var_env->key, var_env->var);
+		else if (!var_env->var && print_null)
+			printf("%s%s\n", prefix, var_env->key);
 		tmp_env = tmp_env->next;
 	}
 }
@@ -69,9 +69,12 @@ void		print_env(char	*prefix, t_list *env)
 t_var_env	*malloc_varenv(const char *key, const char *str)
 {
 	t_var_env	*ret;
+
 	ret = (t_var_env *)malloc(sizeof(t_var_env));
+	ret->var = NULL;
 	ret->key = ft_strdup(key);
-	ret->var = ft_strdup(str);
+	if (str != NULL)
+		ret->var = ft_strdup(str);
 	return (ret);
 }
 
@@ -177,17 +180,15 @@ int		put_env(char *string)
 	while (string[i] != '\0' && string[i] != '=')
 		i++;
 	if (string[i] == '\0')
-		return(unset_env(string));
+		return(set_env(string, NULL, 0));
 	string[i] = '\0';
 	return (set_env(string, &string[i + 1], 1));
 }
 
 int		set_env(const char *name, char *value, int replace)
-{
+{//voir si key est valable et voir += et env de depart
 	t_var_env *tmp;
 
-	if (value == NULL)
-		return (-1);
 	tmp = getvar_env(name);
 	if (replace && tmp)
 	{
@@ -196,7 +197,7 @@ int		set_env(const char *name, char *value, int replace)
 		if (tmp->var == NULL)
 			return (-1);
 	}
-	else
+	else if (!tmp)
 		ft_lstadd_back(&g_env, ft_lstnew(malloc_varenv(name, value)));
 	return (0);
 }

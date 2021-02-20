@@ -1,7 +1,7 @@
 #include "minishell.h"
 
-int		list_env(void)
+int		ft_env(void)
 {
-	print_env(NULL, g_env);
+	print_env("", g_env, 0);
 	return (0);
 }

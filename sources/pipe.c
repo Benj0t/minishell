@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/19 19:08:29 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/20 20:33:39 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		builtins(t_command *cmd, s_pipe *spipe)
 	if (ft_strncmp(parse.command, "export", 7) == 0)
 		return (ft_export(parse.argument));
 	if (ft_strncmp(parse.command, "env", 4) == 0)
-		return (list_env());
+		return (ft_env());
 	if (ft_strncmp(parse.command, "echo", 5) == 0)
 		return (ft_echo(parse.argument));
 	if (ft_strncmp(parse.command, "exit", 5) == 0 && listlen(cmd) < 2)

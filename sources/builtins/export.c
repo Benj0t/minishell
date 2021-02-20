@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/20 18:42:03 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/20 20:27:40 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ int		ft_export(char **arg)
 	if (*arg == NULL)
 	{
 		copy = ft_lstcopy(g_env);
+		if (copy == NULL)
+			return (1);
 		bubble_sort(copy);
-		print_env("export", copy);
+		print_env("export ", copy, 1);
 		ft_lstclear(&copy, NULL);
 		return (0);
 	}
