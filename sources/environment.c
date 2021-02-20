@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/19 19:10:33 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/20 16:53:33 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ t_list	*envp_to_list(char **envp)
 	int		i;
 	char	*c;
 	t_list	*ret;
-	char	**split;
 
 	ret = NULL;
 	i = 0;
@@ -146,7 +145,7 @@ char	*get_env(const char *name)
 	if (name == NULL)
 		return (NULL);
 	tmp_env = g_env;
-	while ((t_var_env *)tmp_env->content != NULL)
+	while (tmp_env != NULL)
 	{
 		if (!strcmp(((t_var_env *)tmp_env->content)->key, name)) //changer strcmp
 			return (((t_var_env *)tmp_env->content)->var);
@@ -160,7 +159,7 @@ t_var_env	*getvar_env(const char *name)
 	t_list		*tmp_env;
 
 	tmp_env = g_env;
-	while ((t_var_env *)tmp_env->content != NULL)
+	while (tmp_env != NULL)
 	{
 		if (!strcmp(((t_var_env *)tmp_env->content)->key, name)) //changer strcmp
 			return ((t_var_env *)tmp_env->content);
@@ -174,7 +173,7 @@ int		put_env(char *string)
 	size_t i;
 
 	i = 0;
-	while (string[i] != '\0' && string[i] == '=')
+	while (string[i] != '\0' && string[i] != '=')
 		i++;
 	if (string[i] == '\0')
 		return(unset_env(string));
@@ -219,14 +218,13 @@ int		unset_env(const char *name)
 {
 	t_list		*tmp_env;
 	t_list		*tmp;
-	t_var_env	*var;
 
 	if (name == NULL || ft_strlen(name) == 0 || contains_egal(name))
 		return (-1);
 	tmp_env = g_env;
-	while ((t_var_env *)tmp_env->content != NULL)
+	while (tmp_env != NULL)
 	{
-		if (!strcmp(var->key, name)) //changer strcmp
+		if (!strcmp(((t_var_env *)tmp->content)->key, name)) //changer strcmp
 		{
 			tmp->next = tmp_env->next;
 			dealloc_varenv((t_var_env *)tmp->content);
