@@ -6,53 +6,71 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/15 12:54:12 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/18 12:04:23 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "token.h"
 
-static char	in_list(char c, char *str)
+t_token			word_tok(t_managparse *manag, size_t i)
 {
-	while (*str)
-	{
-		if (*str == c)
-			return (1);
-		str++;
-	}
-	return (0);
+	t_token	tok;
+	char	*tmp;
+
+	tok.type = tok_word;
+	tok.name = ft_substr(manag->str, 0, i);
+	if (tok.name == NULL)
+		malloc_fail(tok, manag);
+	tmp = ft_strdup(&manag->str[i]);
+	if (tmp == NULL)
+		malloc_fail(tok, manag);
+	free(manag->str);
+	manag->str = tmp;
+	return (tok);
 }
 
-static t_ttoken	search_type(char c)
+t_token			others_tok(t_managparse *manag)
 {
-	int		i;
+	t_token	tok;
+	char	*tmp;
 
-	i = 0;
-	while (T_ALL[i] != c)
+	tok.name = ft_substr(manag->str, 0, 1);
+	if (tok.name == NULL)
+		malloc_fail(tok, manag);
+	tok.type = search_type(*tok.name);
+	tmp = ft_strdup(&manag->str[1]);
+	if (tmp == NULL)
+		malloc_fail(tok, manag);
+	free(manag->str);
+	manag->str = tmp;
+	return (tok);
+}
+
+t_token			error_quote(t_managparse *manag, char quote)
+{
+	t_token	tok;
+
+	tok.name = ft_strdup(&quote);
+	if (tok.name == NULL)
+		malloc_fail(tok, manag);
+	tok.type = tok_error;
+	return (tok);
+}
+
+size_t			quote_pass(t_managparse *manag, size_t i, char quote)
+{
+	i++;
+	while (manag->str[i] != '\0')
+	{
+		if (manag->str[i] == quote)
+			if (!backslash(manag->str, i))
+				break ;
 		i++;
-	return (i+1);
-}
-
-int			is_quote(char c)
-{
-	if (c == '"' || c == '\'')
-		return (1);
-	return (0);
-}
-
-int			is_backslash(char *str, size_t i)
-{
-	if ((str[i + 1] == '\\' && (str[i] != ' ' && str[i] != '	')) || str[i - 1] == '\\')
-	{
-		if (backslash(str, i - 1))
-			return (0);
-		return (1);
 	}
-	return (0);
+	return (i);
 }
 
-t_token		next_token(char **str)
+t_token			next_token(t_managparse *manag)
 {
 	t_token	tok;
 	size_t	i;
@@ -62,45 +80,21 @@ t_token		next_token(char **str)
 	i = 0;
 	tok.name = NULL;
 	tok.type = tok_eof;
-	if (str[0][i] == '\0')
+	if (manag->str[i] == '\0')
 		return (tok);
-	while ((!in_list(str[0][i], T_ALL) && str[0][i] != '\0') || is_backslash(str[0], i))
+	while ((!in_list(manag->str[i], T_ALL) && manag->str[i] != '\0')\
+			|| is_backslash(manag->str, i))
 	{
-		if (is_quote(str[0][i]) && !backslash(str[0], i))
+		if (is_quote(manag->str[i]) && !backslash(manag->str, i))
 		{
-			quote = str[0][i];
-			i++;
-			while (str[0][i] != '\0')
-			{
-				if (str[0][i] == quote)
-					if (!backslash(str[0], i))
-						break;
-				i++;
-			}
-			if (str[0][i] == '\0')
-			{
-				tok.name = ft_strdup(&quote);
-				tok.type = tok_error;
-				return (tok);
-			}
+			quote = manag->str[i];
+			i = quote_pass(manag, i, quote);
+			if (manag->str[i] == '\0')
+				return (error_quote(manag, quote));
 		}
 		i++;
 	}
-	if (in_list(str[0][i], T_ALL) && i == 0)
-	{
-		tok.name = ft_substr(*str, 0, 1);
-		tok.type = search_type(*tok.name);
-		tmp = ft_strdup(&str[0][1]);
-		//printf("%p-%s-\n", tmp, &str[0][i]);
-		free(*str);
-		*str = tmp;
-		return (tok);
-	}
-	tok.type = tok_word;
-	tok.name = ft_substr(*str, 0, i);
-	tmp = ft_strdup(&str[0][i]);
-	//printf("%p-%s-\n", tmp, &str[0][i]);
-	free(*str);
-	*str = tmp;
-	return (tok);
+	if (in_list(manag->str[i], T_ALL) && i == 0)
+		return (others_tok(manag));
+	return (word_tok(manag, i));
 }

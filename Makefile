@@ -31,7 +31,7 @@ FILES =		./sources/main\
 			./sources/enter\
 			./sources/parser\
 			./sources/token\
-			./sources/env\
+			./sources/environment\
 			./sources/expander\
 			./sources/multi_pipe\
 			./sources/redir\
@@ -43,6 +43,10 @@ FILES =		./sources/main\
 			./sources/gnl_prompt\
 			./sources/builtins\
 			./sources/middle_command\
+			./sources/parser_utils\
+			./sources/token_utils\
+			./sources/expander_utils\
+			./sources/lst_sort\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)

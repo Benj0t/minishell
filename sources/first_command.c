@@ -6,20 +6,11 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/20 17:17:30 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/21 14:03:29 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	sig_quit(int sigid)
-{
-	if (sigid == SIGQUIT)
-	{
-		write(1, "\n", 1);
-		exit(9);
-	}
-}
 
 void		exec_fcomm_2(t_redir *redir, s_pipe *spipe, t_parser comm2)
 {
@@ -34,7 +25,7 @@ void		exec_fcomm_2(t_redir *redir, s_pipe *spipe, t_parser comm2)
 	execve(spipe->path, comm2.argument, spipe->l_env);
 }
 
-static int	second_command(t_list *env, t_command *cmd,\
+static int	second_command(t_command *cmd,\
 			s_pipe *spipe, t_redir *redir)
 {
 	t_parser	comm2;
@@ -80,10 +71,9 @@ int			first_command(t_list *env, t_command *cmd,\
 		return (0);
 	if (pipe(spipe->curr_p) < 0 || pipe(spipe->prev_p) < 0)
 		return (0);
-	set_local_env(env, spipe);
-	//signal(SIGQUIT, &sig_quit);
+	set_local_env(spipe);
 	comm1 = get_command(cmd->argument);
-	if ((spipe->ret[spipe->index] = scan_builtins(cmd, env, spipe)) == 0)
+	if ((spipe->ret[spipe->index] = scan_builtins(cmd, spipe)) == 0)
 	{
 		if (redir->std_out == -1)
 			dup2(spipe->prev_p[1], 1);
@@ -97,5 +87,5 @@ int			first_command(t_list *env, t_command *cmd,\
 	end_redir(redir);
 	if (redir->std_out != -1)
 		return (0);
-	return (second_command(env, cmd, spipe, redir));
+	return (second_command(cmd, spipe, redir));
 }

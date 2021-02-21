@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:19:00 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/20 17:17:29 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/21 14:06:34 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void		exec_lcomm(s_pipe *spipe, t_redir *redir, t_parser comm1)
 	execve(spipe->path, comm1.argument, spipe->l_env);
 }
 
-static int	last_command(t_list *env, t_command *cmd,\
+static int	last_command(t_command *cmd,\
 						s_pipe *spipe, t_redir *redir)
 {
 	int			ret;
@@ -52,7 +52,7 @@ static int	last_command(t_list *env, t_command *cmd,\
 	return (0);
 }
 
-int			multi_pipe(t_list *env, t_command *cmd,\
+int			multi_pipe(t_command *cmd,\
 						s_pipe *spipe, t_redir *redir)
 {
 	int			i;
@@ -66,17 +66,17 @@ int			multi_pipe(t_list *env, t_command *cmd,\
 	{
 		if (i == 0)
 		{
-			ret = first_command(env, tmp, spipe, redir);
+			ret = first_command(tmp, spipe, redir);
 			tmp = tmp->pipe;
 		}
 		if (i > 0)
 		{
-			ret = middle_commands(env, tmp, spipe, redir);
+			ret = middle_commands(tmp, spipe, redir);
 		}
 		tmp = tmp->pipe;
 		i++;
 	}
-	ret = last_command(env, tmp, spipe, redir);
+	ret = last_command(tmp, spipe, redir);
 	spipe->i_pipe++;
 	get_ret_values(spipe);
 	return (0);
