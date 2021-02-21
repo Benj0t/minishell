@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/18 14:29:22 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/21 03:20:22 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ typedef struct	t_pipe
 	char		*path;
 	char		**l_env;
 	int			last_ret;
-	int			**p;
+	int			curr_p[2];
+	int			prev_p[2];
 	int			*ret;
 	int			*pid;
 	pid_t		*child;
@@ -41,6 +42,8 @@ typedef struct	s_redir
    	int 		save_stdout;
 }				t_redir;
 
+int		invalid_command(s_pipe *spipe, t_parser comm1);
+void	close_pipe(s_pipe *spipe);
 void	end_redir(t_redir *redir);
 char    **set_local_env(s_pipe *spipe);
 void   	free_spipe(s_pipe *spipe);
@@ -68,5 +71,6 @@ void	get_ret_values(s_pipe *spipe);
 int		init_pipe(s_pipe *spipe);
 int		init_spipe(s_pipe *spipe);
 int		err_msg(char *str);
+int		middle_commands(t_list *env, t_command *cmd, s_pipe *spipe, t_redir *redir);
 void	save_std(t_redir *redir, t_list **tmp, t_command *cmd);
 #endif

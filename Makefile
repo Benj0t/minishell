@@ -41,6 +41,8 @@ FILES =		./sources/main\
 			./sources/init_pipe\
 			./sources/redir_utils\
 			./sources/gnl_prompt\
+			./sources/builtins\
+			./sources/middle_command\
 			./sources/parser_utils\
 			./sources/token_utils\
 			./sources/expander_utils\
