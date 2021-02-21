@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 22:17:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 14:04:54 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/21 20:41:02 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,26 @@
 
 t_list	*g_env;
 
+void	init_env(char **envp)
+{
+	char	*str;
+
+	if (!envp)
+	{
+		g_env = NULL;
+		return ;
+	}
+	g_env = envp_to_list(envp);
+	if (!g_env)
+		return (ft_lstclear(&g_env, free));
+	str = get_env("SHLVL");
+	if (!str)
+		return (ft_lstclear(&g_env, free));
+	str = ft_itoa(ft_atoi(str) + 1);
+	set_env("SHLVL", str, 1);
+	return ;
+}
+
 int		main(int ac, char **av, char **envp)
 {
 	char		*str;
@@ -24,7 +44,7 @@ int		main(int ac, char **av, char **envp)
 
 	(void)ac;
 	spipe.last_ret = 0;
-	g_env = envp_to_list(envp);
+	init_env(envp);
 	spipe.ret = 0;
 	while (1)
 	{

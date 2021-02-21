@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/20 21:12:41 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/21 19:37:35 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int			valid_env(char *s)
 	i = 0;
 	if (s[i] == '=' || ft_isdigit(s[i]))
 		return (0);
-	while (s[i] && s[i] != '=')
+	while (s[i] && s[i] != '=' && s[i] != '+')
 	{
-			if (!ft_isalnum(s[i]) && s[i] != '_')
-				return (0);
+		if (!ft_isalnum(s[i]) && s[i] != '_')
+			return (0);
 		i++;
 	}
 	return (i);
@@ -172,16 +172,42 @@ t_var_env	*getvar_env(const char *name)
 	return (NULL);
 }
 
+int		join_env(const char *name, char *value)
+{//voir si key est valable et voir += et env de depart
+	t_var_env	*tmp;
+	char		*str;
+
+	tmp = getvar_env(name);
+	if (tmp)
+	{
+		str = tmp->var;
+		if (!str)
+			tmp->var = ft_strdup(value);
+		else
+			tmp->var = ft_strjoin(tmp->var, value);
+		if (tmp->var == NULL)
+			return (-1);
+		if (str != NULL)
+			free(str);
+	}
+	else if (!tmp)
+		ft_lstadd_back(&g_env, ft_lstnew(malloc_varenv(name, value)));
+	return (0);
+}
+
 int		put_env(char *string)
 {
 	size_t i;
 
-	i = 0;
-	while (string[i] != '\0' && string[i] != '=')
-		i++;
+	i = is_valid_env(string);
 	if (string[i] == '\0')
 		return(set_env(string, NULL, 0));
 	string[i] = '\0';
+	if (string[i - 1] == '+')
+	{
+		string[i - 1] = '\0';
+		return (join_env(string, &string[i + 1]));
+	}
 	return (set_env(string, &string[i + 1], 1));
 }
 
@@ -226,10 +252,10 @@ int		unset_env(const char *name)
 	tmp_env = g_env;
 	while (tmp_env != NULL)
 	{
-		if (!strcmp(((t_var_env *)tmp->content)->key, name)) //changer strcmp
+		if (!strcmp(((t_var_env *)tmp_env->content)->key, name)) //changer strcmp
 		{
 			tmp->next = tmp_env->next;
-			dealloc_varenv((t_var_env *)tmp->content);
+			dealloc_varenv((t_var_env *)tmp_env->content);
 		}
 		tmp = tmp_env;
 		tmp_env = tmp_env->next;

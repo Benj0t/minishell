@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 14:41:23 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/21 15:23:35 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	right_command(s_pipe *spipe, t_redir *redir,\
 
 void		check_builtin(s_pipe *spipe, t_redir *redir, t_command *command)
 {
-	if ((spipe->ret[1] = scan_builtins(command, spipe)) == 1)
+	if ((spipe->ret[1] = scan_builtins(command, spipe)) == 0)
 	{
 		if (redir->std_in == -1)
 			dup2(spipe->curr_p[0], 0);
@@ -90,7 +90,7 @@ int			single_pipe(t_command *command,\
 	if (exec_redir(command, redir) == -1 || pipe(spipe->curr_p) < 0)
 		return (-1);
 	set_local_env(spipe);
-	if ((spipe->ret[0] = scan_builtins(command, spipe)) == 1)
+	if ((spipe->ret[0] = scan_builtins(command, spipe)) == 0)
 	{
 		if (redir->std_in == -1 && redir->std_out == -1)
 			dup2(spipe->curr_p[1], 1);

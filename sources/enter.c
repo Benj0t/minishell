@@ -6,11 +6,26 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/21 14:54:25 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/21 21:24:30 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		check_pipe(t_command *command)
+{
+	t_command	*tmp;
+
+	tmp = command->pipe;
+	while (tmp != NULL)
+	{
+		if (tmp->argument == NULL && tmp->redir_in == NULL\
+			&& tmp->redir_out == NULL && tmp->redir_append == NULL)
+			return (1);
+		tmp = tmp->pipe;
+	}
+	return (0);
+}
 
 //desalloc et clear t_command
 void		clear_multi_command(t_command *command)
@@ -90,6 +105,7 @@ int		parser(char **str, t_redir *redir, s_pipe *spipe)
 	t_command		*base;
 
 	manag.str = *str;
+	manag.spipe = *spipe;
 	while (*manag.str)
 	{
 		manag.command = setup_command();
@@ -101,8 +117,13 @@ int		parser(char **str, t_redir *redir, s_pipe *spipe)
 			*str = manag.str;
 			return (1);
 		}
-		//debug
 		manag.command = base;
+		if (check_pipe(manag.command))
+		{
+			clear_multi_command(manag.command);
+			return (error_parser(NULL, ft_strdup("parse error near '|'")));
+		}
+		//debug
 		print_multi_command(manag.command);
 		printf("exec\n");
 		execution(manag.command, redir, spipe);
