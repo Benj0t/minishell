@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/18 11:34:38 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/21 14:54:57 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int		save_tok_pipe(t_token *tok, t_managparse *manag)
 	manag->command->pipe = setup_command();
 	if (manag->command->pipe == NULL)
 		malloc_fail(*tok, manag);
+	manag->command = manag->command->pipe;
 	return (parser_token(manag));
 }
 

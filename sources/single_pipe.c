@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   single_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 14:07:46 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/21 14:41:23 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,32 +74,32 @@ static int	right_command(s_pipe *spipe, t_redir *redir,\
 
 void		check_builtin(s_pipe *spipe, t_redir *redir, t_command *command)
 {
-	if ((spipe->ret[1] = scan_builtins(command, env, spipe)) == 1)
+	if ((spipe->ret[1] = scan_builtins(command, spipe)) == 1)
 	{
 		if (redir->std_in == -1)
 			dup2(spipe->curr_p[0], 0);
-		spipe->ret[1] = builtins(command->pipe, env, spipe);
+		spipe->ret[1] = builtins(command->pipe, spipe);
 	}
 }
 
-int			single_pipe(t_list *env, t_command *command,\
+int			single_pipe(t_command *command,\
 					t_redir *redir, s_pipe *spipe)
 {
 	int			child[2];
 
 	if (exec_redir(command, redir) == -1 || pipe(spipe->curr_p) < 0)
 		return (-1);
-	set_local_env(env, spipe);
-	if ((spipe->ret[0] = scan_builtins(command, env, spipe)) == 1)
+	set_local_env(spipe);
+	if ((spipe->ret[0] = scan_builtins(command, spipe)) == 1)
 	{
 		if (redir->std_in == -1 && redir->std_out == -1)
 			dup2(spipe->curr_p[1], 1);
-		builtins(command, env, spipe);
+		builtins(command, spipe);
 	}
 	if ((child[0] = left_command(spipe, redir, command, spipe->curr_p)) == -1)
 		return (0);
 	end_redir(redir);
-	set_local_env(env, spipe);
+	set_local_env(spipe);
 	if (exec_redir(command, redir) == -1)
 		return (-1);
 	check_builtin(spipe, redir, command);

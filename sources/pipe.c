@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/21 14:07:07 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/21 14:37:59 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ int		simple_command(t_command *cmd,\
 
 	g_child = 0;
 	comm1 = get_command(cmd->argument);
-	set_local_env(env, spipe);
+	set_local_env(spipe);
 	if (exec_redir(cmd, redir) == -1)
 		return (0);
-	ret = builtins(cmd, env, spipe);
+	ret = builtins(cmd, spipe);
 	if (ret == -1)
 	{
 		signal(SIGQUIT, &sig_quit);
@@ -83,7 +83,7 @@ int		execution(t_command *cmd, t_redir *redir, s_pipe *spipe)
 	}
 	else if (spipe->n_comm > 2)
 	{
-		multi_pipe(env, cmd, spipe, redir);
+		multi_pipe(cmd, spipe, redir);
 		spipe->index = 0;
 	}
 	spipe->last_ret = spipe->ret[spipe->index];

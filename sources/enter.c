@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/19 15:53:23 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/21 14:54:25 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,20 +87,24 @@ t_command	*setup_command(void)
 int		parser(char **str, t_redir *redir, s_pipe *spipe)
 {
 	t_managparse	manag;
+	t_command		*base;
 
 	manag.str = *str;
 	while (*manag.str)
 	{
 		manag.command = setup_command();
+		base = manag.command;
 		if (parser_token(&manag))
 		{
+			manag.command = base;
 			clear_multi_command(manag.command);
 			*str = manag.str;
 			return (1);
 		}
 		//debug
-		//print_multi_command(manag.command);
-		//printf("exec\n");
+		manag.command = base;
+		print_multi_command(manag.command);
+		printf("exec\n");
 		execution(manag.command, redir, spipe);
 		clear_multi_command(manag.command);
 	}

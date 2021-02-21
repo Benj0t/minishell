@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multi_pipe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:19:00 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 14:06:34 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/21 14:39:55 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,15 @@ static int	last_command(t_command *cmd,\
 	if (pipe(spipe->curr_p) < 0)
 		return (1);
 	comm1 = get_command(cmd->argument);
-	set_local_env(env, spipe);
+	set_local_env(spipe);
 	if (exec_redir(cmd, redir) == -1)
 		return (2);
-	if ((spipe->ret[spipe->index] = scan_builtins(cmd, env, spipe)) == 0)
+	if ((spipe->ret[spipe->index] = scan_builtins(cmd, spipe)) == 0)
 	{
 		if (redir->std_in == -1)
 			dup2(spipe->prev_p[0], 0);
 		close(spipe->prev_p[1]);
-		builtins(cmd, env, spipe);
+		builtins(cmd, spipe);
 	}
 	if (spipe->ret[spipe->index++] == -1 &&\
 		(spipe->child[spipe->i_comm++] = fork()) == 0)

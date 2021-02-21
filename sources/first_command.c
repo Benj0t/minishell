@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 14:03:29 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/21 14:40:45 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,16 @@ static int	second_command(t_command *cmd,\
 	t_parser	comm2;
 
 	comm2 = get_command(cmd->pipe->argument);
-	set_local_env(env, spipe);
+	set_local_env(spipe);
 	if (exec_redir(cmd, redir) == -1)
 		return (0);
-	if ((spipe->ret[spipe->index] = scan_builtins(cmd->pipe, env, spipe)) == 1)
+	if ((spipe->ret[spipe->index] = scan_builtins(cmd->pipe, spipe)) == 1)
 	{
 		if (redir->std_in == -1)
 			dup2(spipe->prev_p[0], 0);
 		if (redir->std_out == -1)
 			dup2(spipe->curr_p[1], 1);
-		builtins(cmd->pipe, env, spipe);
+		builtins(cmd->pipe, spipe);
 	}
 	if (spipe->ret[spipe->index++] == -1 &&\
 		(spipe->child[spipe->i_comm++] = fork()) == 0)
@@ -62,7 +62,7 @@ void		exec_fcomm_1(t_redir *redir, s_pipe *spipe, t_parser comm1)
 	execve(spipe->path, comm1.argument, spipe->l_env);
 }
 
-int			first_command(t_list *env, t_command *cmd,\
+int			first_command(t_command *cmd,\
 			s_pipe *spipe, t_redir *redir)
 {
 	t_parser comm1;
@@ -77,7 +77,7 @@ int			first_command(t_list *env, t_command *cmd,\
 	{
 		if (redir->std_out == -1)
 			dup2(spipe->prev_p[1], 1);
-		builtins(cmd, env, spipe);
+		builtins(cmd, spipe);
 	}
 	if (spipe->ret[spipe->index++] == -1 &&\
 		((spipe->child[spipe->i_comm++] = fork()) == 0))
