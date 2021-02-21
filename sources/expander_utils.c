@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 12:06:18 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/19 15:44:25 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/21 17:19:50 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char	*var_to_replace(t_token *tok, t_managparse *manag, char *tmp)
 	if (tmp[0] == '?')
 	{
 		var = ft_itoa(manag->spipe.last_ret);
+		printf("%s\n", var);
 		if (var == NULL)
 			malloc_fail(*tok, manag);
 	}

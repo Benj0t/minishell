@@ -5,11 +5,11 @@ int		ft_pwd(void)
 {
 	char	*pwd;
 
-	pwd = getcwd(NULL, MAXPATHLEN);
+	pwd = getenv("PWD");
 	if (pwd == NULL)
 		return (-1);
 	else
 		ft_putstr_fd(pwd, 2);
-	free(pwd);
+	ft_putchar_fd('\n', 2);
 	return (0);
 }

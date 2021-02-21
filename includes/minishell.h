@@ -2,6 +2,7 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include <dirent.h>
 
 typedef struct	s_command
 {

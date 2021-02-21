@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/21 14:37:59 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/21 22:41:00 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int		simple_command(t_command *cmd,\
 	set_local_env(spipe);
 	if (exec_redir(cmd, redir) == -1)
 		return (0);
-	ret = builtins(cmd, spipe);
+	if ((ret = scan_builtins(cmd, spipe)) == 0)
+		builtins(cmd, spipe);
 	if (ret == -1)
 	{
 		signal(SIGQUIT, &sig_quit);
@@ -73,6 +74,7 @@ int		execution(t_command *cmd, t_redir *redir, s_pipe *spipe)
 	if (cmd->argument == NULL)
 		return (-1);
 	spipe->n_comm = listlen(cmd);
+	spipe->n_bin = spipe->n_comm - 1;
 	if (!init_spipe(spipe))
 		return (-1);
 	if (spipe->n_comm == 1)

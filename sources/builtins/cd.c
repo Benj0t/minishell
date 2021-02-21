@@ -58,6 +58,26 @@ static int		cd_error(char *error)
 	return (-1);
 }
 
+char	*ft_joinpath(char const *s1, char const *s2)
+{
+	char	*ptr;
+	char	*tmp;
+
+	if (!s1 || !s2)
+		return (NULL);
+	ptr = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 2));
+	if (!ptr)
+		return (NULL);
+	tmp = ptr;
+	while (*s1 != '\0')
+		*ptr++ = *s1++;
+	*ptr++ = '/';
+	while (*s2 != '\0')
+		*ptr++ = *s2++;
+	*ptr = '\0';
+	return (tmp);
+}
+
 int				ft_cd(char **arg)
 {
 	char	*previous;
@@ -65,9 +85,21 @@ int				ft_cd(char **arg)
 	char	*pwd;
 	char	*new;
 	int		ret;
+	int		bool;
 
 	errno = 0;
+	bool = 0;
 	pwd = getcwd(NULL, MAXPATHLEN);
+	if (pwd == NULL)
+	{
+		if ((ret = chdir(arg[1]) == -1 && getcwd(NULL, MAXPATHLEN) == NULL) || ft_strncmp(arg[1], ".", 2) == 0)
+		{
+			ft_putstr_fd("Can't find current working directory\n", 2);
+			return (1);
+		}
+		bool = 1;
+		pwd = getcwd(NULL, MAXPATHLEN);
+	}
 	previous = getenv("OLDPWD");
 	home = getenv("HOME");
 	if (arg[1] == NULL)
@@ -86,7 +118,12 @@ int				ft_cd(char **arg)
 	}
 	else
 		new = arg[1];
-	ret = chdir(new);
+	if (!bool)
+		ret = chdir(new);
+	char *str;
+	str = getcwd(NULL, MAXPATHLEN);
+	if (str != NULL)
+		setenv("PWD", str, 1);
 	if (ret != 0)
 		return (cd_error(NULL));
 	if (ft_strncmp(pwd, new, MAXPATHLEN))
