@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 00:10:15 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/22 00:29:36 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/22 19:36:04 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		ft_pwd(void)
 {
 	char	*pwd;
 
-	pwd = getenv("PWD");
+	pwd = get_env("PWD");
 	if (pwd == NULL)
 		return (-1);
 	else
