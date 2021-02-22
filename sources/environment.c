@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/20 21:12:41 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/22 19:01:12 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ int			check_env(char *s)
 		return (1);
 	while (s[i])
 	{
-			if (!ft_isalnum(s[i]) && s[i] != '_')
-			{
-				if (i == 0)
-					return (0);
-				else
-					break;
-			}
+		if (!ft_isalnum(s[i]) && s[i] != '_')
+		{
+			if (i == 0)
+				return (0);
+			else
+				break ;
+		}
 		i++;
 	}
 	return (i);
@@ -42,8 +42,8 @@ int			valid_env(char *s)
 		return (0);
 	while (s[i] && s[i] != '=')
 	{
-			if (!ft_isalnum(s[i]) && s[i] != '_')
-				return (0);
+		if (!ft_isalnum(s[i]) && s[i] != '_')
+			return (0);
 		i++;
 	}
 	return (i);
@@ -59,9 +59,19 @@ void		print_env(char	*prefix, t_list *env, int print_null)
 	{
 		var_env = (t_var_env *)tmp_env->content;
 		if (var_env->var)
-			printf("%s%s=%s\n", prefix, var_env->key, var_env->var);
+		{
+			ft_putstr_fd(prefix, 1);
+			ft_putstr_fd(var_env->key, 1);
+			ft_putchar_fd('=', 1);
+			ft_putstr_fd(var_env->var, 1);
+			ft_putchar_fd('\n', 1);
+		}
 		else if (!var_env->var && print_null)
-			printf("%s%s\n", prefix, var_env->key);
+		{
+			ft_putstr_fd(prefix, 1);
+			ft_putstr_fd(var_env->key, 1);
+			ft_putchar_fd('\n', 1);
+		}
 		tmp_env = tmp_env->next;
 	}
 }
@@ -86,7 +96,7 @@ void		dealloc_varenv(t_var_env *var_env)
 	free(var_env);
 }
 
-t_list	*envp_to_list(char **envp)
+t_list		*envp_to_list(char **envp)
 {
 	int		i;
 	char	*c;
@@ -107,7 +117,7 @@ t_list	*envp_to_list(char **envp)
 	return (ret);
 }
 
-char	**list_to_envp(void)
+char		**list_to_envp(void)
 {
 	int		len;
 	int		i;
@@ -120,7 +130,7 @@ char	**list_to_envp(void)
 	i = 0;
 	while (tmp != NULL)
 	{
-		ret[i] = ft_strjoin_c(((t_var_env *)tmp->content)->key,
+		ret[i] = ft_strjoin_c(((t_var_env *)tmp->content)->key,\
 					((t_var_env *)tmp->content)->var, '='); //malloc
 		tmp = tmp->next;
 		i++;
@@ -129,7 +139,7 @@ char	**list_to_envp(void)
 	return (ret);
 }
 
-void	dealloc_tab(char **tab)
+void		dealloc_tab(char **tab)
 {
 	char	**start;
 
@@ -142,7 +152,7 @@ void	dealloc_tab(char **tab)
 	free(start);
 }
 
-char	*get_env(const char *name)
+char		*get_env(const char *name)
 {
 	t_list		*tmp_env;
 

@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/21 14:04:35 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/22 00:03:01 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	sig_handler(int sigid)
 
 void	ign_sig(int sigid)
 {
-	return;
+	return ;
 }
 
 int		prompt_malloc(char **line, char *str)

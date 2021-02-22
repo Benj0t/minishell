@@ -4,6 +4,18 @@
 # include "libft.h"
 # include <dirent.h>
 
+typedef struct s_cd
+{
+	char		*previous;
+	char		*home;
+	char		*pwd;
+	char		*tmp;
+	char		*new;
+	int			ret;
+	int			bool;
+}				t_cd;
+
+
 typedef struct	s_command
 {
 		t_list			*argument;

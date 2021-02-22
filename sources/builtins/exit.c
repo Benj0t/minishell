@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/19 14:38:36 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/22 00:11:40 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ static int				error_exit(char *str)
 
 unsigned long long int	ft_atoull(const char *str)
 {
-	int i;
-	unsigned long long result;
-	int neg;
+	int					i;
+	unsigned long long	result;
+	int					neg;
 
 	i = 0;
 	result = 0;
@@ -61,7 +61,6 @@ unsigned long long int	ft_atoull(const char *str)
 
 int						ft_exit(char **arg, s_pipe *spipe)
 {
-
 	if (!arg[1])
 		exit(spipe->last_ret);
 	if (arg[2])

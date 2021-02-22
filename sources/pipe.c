@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/21 22:41:00 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/22 19:03:25 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	sig_quit(int sigid)
 {
 	if (sigid == SIGQUIT && g_child != 0)
 	{
-
 		write(1, "\n", 2);
 		kill(g_child, SIGTERM);
 	}
@@ -35,9 +34,9 @@ int		simple_command(t_command *cmd,\
 	set_local_env(spipe);
 	if (exec_redir(cmd, redir) == -1)
 		return (0);
-	if ((ret = scan_builtins(cmd, spipe)) == 0)
-		builtins(cmd, spipe);
-	if (ret == -1)
+	if ((scan_builtins(cmd, spipe)) == 0)
+		spipe->ret[0] = builtins(cmd, spipe);
+	else
 	{
 		signal(SIGQUIT, &sig_quit);
 		if ((g_child = fork()) == 0)
@@ -50,7 +49,7 @@ int		simple_command(t_command *cmd,\
 		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
 	}
 	end_redir(redir);
-	return (ret);
+	return (spipe->ret[0]);
 }
 
 int		ft_ret(int *ret)
