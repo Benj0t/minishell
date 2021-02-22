@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/18 12:09:43 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/22 17:11:31 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,7 @@ char	*quote_exp(t_token *tok, t_managparse *manag, char *result, size_t *i)
 	*i = 0;
 	while (tok->name[*i] != quote || tok->name[*i - 1] == '\\')
 	{
-		if (quote == '"' && tok->name[*i - 1] == '\\' && \
-			(tok->name[*i] == '$' || tok->name[*i] == '"' \
-			|| tok->name[*i] == '\\'))
-		{
-			if (remove_char(&tok->name, *i - 1))
-				malloc_fail(*tok, manag);
-			if (tok->name[*i] == '"')
-				continue ;
-		}
+		backslash_quote(tok, i, quote);
 		(*i)++;
 	}
 	tok->name[*i] = '\0';

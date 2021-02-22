@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/21 14:09:17 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/22 13:15:30 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-# define EENOUGH "unset: not enough arguments"
 
 int		ft_unset(char **arg)
 {

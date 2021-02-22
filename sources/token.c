@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/18 12:04:23 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/22 14:14:12 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,11 @@ t_token			others_tok(t_managparse *manag)
 t_token			error_quote(t_managparse *manag, char quote)
 {
 	t_token	tok;
+	char	str[2];
 
-	tok.name = ft_strdup(&quote);
+	str[0] = quote;
+	str[1] = '\0';
+	tok.name = ft_strdup(str);
 	if (tok.name == NULL)
 		malloc_fail(tok, manag);
 	tok.type = tok_error;

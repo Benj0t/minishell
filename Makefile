@@ -47,6 +47,9 @@ FILES =		./sources/main\
 			./sources/token_utils\
 			./sources/expander_utils\
 			./sources/lst_sort\
+			./sources/backslash_quote\
+			./sources/environment_utils\
+			./sources/environment_manag\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)
