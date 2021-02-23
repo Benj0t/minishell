@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 21:44:14 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 21:47:40 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int						ft_exit(char **arg, s_pipe *spipe, t_command *command)
 		exit(spipe->last_ret);
 	}
 	if (arg[2])
-		exit(error_exit(EMANYARG));
+		return(error_exit(EMANYARG));
 	if (ft_isnum(arg[1]) || ft_strlen(arg[1]) > 18)
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
