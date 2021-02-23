@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/12 22:10:50 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 13:03:42 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,27 @@ int			stat_loop(char *path, struct stat *buf, int *ret)
 	return (0);
 }
 
+char		*abs_path(char **env, t_parser comm, struct stat buf)
+{
+	int		ret;
+	int		child;
+
+	child = fork();
+	if (child == 0)
+	{
+		if (!stat(comm.argument[0], &buf))
+			exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		waitpid(child, &ret, 0);
+		if (ret != -1 && ret != 256)
+			return (ft_strdup(comm.argument[0]));
+	}
+	return (NULL);
+}
+
 char		*ft_path(char **env, t_parser comm)
 {
 	char		*path;
@@ -101,6 +122,9 @@ char		*ft_path(char **env, t_parser comm)
 	struct stat	buf;
 
 	path = rel_path(env, comm, buf);
+	if (path)
+		return (path);
+	path = abs_path(env, comm, buf);
 	if (path)
 		return (path);
 	if ((i = get_path_id(env)) < 0)
