@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 14:43:48 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 19:34:34 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 01:31:26 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,47 +67,50 @@ int				wrong_file(int *bool, int *ret, char **pwd, char **arg)
 	return (0);
 }
 
-int				ft_cd(char **arg)
+int			get_arg(char **arg, char **new, char *previous, char *home)
 {
-	char		*previous;
-	char		*home;
-	char		*pwd;
-	char		*tmp;
-	char		*new;
-	int			ret;
-	int			bool;
-
-	errno = 0;
-	bool = 0;
-	pwd = getcwd(NULL, MAXPATHLEN);
-	if (wrong_file(&bool, &ret, &pwd, arg) == 1)
-		return (1);
-	previous = get_env("OLDPWD");
-	home = get_env("HOME");
 	if (arg[1] == NULL)
 	{
 		if (home)
-			new = home;
+			*new = home;
 		else
 			return (cd_error(EHOME));
 	}
 	else if (!ft_strncmp(arg[1], "-", 2))
 	{
 		if (previous)
-			new = previous;
+			*new = previous;
 		else
 			return (cd_error(EOLDPWD));
 	}
 	else
-		new = arg[1];
-	if (!bool)
-		ret = chdir(new);
-	tmp = getcwd(NULL, MAXPATHLEN);
-	if (tmp != NULL)
-		set_env("PWD", tmp, 1);
-	if (ret != 0)
+		*new = arg[1];
+	return (0);
+}
+
+int				ft_cd(char **arg)
+{
+	t_cd cd;
+
+	errno = 0;
+	cd.bool = 0;
+	cd.pwd = getcwd(NULL, MAXPATHLEN);
+	if (wrong_file(&(cd.bool), &cd.ret, &cd.pwd, arg) == 1)
+		return (1);
+	cd.previous = get_env("OLDPWD");
+	cd.home = get_env("HOME");
+	if (get_arg(arg, &cd.new, cd.previous, cd.home))
+		return (1);
+	if (!cd.bool)
+		cd.ret = chdir(cd.new);
+	cd.tmp = getcwd(NULL, MAXPATHLEN);
+	if (cd.tmp != NULL)
+		set_env("PWD", cd.tmp, 1);
+	if (cd.ret != 0)
 		return (cd_error(NULL));
-	if (ft_strncmp(pwd, new, MAXPATHLEN))
-		set_env("OLDPWD", pwd, 1);
+	if (!ft_strncmp(cd.previous, cd.new, MAXPATHLEN))
+		ft_pwd();
+	if (ft_strncmp(cd.pwd, cd.new, MAXPATHLEN))
+		set_env("OLDPWD", cd.pwd, 1);
 	return (0);
 }
