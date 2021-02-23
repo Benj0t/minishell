@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 22:17:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 20:41:02 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 02:29:26 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,5 @@ int		main(int ac, char **av, char **envp)
 		parser(&str, &redir, &spipe);
 		free(str);
 	}
-	free(str);
-	ft_lstclear(&g_env, free);
 	return (0);
 }
