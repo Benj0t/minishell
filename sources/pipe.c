@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/23 20:52:32 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 00:26:03 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int		execution(t_command *cmd, t_redir *redir, s_pipe *spipe)
 	else if (spipe->n_comm > 2)
 	{
 		multi_pipe(cmd, spipe, redir);
-		spipe->index = 0;
+		spipe->index--;
 	}
 	spipe->last_ret = spipe->ret[spipe->index];
 	free_spipe(spipe);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:44:00 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 20:18:42 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 23:46:43 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char		*env_sub_var(t_managparse *manag, char *tmp)
 
 	if (tmp[0] == '?')
 	{
-		var = ft_itoa(manag->spipe.last_ret);
+		var = ft_itoa(manag->spipe->last_ret);
 		if (var == NULL)
 			return (NULL);
 	}
