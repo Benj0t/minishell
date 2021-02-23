@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 01:44:14 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 02:08:02 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,7 @@ t_token			next_token(t_managparse *manag)
 			if (manag->str[i] == '\0')
 				return (error_quote(manag, quote));
 		}
-		if (manag->str[i] == '$')
-			i = env_sub(&manag->str, manag, i);
-		i++;
+		i = env_token(&manag->str, manag, i);
 	}
 	if (in_list(manag->str[i], T_ALL) && i == 0)
 		return (others_tok(manag));
