@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enter.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/21 21:54:44 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 13:19:25 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int			parser(char **str, t_redir *redir, s_pipe *spipe)
 		if (check_pipe(manag.command))
 		{
 			clear_multi_command(manag.command);
+			*str = manag.str;
 			return (error_parser(NULL, ft_strdup("parse error near '|'")));
 		}
 		//debug

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 19:01:12 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 13:17:24 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,11 @@ t_var_env	*malloc_varenv(const char *key, const char *str)
 	return (ret);
 }
 
-void		dealloc_varenv(t_var_env *var_env)
+void		dealloc_varenv(void *content)
 {
+	t_var_env *var_env;
+
+	var_env = (t_var_env *)content;
 	free(var_env->key);
 	if (var_env->var != NULL)
 		free(var_env->var);

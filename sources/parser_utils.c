@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 11:31:23 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/18 15:06:31 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 13:59:50 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		error_parser(char *str, char *name)
 void	malloc_fail(t_token tok, t_managparse *manag)
 {
 	clear_multi_command(manag->command);
-	ft_lstclear(&g_env, free);
+	ft_lstclear(&g_env, &dealloc_varenv);
 	printf("malloc_failed\n");
 	exit(1);
 }
@@ -61,4 +61,9 @@ void	next_free_token(t_token *tok, t_managparse *manag)
 {
 	free(tok->name);
 	*tok = next_token(manag);
+	while (tok->type == tok_space || tok->type == tok_tab)
+	{
+		free(tok->name);
+		*tok = next_token(manag);
+	}
 }

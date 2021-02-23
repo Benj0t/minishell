@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 02:07:30 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 14:28:13 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_token			others_tok(t_managparse *manag);
 t_token			error_quote(t_managparse *manag, char quote);
 size_t			quote_pass(t_managparse *manag, size_t i, char quote);
 t_token			next_token(t_managparse *manag);
-char			*env_dbl_join(char **str, t_managparse *manag, char *var, size_t ret);
+char			*env_dbl_join(char **str, char *var, size_t ret);
 char			*env_sub_var(t_managparse *manag, char *tmp);
 size_t			env_sub(char **str, t_managparse *manag, size_t i);
 size_t			env_token(char **str, t_managparse *manag, size_t i);

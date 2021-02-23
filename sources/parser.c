@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 14:05:09 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 14:03:22 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,43 @@
 
 int		save_tok_out(t_token *tok, t_managparse *manag)
 {
-	next_free_token(tok, manag);
+	free(tok->name);
+	*tok = next_token(manag);
 	if (tok->type == tok_out)
 	{
 		next_free_token(tok, manag);
-		return (test_arg(tok, manag, &manag->command->redir_append));
+		if (tok->type == tok_word)
+			return (test_arg(tok, manag, &manag->command->redir_append));
+		else
+		{
+			tok->type = tok_error;
+			return (error_parser(EUNEXPECTED, tok->name));
+		}
 	}
 	else
-		return (test_arg(tok, manag, &manag->command->redir_out));
+	{
+		next_free_token(tok, manag);
+		if (tok->type == tok_word)
+			return (test_arg(tok, manag, &manag->command->redir_out));
+		else
+		{
+			tok->type = tok_error;
+			return (error_parser(EUNEXPECTED, tok->name));
+		}
+	}
 	return (parser_token(manag));
 }
 
 int		save_tok_in(t_token *tok, t_managparse *manag)
 {
 	next_free_token(tok, manag);
-	return (test_arg(tok, manag, &manag->command->redir_in));
+	if (tok->type == tok_word)
+		return (test_arg(tok, manag, &manag->command->redir_in));
+	else
+	{
+		tok->type = tok_error;
+		return (error_parser(EUNEXPECTED, tok->name));
+	}
 }
 
 int		save_tok_pipe(t_token *tok, t_managparse *manag)
@@ -41,6 +63,12 @@ int		save_tok_pipe(t_token *tok, t_managparse *manag)
 	return (parser_token(manag));
 }
 
+int		free_ret(t_token *tok)
+{
+	free(tok->name);
+	return (0);
+}
+
 int		parser_token(t_managparse *manag)
 {
 	t_token		tok;
@@ -50,7 +78,7 @@ int		parser_token(t_managparse *manag)
 	if (tok.type == tok_space || tok.type == tok_tab)
 		next_free_token(&tok, manag);
 	if (tok.type == tok_eof || tok.type == tok_end)
-		return (0);
+		return (free_ret(&tok));
 	if (tok.type > T_NOWORD && manag->command->argument == NULL)
 		return (error_parser(EUNEXPECTED, tok.name));
 	if (tok.type == tok_word)

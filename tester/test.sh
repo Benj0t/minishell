@@ -162,12 +162,12 @@ exec_test "ls # -l" #comment
 exec_test "echo#" #comment
 exec_test "ls ;; ls" #nop
 exec_test "; ls ; ls" #ok
-exec_test "cat <<<<< bar" #nop error multi in
-exec_test "cat << << bar" #nop error multi in
+exec_test "cat <<<<< bar" #ok
+exec_test "cat << << bar" #ok
 exec_test "echo -nnnnnnnnnnnnnnnnnnnnn FOO" #ok
 exec_test "echo -nnnnnnnnnnnnnnnnnnnnno foo" #ok
 exec_test "echo -n -n -n -n bar" #ok
-exec_test 'echo "$ $ $ $ $SHELL----------$LOL.......$123TEST"' #nop $1 pas bon
+exec_test 'echo "$ $ $ $ $SHELL----------$LOL.......$123TEST"' #ok
 exec_test 'echo $PWD; echo $OLDPWD; cd ../../../..; pwd; echo $PWD; echo $OLDPWD' #bop revoir pwd
 exec_test 'export HELLO\\WORLD' #parser ok : exec nop revoir export
 exec_test 'export N\\T' #parser ok : exec nop revoir export
