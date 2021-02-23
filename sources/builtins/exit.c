@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 15:13:41 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 20:38:51 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static int				ft_isnum(char *str)
 	int i;
 
 	i = -1;
+	if (str[0] == '-' || str[0] == '+')
+		i++;
 	while (str[++i])
 	{
 		if (!(str[i] >= '0' && str[i] <= '9'))
@@ -33,10 +35,10 @@ static int				error_exit(char *str)
 	return (-1);
 }
 
-unsigned long long int	ft_atoull(const char *str)
+long long int	ft_atoll(const char *str)
 {
 	int					i;
-	unsigned long long	result;
+	long long	result;
 	int					neg;
 
 	i = 0;
@@ -53,17 +55,34 @@ unsigned long long int	ft_atoull(const char *str)
 	while (ft_isdigit((int)str[i]))
 	{
 		result *= 10;
-		result += (unsigned long long int)str[i] - 48;
+		result += (long long int)str[i] - 48;
 		i++;
 	}
-	return (result * (unsigned long long int)neg);
+	return (result * (long long int)neg);
 }
 
-int						ft_exit(char **arg, s_pipe *spipe)
+int						exit_neg(long long int nb)
 {
+	if (nb >= -256)
+		return (256 + nb);
+	return (256 + (nb % 256));
+}
+
+
+void						free_exit(char **arg, s_pipe *spipe, t_command *command)
+{
+	free(arg);
+	free_spipe(spipe);
+	ft_lstclear(&g_env, &dealloc_varenv);
+}
+
+int						ft_exit(char **arg, s_pipe *spipe, t_command *command)
+{
+	long long int nb;
+
 	if (!arg[1])
 	{
-		free(arg);
+		free_exit(arg, spipe, command);
 		exit(spipe->last_ret);
 	}
 	if (arg[2])
@@ -73,11 +92,13 @@ int						ft_exit(char **arg, s_pipe *spipe)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(arg[1], 2);
 		ft_putstr_fd(": numeric argument required", 2);
-		ft_lstclear(&g_env, &dealloc_varenv);
-		free(arg);
+		free_exit(arg, spipe, command);
 		exit(2);
 	}
-	free(arg);
-	exit(ft_atoull(arg[1]) % 256);
+	nb = ft_atoll(arg[1]);
+	free_exit(arg, spipe, command);
+	if (nb < 0)
+		exit(exit_neg(nb));
+	exit(nb % 256);
 	return (-1);
 }

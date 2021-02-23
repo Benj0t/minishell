@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 02:10:41 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/23 17:27:50 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 20:23:19 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int		builtins(t_command *cmd, s_pipe *spipe)
 	if (ft_strncmp(parse.command, "echo", 5) == 0)
 		return (ft_echo(parse.argument));
 	if (ft_strncmp(parse.command, "exit", 5) == 0 && listlen(cmd) < 2)
-		return (ft_exit(parse.argument, spipe));
+		return (ft_exit(parse.argument, spipe, cmd));
 	free(parse.argument);
 	return (1);
 }
