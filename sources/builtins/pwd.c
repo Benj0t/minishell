@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 20:01:04 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 21:41:09 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 12:52:40 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,5 @@ int		ft_pwd(void)
 	else
 		ft_putstr_fd(pwd, 2);
 	ft_putchar_fd('\n', 2);
-	free(pwd);
 	return (0);
 }
