@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 13:19:25 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 16:31:50 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int			parser_fail(t_managparse *manag, char **str, t_command *base)
 	manag->command = base;
 	clear_multi_command(manag->command);
 	*str = manag->str;
+	manag->spipe.last_ret = 2;
 	return (1);
 }
 
@@ -117,16 +118,15 @@ int			parser(char **str, t_redir *redir, s_pipe *spipe)
 		base = manag.command;
 		if (parser_token(&manag))
 			return (parser_fail(&manag, str, base));
-		manag.command = base;
-		if (check_pipe(manag.command))
+		if (check_pipe(base))
 		{
-			clear_multi_command(manag.command);
-			*str = manag.str;
-			return (error_parser(NULL, ft_strdup("parse error near '|'")));
+			error_parser(NULL, ft_strdup("parse error near '|'"));
+			return (parser_fail(&manag, str, base));
 		}
+		manag.command = base;
 		//debug
-		print_multi_command(manag.command);
-		printf("exec\n");
+		// print_multi_command(manag.command);
+		// printf("exec\n");
 		execution(manag.command, redir, spipe);
 		clear_multi_command(manag.command);
 	}

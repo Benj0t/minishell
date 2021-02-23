@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:44:00 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 14:27:35 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 17:13:55 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ size_t		env_sub(char **str, t_managparse *manag, size_t i)
 
 size_t		env_token(char **str, t_managparse *manag, size_t i)
 {
+	backslash_lvl(str[0], i);
 	if (str[0][i] == '$')
 	{
 		i = env_sub(str, manag, i);

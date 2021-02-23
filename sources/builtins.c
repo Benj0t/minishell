@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 02:10:41 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/22 18:55:53 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 16:40:22 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		builtins(t_command *cmd, s_pipe *spipe)
 		return (ft_pwd());
 	if (ft_strncmp(parse.command, "cd", 3) == 0 && listlen(cmd) < 2)
 		return (ft_cd(parse.argument));
-	if (ft_strncmp(parse.command, "export", 7) == 0 && listlen(cmd) < 2)
+	if (ft_strncmp(parse.command, "export", 7) == 0)
 		return (ft_export(parse.argument));
 	if (ft_strncmp(parse.command, "unset", 6) == 0 && listlen(cmd) < 2)
 		return (ft_unset(parse.argument));

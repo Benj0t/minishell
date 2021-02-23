@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 20:01:04 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 14:31:56 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 15:53:13 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int		ft_pwd(void)
 	if (pwd == NULL)
 		return (-1);
 	else
-		ft_putstr_fd(pwd, 2);
-	ft_putchar_fd('\n', 2);
+		ft_putstr_fd(pwd, 1);
+	ft_putchar_fd('\n', 1);
 	return (0);
 }
