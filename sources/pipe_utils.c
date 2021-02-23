@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 16:21:57 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 16:08:33 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void		get_ret_values(s_pipe *spipe)
 	i = 0;
 	while (spipe->n_bin >= 0)
 	{
-		if (spipe->ret[i] == -1)
+		if (spipe->ret[i] == 1)
 		{
 			waitpid(spipe->child[spipe->n_bin--], (int *)&(spipe->pid[i]), 0);
 			spipe->ret[i] = WEXITSTATUS(spipe->pid[i]);
@@ -47,7 +47,7 @@ int			invalid_command(s_pipe *spipe, t_parser comm1)
 {
 	ft_putstr_fd(comm1.argument[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
-	exit(127);
+	return (127);
 }
 
 void		close_pipe(s_pipe *spipe)

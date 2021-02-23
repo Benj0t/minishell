@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mdavid <mdavid@student.42.fr>              +#+  +:+       +#+         #
+#    By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/13 19:04:13 by bemoreau          #+#    #+#              #
-#    Updated: 2020/07/06 23:10:44 by mdavid           ###   ########.fr        #
+#    Updated: 2021/02/23 13:59:09 by bemoreau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ FILES =		./sources/main\
 			./sources/environment_utils\
 			./sources/environment_manag\
 			./sources/token_env\
+			./sources/free\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)

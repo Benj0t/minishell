@@ -56,6 +56,7 @@ extern t_list *g_env;
 # include "pipe.h"
 # include "parser.h"
 
+void		free_struct(s_pipe *spipe, t_redir *redir, t_command *command);
 int			prompt_malloc(char **line, char *str);
 void		bubble_sort(t_list *list);
 t_list*		ft_lstcopy(t_list* head);
@@ -64,7 +65,7 @@ int			check_env(char *s);
 int			valid_env(char *s);
 void		print_env(char	*prefix, t_list *env, int print_null);
 t_var_env	*malloc_varenv(const char *key, const char *str);
-void		dealloc_varenv(t_var_env *var_env);
+void		dealloc_varenv(void * content);
 t_list		*envp_to_list(char **envp);
 char		**list_to_envp(void);
 void		dealloc_tab(char **tab);

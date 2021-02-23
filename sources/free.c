@@ -1,50 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/07 13:12:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 14:52:12 by bemoreau         ###   ########.fr       */
+/*   Created: 2021/02/23 13:58:07 by bemoreau          #+#    #+#             */
+/*   Updated: 2021/02/23 16:11:32 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		check_opt_n(char *arg)
+void	free_struct(s_pipe *spipe, t_redir *redir, t_command *command)
 {
-	if (*arg != '-')
-		return (0);
-	arg++;
-	while (*arg == 'n')
-	{
-		arg++;
-		if (*arg == '\0')
-			return (1);
-	}
-	return (0);
+	exit(42);
 }
 
-int		ft_echo(char **arg)
+int		free_spipe(s_pipe *spipe)
 {
-	int		opt_n;
+	int i;
 
-	opt_n = 0;
-	arg++;
-	while (*arg && check_opt_n(*arg))
+	i = 0;
+	free(spipe->child);
+	free(spipe->pid);
+	free(spipe->ret);
+	if (spipe->l_env)
 	{
-		opt_n = 1;
-		arg++;
+		dealloc_tab(spipe->l_env);
+		spipe->l_env = NULL;
 	}
-	while (*arg)
-	{
-		ft_putstr_fd(*arg, 1);
-		arg++;
-		if (*arg)
-			ft_putchar_fd(' ', 1);
-	}
-	if (!opt_n)
-		ft_putchar_fd('\n', 1);
-	return (0);
+	return (-1);
 }

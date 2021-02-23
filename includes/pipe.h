@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/21 15:51:28 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 14:40:31 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,37 +37,37 @@ typedef struct	t_pipe
 
 typedef struct	s_redir
 {
-    int			std_in;
-   	int 		std_out;
+	int			std_in;
+	int 		std_out;
 	int			save_stdin;
-   	int 		save_stdout;
+	int 		save_stdout;
 }				t_redir;
 
 int		invalid_command(s_pipe *spipe, t_parser comm1);
 void	close_pipe(s_pipe *spipe);
 void	end_redir(t_redir *redir);
-char    **set_local_env(s_pipe *spipe);
-void   	free_spipe(s_pipe *spipe);
+char	**set_local_env(s_pipe *spipe);
+int		free_spipe(s_pipe *spipe);
 int		first_command(t_command *cmd,\
 		s_pipe *spipe, t_redir *redir);
 void	dealloc_tab(char **tab);
-char    *init_path(char **env, t_parser command, s_pipe *spipe);
+char	*init_path(char **env, t_parser command, s_pipe *spipe);
 char	**set_local_env(s_pipe *spipe);
 int		builtins(t_command *cmd, s_pipe *spipe);
-int     ft_ret(int *ret);
+int		ft_ret(int *ret);
 void	end_redir(t_redir *redir);
-int     exec_redir(t_command *cmd, t_redir *redir);
-int     redir_manager(char **env, t_command *cmd);
-int     create_files_in(t_list *file);
-int     exec_redir_in(char **env, t_command *cmd, t_list *redir);
-int     listlen(t_command *list);
-int     multi_pipe(t_command *cmd, s_pipe *spipe, t_redir *redir);
-int     simple_command(t_command *cmd, t_redir *redir, s_pipe *spipe);
-int     single_pipe(t_command *command, t_redir *redir, s_pipe *spipe);
-int     exec_pipe(char **env, t_command *command, int pipe[2]);
-int     create_files_out(t_list *file);
+int		exec_redir(t_command *cmd, t_redir *redir);
+int		redir_manager(char **env, t_command *cmd);
+int		create_files_in(t_list *file);
+int		exec_redir_in(char **env, t_command *cmd, t_list *redir);
+int		listlen(t_command *list);
+int		multi_pipe(t_command *cmd, s_pipe *spipe, t_redir *redir);
+int		simple_command(t_command *cmd, t_redir *redir, s_pipe *spipe);
+int		single_pipe(t_command *command, t_redir *redir, s_pipe *spipe);
+int		exec_pipe(char **env, t_command *command, int pipe[2]);
+int		create_files_out(t_list *file);
 int		exec_redir_out(char **env, t_command *cmd, t_list *redir);
-int     execution(t_command *cmd, t_redir *redir, s_pipe *spipe);
+int		execution(t_command *cmd, t_redir *redir, s_pipe *spipe);
 void	get_ret_values(s_pipe *spipe);
 int		init_pipe(s_pipe *spipe);
 int		init_spipe(s_pipe *spipe);

@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 01:41:17 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 14:31:21 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int		prompt_test(int check, char *str, char **line, int *last_ret)
 		*last_ret = 130;
 		write(2, "exit\n", 5);
 		free(*line);
-		ft_lstclear(&g_env, free);
+		ft_lstclear(&g_env, &dealloc_varenv);
 		exit(9);
 	}
 	if (check == 0)
@@ -92,6 +92,7 @@ int		gnl_prompt(int fd, char **line, int *last_ret)
 
 	check = BUFFER_SIZE;
 	g_signal_c = 0;
+	str[0] = '\0';
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, &ign_sig);
 	if (line == NULL || read(fd, str, 0) || BUFFER_SIZE <= 0)

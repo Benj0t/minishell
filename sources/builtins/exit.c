@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 01:34:56 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 15:13:41 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ unsigned long long int	ft_atoull(const char *str)
 int						ft_exit(char **arg, s_pipe *spipe)
 {
 	if (!arg[1])
+	{
+		free(arg);
 		exit(spipe->last_ret);
+	}
 	if (arg[2])
 		return (error_exit(EMANYARG));
 	if (ft_isnum(arg[1]) || ft_strlen(arg[1]) > 18)
@@ -70,8 +73,11 @@ int						ft_exit(char **arg, s_pipe *spipe)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(arg[1], 2);
 		ft_putstr_fd(": numeric argument required", 2);
+		ft_lstclear(&g_env, &dealloc_varenv);
+		free(arg);
 		exit(2);
 	}
+	free(arg);
 	exit(ft_atoull(arg[1]) % 256);
 	return (-1);
 }

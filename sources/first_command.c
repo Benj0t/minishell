@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 15:22:51 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 16:07:04 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void		exec_fcomm_2(t_redir *redir, s_pipe *spipe, t_parser comm2)
 {
-	if (init_path(spipe->l_env, comm2, spipe) == NULL)
-		invalid_command(spipe, comm2);
 	if (redir->std_in == -1)
 		dup2(spipe->prev_p[0], 0);
 	close(spipe->prev_p[1]);
@@ -30,7 +28,8 @@ static int	second_command(t_command *cmd,\
 {
 	t_parser	comm2;
 
-	comm2 = get_command(cmd->pipe->argument);
+	if ((get_command(cmd->pipe->argument, &comm2)) == -1)
+		free_struct(spipe, redir, cmd);
 	set_local_env(spipe);
 	if (exec_redir(cmd, redir) == -1)
 		return (0);
@@ -42,7 +41,9 @@ static int	second_command(t_command *cmd,\
 			dup2(spipe->curr_p[1], 1);
 		builtins(cmd->pipe, spipe);
 	}
-	if (spipe->ret[spipe->index++] == -1 &&\
+	if (init_path(spipe->l_env, comm2, spipe) == NULL)
+		spipe->ret[spipe->index] = invalid_command(spipe, comm2);
+	if (spipe->ret[spipe->index++] == 1 &&\
 		(spipe->child[spipe->i_comm++] = fork()) == 0)
 		exec_fcomm_2(redir, spipe, comm2);
 	end_redir(redir);
@@ -54,8 +55,6 @@ static int	second_command(t_command *cmd,\
 
 void		exec_fcomm_1(t_redir *redir, s_pipe *spipe, t_parser comm1)
 {
-	if (init_path(spipe->l_env, comm1, spipe) == NULL)
-		invalid_command(spipe, comm1);
 	if (redir->std_out == -1)
 		dup2(spipe->prev_p[1], 1);
 	close(spipe->prev_p[0]);
@@ -72,18 +71,19 @@ int			first_command(t_command *cmd,\
 	if (pipe(spipe->curr_p) < 0 || pipe(spipe->prev_p) < 0)
 		return (0);
 	set_local_env(spipe);
-	comm1 = get_command(cmd->argument);
+	if ((get_command(cmd->argument, &comm1)) == -1)
+		free_struct(spipe, redir, cmd);
 	if ((spipe->ret[spipe->index] = scan_builtins(cmd, spipe)) == 0)
 	{
 		if (redir->std_out == -1)
 			dup2(spipe->prev_p[1], 1);
 		builtins(cmd, spipe);
 	}
-	if (spipe->ret[spipe->index++] == -1 &&\
+	if (init_path(spipe->l_env, comm1, spipe) == NULL)
+		spipe->ret[spipe->index] = invalid_command(spipe, comm1);
+	if (spipe->ret[spipe->index++] == 1 &&\
 		((spipe->child[spipe->i_comm++] = fork()) == 0))
-	{
 		exec_fcomm_1(redir, spipe, comm1);
-	}
 	end_redir(redir);
 	if (redir->std_out != -1)
 		return (0);
