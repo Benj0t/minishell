@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:00:04 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 17:04:03 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/22 19:59:45 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,3 @@ void	backslash_quote(t_token *tok, size_t *i, char quote)
 		}
 	}
 }
-

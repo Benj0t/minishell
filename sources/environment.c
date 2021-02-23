@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 17:17:53 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/22 21:42:31 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ int			check_env(char *s)
 		return (1);
 	while (s[i])
 	{
-			if (!ft_isalnum(s[i]) && s[i] != '_')
-			{
-				if (i == 0)
-					return (0);
-				else
-					break;
-			}
+		if (!ft_isalnum(s[i]) && s[i] != '_')
+		{
+			if (i == 0)
+				return (0);
+			else
+				break ;
+		}
 		i++;
 	}
 	return (i);
@@ -49,7 +49,7 @@ int			valid_env(char *s)
 	return (i);
 }
 
-void		print_env(char	*prefix, t_list *env, int print_null)
+void		print_env(char *prefix, t_list *env, int print_null)
 {
 	t_var_env	*var_env;
 	t_list		*tmp_env;
@@ -76,4 +76,12 @@ t_var_env	*malloc_varenv(const char *key, const char *str)
 	if (str != NULL)
 		ret->var = ft_strdup(str);
 	return (ret);
+}
+
+void		dealloc_varenv(t_var_env *var_env)
+{
+	free(var_env->key);
+	if (var_env->var != NULL)
+		free(var_env->var);
+	free(var_env);
 }

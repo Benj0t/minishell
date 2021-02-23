@@ -6,14 +6,14 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:16:07 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 17:16:50 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/22 21:22:57 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		join_env(const char *name, char *value)
-{//voir si key est valable et voir += et env de depart
+{
 	t_var_env	*tmp;
 	char		*str;
 
@@ -41,7 +41,7 @@ int		put_env(char *string)
 
 	i = is_valid_env(string);
 	if (string[i] == '\0')
-		return(set_env(string, NULL, 0));
+		return (set_env(string, NULL, 0));
 	string[i] = '\0';
 	if (string[i - 1] == '+')
 	{
@@ -52,7 +52,7 @@ int		put_env(char *string)
 }
 
 int		set_env(const char *name, char *value, int replace)
-{//voir si key est valable et voir += et env de depart
+{
 	t_var_env *tmp;
 
 	tmp = getvar_env(name);
@@ -92,7 +92,7 @@ int		unset_env(const char *name)
 	tmp_env = g_env;
 	while (tmp_env != NULL)
 	{
-		if (!strcmp(((t_var_env *)tmp_env->content)->key, name)) //changer strcmp
+		if (!strcmp(((t_var_env *)tmp_env->content)->key, name))
 		{
 			tmp->next = tmp_env->next;
 			dealloc_varenv((t_var_env *)tmp_env->content);

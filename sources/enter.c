@@ -6,13 +6,13 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/21 21:24:30 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/22 20:40:24 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		check_pipe(t_command *command)
+int			check_pipe(t_command *command)
 {
 	t_command	*tmp;
 
@@ -27,7 +27,6 @@ int		check_pipe(t_command *command)
 	return (0);
 }
 
-//desalloc et clear t_command
 void		clear_multi_command(t_command *command)
 {
 	t_command	*tmp;
@@ -45,11 +44,10 @@ void		clear_multi_command(t_command *command)
 	}
 }
 
-//print t_command
-void		print_multi_command(t_command *command)
+void		print_multi_command(t_command *command)//sup
 {
-	t_command *tmp;
-	t_list *lst_tmp;
+	t_command	*tmp;
+	t_list		*lst_tmp;
 
 	tmp = command;
 	while (tmp != NULL)
@@ -98,8 +96,15 @@ t_command	*setup_command(void)
 	return (ret);
 }
 
-//start du parser
-int		parser(char **str, t_redir *redir, s_pipe *spipe)
+int			parser_fail(t_managparse *manag, char **str, t_command *base)
+{
+	manag->command = base;
+	clear_multi_command(manag->command);
+	*str = manag->str;
+	return (1);
+}
+
+int			parser(char **str, t_redir *redir, s_pipe *spipe)
 {
 	t_managparse	manag;
 	t_command		*base;
@@ -111,12 +116,7 @@ int		parser(char **str, t_redir *redir, s_pipe *spipe)
 		manag.command = setup_command();
 		base = manag.command;
 		if (parser_token(&manag))
-		{
-			manag.command = base;
-			clear_multi_command(manag.command);
-			*str = manag.str;
-			return (1);
-		}
+			return (parser_fail(&manag, str, base));
 		manag.command = base;
 		if (check_pipe(manag.command))
 		{

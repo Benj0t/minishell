@@ -6,13 +6,13 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/21 20:48:33 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/22 20:00:27 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			is_valid_env(char *s)
+int		is_valid_env(char *s)
 {
 	size_t i;
 
@@ -31,7 +31,7 @@ int			is_valid_env(char *s)
 	return (i);
 }
 
-int		invalid_id(char	*arg)
+int		invalid_id(char *arg)
 {
 	ft_putstr_fd("export: ", 2);
 	ft_putstr_fd(arg, 2);

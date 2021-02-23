@@ -6,21 +6,13 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:17:32 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 17:22:15 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/22 21:42:18 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		dealloc_varenv(t_var_env *var_env)
-{
-	free(var_env->key);
-	if (var_env->var != NULL)
-		free(var_env->var);
-	free(var_env);
-}
-
-t_list	*envp_to_list(char **envp)
+t_list		*envp_to_list(char **envp)
 {
 	int		i;
 	char	*c;
@@ -33,15 +25,23 @@ t_list	*envp_to_list(char **envp)
 		c = ft_strchr(envp[i], '=');
 		c[0] = '\0';
 		if (i == 0)
-			ret = ft_lstnew(malloc_varenv(envp[i], &c[1])); //malloc
+		{
+			ret = ft_lstnew(malloc_varenv(envp[i], &c[1]));
+			if (ret == NULL)
+				return (NULL);
+		}
 		else
-			ft_lstadd_back(&ret, ft_lstnew(malloc_varenv(envp[i], &c[1]))); //malloc
+		{
+			ft_lstadd_back(&ret, ft_lstnew(malloc_varenv(envp[i], &c[1])));
+			if (ret == NULL)
+				return (NULL);
+		}
 		i++;
 	}
 	return (ret);
 }
 
-char	**list_to_envp(void)
+char		**list_to_envp(void)
 {
 	int		len;
 	int		i;
@@ -57,7 +57,12 @@ char	**list_to_envp(void)
 	while (tmp != NULL)
 	{
 		ret[i] = ft_strjoin_c(((t_var_env *)tmp->content)->key,
-					((t_var_env *)tmp->content)->var, '='); //malloc
+					((t_var_env *)tmp->content)->var, '=');
+		if (ret[i] == NULL)
+		{
+			dealloc_tab(ret);
+			return (NULL);
+		}
 		tmp = tmp->next;
 		i++;
 	}
@@ -65,7 +70,7 @@ char	**list_to_envp(void)
 	return (ret);
 }
 
-void	dealloc_tab(char **tab)
+void		dealloc_tab(char **tab)
 {
 	char	**start;
 
@@ -78,7 +83,7 @@ void	dealloc_tab(char **tab)
 	free(start);
 }
 
-char	*get_env(const char *name)
+char		*get_env(const char *name)
 {
 	t_list		*tmp_env;
 
@@ -87,7 +92,7 @@ char	*get_env(const char *name)
 	tmp_env = g_env;
 	while (tmp_env != NULL)
 	{
-		if (!strcmp(((t_var_env *)tmp_env->content)->key, name)) //changer strcmp
+		if (!strcmp(((t_var_env *)tmp_env->content)->key, name))
 			return (((t_var_env *)tmp_env->content)->var);
 		tmp_env = tmp_env->next;
 	}
@@ -101,7 +106,7 @@ t_var_env	*getvar_env(const char *name)
 	tmp_env = g_env;
 	while (tmp_env != NULL)
 	{
-		if (!strcmp(((t_var_env *)tmp_env->content)->key, name)) //changer strcmp
+		if (!strcmp(((t_var_env *)tmp_env->content)->key, name))
 			return ((t_var_env *)tmp_env->content);
 		tmp_env = tmp_env->next;
 	}
