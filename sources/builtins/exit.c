@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 21:47:40 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 21:50:08 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ static int				ft_isnum(char *str)
 static int				error_exit(char *str)
 {
 	ft_putendl_fd(str, 2);
-	return (9);
+	return (1);
 }
 
 long long int	ft_atoll(const char *str)
 {
 	int					i;
-	long long	result;
+	long long			result;
 	int					neg;
 
 	i = 0;
