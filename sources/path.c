@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/23 17:27:40 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 21:30:43 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ char		*rel_path(char **env, t_parser comm, struct stat buf)
 
 char		*abs_path(char **env, t_parser comm, struct stat buf)
 {
+	if (!(comm.argument[0][0] == '/'))
+		return (NULL);
 	if (!stat(comm.argument[0], &buf))
-			return (ft_strdup(comm.argument[0]));
+		return (ft_strdup(comm.argument[0]));
 	return (NULL);
 }
 
