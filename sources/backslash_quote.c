@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:00:04 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 19:59:45 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 19:50:41 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int		backslash_lvl(char *str, size_t i)
 		lvl++;
 		i--;
 	}
+	if (str[i] == '\\' && i == 0)
+		lvl++;
 	return (lvl);
 }
 
