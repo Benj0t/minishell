@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 17:27:46 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 20:43:23 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int		gnl_prompt(int fd, char **line, int *last_ret)
 	char		str[(BUFFER_SIZE > 0 ? BUFFER_SIZE : 0) + 1];
 	ssize_t		check;
 
+	str[0] = '\0';
 	check = BUFFER_SIZE;
 	g_signal_c = 0;
 	str[0] = '\0';

@@ -65,7 +65,7 @@ int			check_env(char *s);
 int			valid_env(char *s);
 void		print_env(char	*prefix, t_list *env, int print_null);
 t_var_env	*malloc_varenv(const char *key, const char *str);
-void		dealloc_varenv(void * content);
+void		dealloc_varenv(void *content);
 t_list		*envp_to_list(char **envp);
 char		**list_to_envp(void);
 void		dealloc_tab(char **tab);

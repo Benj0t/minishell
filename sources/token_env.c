@@ -6,13 +6,13 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:44:00 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 02:06:54 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 17:13:55 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char		*env_dbl_join(char **str, t_managparse *manag, char *var, size_t ret)
+char		*env_dbl_join(char **str, char *var, size_t ret)
 {
 	char	*tmp;
 	char	*tmp2;
@@ -70,13 +70,17 @@ size_t		env_sub(char **str, t_managparse *manag, size_t i)
 	var = env_sub_var(manag, tmp);
 	free(tmp);
 	ret = i + 1 + ret;
-	*str = env_dbl_join(str, manag, var, ret);
+	*str = env_dbl_join(str, var, ret);
 	return (i);
 }
 
 size_t		env_token(char **str, t_managparse *manag, size_t i)
 {
-	if (manag->str[i] == '$')
-			i = env_sub(&manag->str, manag, i);
+	backslash_lvl(str[0], i);
+	if (str[0][i] == '$')
+	{
+		i = env_sub(str, manag, i);
+		return (i);
+	}
 	return (i + 1);
 }
