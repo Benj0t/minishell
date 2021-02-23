@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 21:42:31 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/22 19:01:12 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,19 @@ void		print_env(char *prefix, t_list *env, int print_null)
 	{
 		var_env = (t_var_env *)tmp_env->content;
 		if (var_env->var)
-			printf("%s%s=%s\n", prefix, var_env->key, var_env->var);
+		{
+			ft_putstr_fd(prefix, 1);
+			ft_putstr_fd(var_env->key, 1);
+			ft_putchar_fd('=', 1);
+			ft_putstr_fd(var_env->var, 1);
+			ft_putchar_fd('\n', 1);
+		}
 		else if (!var_env->var && print_null)
-			printf("%s%s\n", prefix, var_env->key);
+		{
+			ft_putstr_fd(prefix, 1);
+			ft_putstr_fd(var_env->key, 1);
+			ft_putchar_fd('\n', 1);
+		}
 		tmp_env = tmp_env->next;
 	}
 }

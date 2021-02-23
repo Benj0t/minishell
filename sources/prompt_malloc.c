@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   prompt_malloc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/22 20:01:04 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 21:41:09 by psemsari         ###   ########.fr       */
+/*   Created: 2021/02/23 01:36:09 by bemoreau          #+#    #+#             */
+/*   Updated: 2021/02/23 01:40:55 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "limits.h"
 
-int		ft_pwd(void)
+int		prompt_malloc(char **line, char *str)
 {
-	char	*pwd;
+	char *tmp;
 
-	pwd = get_env("PWD");
-	if (pwd == NULL)
+	tmp = *line;
+	*line = ft_strjoin(*line, str);
+	free(tmp);
+	if (*line == NULL)
 		return (-1);
-	else
-		ft_putstr_fd(pwd, 2);
-	ft_putchar_fd('\n', 2);
-	free(pwd);
 	return (0);
 }

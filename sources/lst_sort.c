@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   lst_sort.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 16:37:51 by psemsari          #+#    #+#             */
 /*   Updated: 2021/02/22 20:03:06 by psemsari         ###   ########.fr       */
@@ -14,9 +14,9 @@
 
 t_list	*ft_lstcopy(t_list *list)
 {
-	t_list *tmp;
-	t_list *ret;
-	t_list *tmp2;
+	t_list	*tmp;
+	t_list	*ret;
+	t_list	*tmp2;
 
 	tmp = list;
 	ret = NULL;
@@ -40,7 +40,7 @@ t_list	*ft_lstcopy(t_list *list)
 	return (ret);
 }
 
-int		ft_strcmp(const char *s1, const char *s2)
+int			ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
 	int		ret;
@@ -55,7 +55,7 @@ int		ft_strcmp(const char *s1, const char *s2)
 	return (ret);
 }
 
-void	swap(t_list *a, t_list *b)
+void		swap(t_list *a, t_list *b)
 {
 	void *temp;
 
@@ -64,7 +64,7 @@ void	swap(t_list *a, t_list *b)
 	b->content = temp;
 }
 
-void	bubble_sort(t_list *list)
+void		bubble_sort(t_list *list)
 {
 	int		swapped;
 	t_list	*ptr;

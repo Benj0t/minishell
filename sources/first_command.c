@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 14:40:45 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/21 15:22:51 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	second_command(t_command *cmd,\
 	set_local_env(spipe);
 	if (exec_redir(cmd, redir) == -1)
 		return (0);
-	if ((spipe->ret[spipe->index] = scan_builtins(cmd->pipe, spipe)) == 1)
+	if ((spipe->ret[spipe->index] = scan_builtins(cmd->pipe, spipe)) == 0)
 	{
 		if (redir->std_in == -1)
 			dup2(spipe->prev_p[0], 0);

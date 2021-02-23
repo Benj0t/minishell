@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   single_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
 /*   Updated: 2021/02/21 15:23:35 by psemsari         ###   ########.fr       */

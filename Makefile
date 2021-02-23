@@ -47,6 +47,7 @@ FILES =		./sources/main\
 			./sources/token_utils\
 			./sources/expander_utils\
 			./sources/lst_sort\
+			./sources/prompt_malloc\
 			./sources/backslash_quote\
 			./sources/environment_utils\
 			./sources/environment_manag\

@@ -2,6 +2,19 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include <dirent.h>
+
+typedef struct s_cd
+{
+	char		*previous;
+	char		*home;
+	char		*pwd;
+	char		*tmp;
+	char		*new;
+	int			ret;
+	int			bool;
+}				t_cd;
+
 
 typedef struct	s_command
 {
@@ -43,6 +56,7 @@ extern t_list *g_env;
 # include "pipe.h"
 # include "parser.h"
 
+int			prompt_malloc(char **line, char *str);
 void		bubble_sort(t_list *list);
 t_list*		ft_lstcopy(t_list* head);
 
