@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 15:23:35 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 20:23:10 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void		pid_manager(s_pipe *spipe, int child[2])
 {
-	if (spipe->ret[0] == -1)
+	if (spipe->ret[0] == 1)
 	{
 		waitpid(child[0], (int *)&(spipe->pid[0]), 0);
 		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
 	}
-	if (spipe->ret[1] == -1)
+	if (spipe->ret[1] == 1)
 	{
 		waitpid(child[1], (int *)&(spipe->pid[1]), 0);
 		spipe->ret[1] = WEXITSTATUS(spipe->pid[1]);
@@ -32,11 +32,12 @@ static int	left_command(s_pipe *spipe, t_redir *redir,\
 	int			child;
 	t_parser	comm1;
 
-	comm1 = get_command(command->argument);
-	if (spipe->ret[0] == -1 && (child = fork()) == 0)
+	if ((get_command(command->argument, &comm1)) == -1)
+		free_struct(spipe, redir, command);
+	if (init_path(spipe->l_env, comm1, spipe) == NULL)
+		spipe->ret[0] = invalid_command(spipe, comm1);
+	if (spipe->ret[0] == 1 && (child = fork()) == 0)
 	{
-		if (init_path(spipe->l_env, comm1, spipe) == NULL)
-			invalid_command(spipe, comm1);
 		if (redir->std_in == -1 && redir->std_out == -1)
 			dup2(p[1], 1);
 		close(p[0]);
@@ -56,11 +57,12 @@ static int	right_command(s_pipe *spipe, t_redir *redir,\
 	int			child;
 	t_parser	comm2;
 
-	comm2 = get_command(command->pipe->argument);
-	if (spipe->ret[1] == -1 && (child = fork()) == 0)
+	if ((get_command(command->pipe->argument, &comm2)) == -1)
+		free_struct(spipe, redir, command);
+	if (init_path(spipe->l_env, comm2, spipe) == NULL)
+		spipe->ret[1] = invalid_command(spipe, comm2);
+	if (spipe->ret[1] == 1 && (child = fork()) == 0)
 	{
-		if (init_path(spipe->l_env, comm2, spipe) == NULL)
-			invalid_command(spipe, comm2);
 		if (redir->std_in == -1)
 			dup2(p[0], 0);
 		close(p[1]);

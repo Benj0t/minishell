@@ -6,30 +6,11 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/23 13:03:42 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 17:27:40 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_parser	get_command(t_list *argument)
-{
-	t_parser	parse;
-	int			len;
-	int			i;
-
-	len = ft_lstsize(argument);
-	parse.argument = (char **)malloc(sizeof(char *) * (len + 1));
-	parse.argument[len] = NULL;
-	i = -1;
-	while (++i < len)
-	{
-		parse.argument[i] = argument->content;
-		argument = argument->next;
-	}
-	parse.command = parse.argument[0];
-	return (parse);
-}
 
 int			get_path_id(char **env)
 {
@@ -47,69 +28,17 @@ int			get_path_id(char **env)
 
 char		*rel_path(char **env, t_parser comm, struct stat buf)
 {
-	int ret;
-	int child;
-
 	if (!(comm.argument[0][0] == '.' && comm.argument[0][1] == '/'))
 		return (NULL);
-	child = fork();
-	if (child == 0)
-	{
-		if (!stat(comm.argument[0], &buf))
-			exit(EXIT_SUCCESS);
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		waitpid(child, &ret, 0);
-		if (ret != -1 && ret != 256)
+	if (!stat(comm.argument[0], &buf))
 			return (ft_strdup(comm.argument[0]));
-	}
 	return (NULL);
-}
-
-int			stat_loop(char *path, struct stat *buf, int *ret)
-{
-	pid_t		child;
-
-	child = fork();
-	if (child == 0)
-	{
-		if (!stat(path, buf))
-			exit(EXIT_SUCCESS);
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		waitpid(child, ret, 0);
-		if (*ret != -1 && *ret != 256)
-			return (1);
-		else
-		{
-			free(path);
-		}
-	}
-	return (0);
 }
 
 char		*abs_path(char **env, t_parser comm, struct stat buf)
 {
-	int		ret;
-	int		child;
-
-	child = fork();
-	if (child == 0)
-	{
-		if (!stat(comm.argument[0], &buf))
-			exit(EXIT_SUCCESS);
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		waitpid(child, &ret, 0);
-		if (ret != -1 && ret != 256)
+	if (!stat(comm.argument[0], &buf))
 			return (ft_strdup(comm.argument[0]));
-	}
 	return (NULL);
 }
 
@@ -121,21 +50,27 @@ char		*ft_path(char **env, t_parser comm)
 	int			i;
 	struct stat	buf;
 
+	path = NULL;
 	path = rel_path(env, comm, buf);
 	if (path)
 		return (path);
 	path = abs_path(env, comm, buf);
 	if (path)
 		return (path);
-	if ((i = get_path_id(env)) < 0)
+	if ((i = get_path_id(env)) < 0 || (tab = ft_split(env[i] + 5, ':')) == NULL)
 		return (NULL);
-	tab = ft_split(env[i] + 5, ':');
 	i = 0;
 	ret = 0;
-	path = NULL;
-	path = ft_strjoin_c(tab[i], comm.command, '/');
-	while (tab[i] && !(stat_loop(path, &buf, &ret)))
+	if ((path = ft_strjoin_c(tab[i], comm.command, '/')) == NULL)
+	{
+		dealloc_tab(tab);
+		return (NULL);
+	}
+	while (tab[i] && (stat(path, &buf) == -1))
+	{
+		free(path);
 		path = ft_strjoin_c(tab[++i], comm.command, '/');
+	}
 	dealloc_tab(tab);
 	return (path);
 }

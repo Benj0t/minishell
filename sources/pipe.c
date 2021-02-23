@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/23 01:41:43 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 20:23:17 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int		simple_command(t_command *cmd,\
 	int			ret;
 
 	g_child = 0;
-	comm1 = get_command(cmd->argument);
+	if ((get_command(cmd->argument, &comm1)) == -1)
+		free_struct(spipe, redir, cmd);
 	set_local_env(spipe);
 	if (exec_redir(cmd, redir) == -1)
 		return (0);
@@ -39,16 +40,21 @@ int		simple_command(t_command *cmd,\
 	else
 	{
 		signal(SIGQUIT, &sig_quit);
-		if ((g_child = fork()) == 0)
+		if (init_path(spipe->l_env, comm1, spipe) == NULL)
+			spipe->ret[0] = invalid_command(spipe, comm1);
+		else 
 		{
-			if (init_path(spipe->l_env, comm1, spipe) == NULL)
-				invalid_command(spipe, comm1);
-			execve(spipe->path, comm1.argument, spipe->l_env);
+			if ((g_child = fork()) == 0)
+				execve(spipe->path, comm1.argument, spipe->l_env);
+			waitpid(g_child, (int *)&(spipe->pid[0]), 0);
+			spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
 		}
-		waitpid(g_child, (int *)&(spipe->pid[0]), 0);
-		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
 	}
 	end_redir(redir);
+	if (spipe->path)
+	{
+		free(spipe->path);
+	}
 	return (spipe->ret[0]);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnl_prompt.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 13:32:39 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 20:43:23 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int		gnl_prompt(int fd, char **line, int *last_ret)
 	str[0] = '\0';
 	check = BUFFER_SIZE;
 	g_signal_c = 0;
+	str[0] = '\0';
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, &ign_sig);
 	if (line == NULL || read(fd, str, 0) || BUFFER_SIZE <= 0)

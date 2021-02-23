@@ -3,20 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 02:10:41 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/23 16:40:22 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 20:43:03 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int			get_command(t_list *argument, t_parser *parse)
+{
+	int			len;
+	int			i;
+
+	len = ft_lstsize(argument);
+	if ((parse->argument = (char **)malloc(sizeof(char *) * (len + 1))) == NULL)
+		return (-1);
+	parse->argument[len] = NULL;
+	i = -1;
+	while (++i < len)
+	{
+		parse->argument[i] = argument->content;
+		argument = argument->next;
+	}
+	parse->command = parse->argument[0];
+	return (0);
+}
+
 int		scan_builtins(t_command *cmd, s_pipe *spipe)
 {
 	t_parser parse;
 
-	parse = get_command(cmd->argument);
+	if ((get_command(cmd->argument, &parse)) == -1)
+		return (-1);
 	if (ft_strncmp(parse.command, "cd", 3) == 0)
 		return (0);
 	if (ft_strncmp(parse.command, "unset", 6) == 0)
@@ -31,7 +51,8 @@ int		scan_builtins(t_command *cmd, s_pipe *spipe)
 		return (0);
 	if (ft_strncmp(parse.command, "pwd", 4) == 0)
 		return (0);
-	return (-1);
+	free(parse.argument);
+	return (1);
 }
 
 int		builtins(t_command *cmd, s_pipe *spipe)
@@ -39,7 +60,8 @@ int		builtins(t_command *cmd, s_pipe *spipe)
 	t_parser parse;
 
 	spipe->n_bin--;
-	parse = get_command(cmd->argument);
+	if ((get_command(cmd->argument, &parse)) == -1)
+		return (-1);
 	if (ft_strncmp(parse.command, "pwd", 4) == 0)
 		return (ft_pwd());
 	if (ft_strncmp(parse.command, "cd", 3) == 0 && listlen(cmd) < 2)
@@ -53,6 +75,7 @@ int		builtins(t_command *cmd, s_pipe *spipe)
 	if (ft_strncmp(parse.command, "echo", 5) == 0)
 		return (ft_echo(parse.argument));
 	if (ft_strncmp(parse.command, "exit", 5) == 0 && listlen(cmd) < 2)
-		return (ft_exit(parse.argument, spipe));
-	return (-1);
+		return (ft_exit(parse.argument, spipe, cmd));
+	free(parse.argument);
+	return (1);
 }

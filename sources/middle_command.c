@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   middle_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 04:32:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 14:36:30 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 17:27:58 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,15 @@ int			middle_commands(t_command *cmd,\
 
 	if (pipe(spipe->curr_p) < 0)
 		return (0);
-	comm1 = get_command(cmd->argument);
-	if (init_path(spipe->l_env, comm1, spipe) == NULL)
-		return (invalid_command(spipe, comm1));
+	if ((get_command(cmd->argument, &comm1)) == -1)
+		free_struct(spipe, redir, cmd);
 	set_local_env(spipe);
-	exec_middle_builtin(spipe, cmd, redir);
 	if (exec_redir(cmd, redir) == -1)
 		return (-1);
-	if (spipe->ret[spipe->index++] == -1 &&\
+	exec_middle_builtin(spipe, cmd, redir);
+	if (init_path(spipe->l_env, comm1, spipe) == NULL)
+		spipe->ret[spipe->index] = invalid_command(spipe, comm1);
+	if (spipe->ret[spipe->index++] == 1 &&\
 		(spipe->child[spipe->i_comm++] = fork()) == 0)
 		exec_middle_command(redir, spipe, comm1);
 	if (redir->std_out != -1)

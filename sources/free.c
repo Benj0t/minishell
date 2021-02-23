@@ -1,20 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path.h                                             :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/19 16:56:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 17:27:45 by bemoreau         ###   ########.fr       */
+/*   Created: 2021/02/23 13:58:07 by bemoreau          #+#    #+#             */
+/*   Updated: 2021/02/23 16:11:32 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PATH_H
-# define PATH_H
+#include "minishell.h"
 
-int			get_command(t_list *argument, t_parser *parse);
-int			get_path_id(char **env);
-char		*ft_path(char **env, t_parser comm);
+void	free_struct(s_pipe *spipe, t_redir *redir, t_command *command)
+{
+	exit(42);
+}
 
-#endif
+int		free_spipe(s_pipe *spipe)
+{
+	int i;
+
+	i = 0;
+	free(spipe->child);
+	free(spipe->pid);
+	free(spipe->ret);
+	if (spipe->l_env)
+	{
+		dealloc_tab(spipe->l_env);
+		spipe->l_env = NULL;
+	}
+	return (-1);
+}

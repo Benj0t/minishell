@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/21 15:05:18 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 17:27:44 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,6 @@ int			init_spipe(s_pipe *spipe)
 	while (i < spipe->n_comm)
 		spipe->ret[i++] = 0;
 	return (1);
-}
-
-void		free_spipe(s_pipe *spipe)
-{
-	int i;
-
-	i = 0;
-	free(spipe->child);
-	free(spipe->pid);
-	free(spipe->ret);
-	if (spipe->l_env)
-	{
-		dealloc_tab(spipe->l_env);
-		spipe->l_env = NULL;
-	}
-	if (spipe->path)
-		free(spipe->path);
 }
 
 char		*init_path(char **env, t_parser command, s_pipe *spipe)
