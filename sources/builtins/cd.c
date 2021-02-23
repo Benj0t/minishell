@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 14:43:48 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 01:31:26 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 01:34:08 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int				wrong_file(int *bool, int *ret, char **pwd, char **arg)
 	return (0);
 }
 
-int			get_arg(char **arg, char **new, char *previous, char *home)
+int				get_arg(char **arg, char **new, char *previous, char *home)
 {
 	if (arg[1] == NULL)
 	{

@@ -47,6 +47,7 @@ FILES =		./sources/main\
 			./sources/token_utils\
 			./sources/expander_utils\
 			./sources/lst_sort\
+			./sources/prompt_malloc\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)

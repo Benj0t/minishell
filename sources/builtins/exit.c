@@ -6,13 +6,13 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 00:11:40 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 01:34:56 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-# define EMANYARG "exit: too many arguments"
+#define EMANYARG "exit: too many arguments"
 
 static int				ft_isnum(char *str)
 {
