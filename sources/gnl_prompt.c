@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 00:03:01 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 01:14:53 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int		prompt_test(int check, char *str, char **line, int *last_ret)
 	if (check == 0)
 		check = 1;
 	str[check] = 0;
-	return (prompt_rec(check, str, line, 0));
+	return (prompt_rec(check, str, line, last_ret));
 }
 
 int		prompt_rec(int check, char *str, char **line, int *last_ret)
