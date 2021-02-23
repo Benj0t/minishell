@@ -106,18 +106,18 @@ exec_test 'echo "$T1TEST"' #ok
 # ENV EXPANSIONS #impossible test
 ENV_SHOW="env | sort | grep -v SHLVL | grep -v _="
 EXPORT_SHOW="export | sort | grep -v SHLVL | grep -v _= | grep -v OLDPWD"
-exec_test 'export =' #nop export: `=': not a valid identifier
-exec_test 'export 1TEST= ;' $ENV_SHOW #nop
-exec_test 'export TEST ;' $EXPORT_SHOW
-exec_test 'export ""="" ; ' $ENV_SHOW
-exec_test 'export TES=T="" ;' $ENV_SHOW
-exec_test 'export TE+S=T="" ;' $ENV_SHOW
-exec_test 'export TEST=LOL ; echo $TEST ;' $ENV_SHOW
-exec_test 'export TEST=LOL ; echo $TEST$TEST$TEST=lol$TEST'
-exec_test 'export TEST=LOL; export TEST+=LOL ; echo $TEST ;' $ENV_SHOW
+exec_test 'export =' #ok
+exec_test 'export 1TEST= ;' $ENV_SHOW #ok
+exec_test 'export TEST ;' $EXPORT_SHOW #ok
+exec_test 'export ""="" ; ' $ENV_SHOW #ok
+exec_test 'export TES=T="" ;' $ENV_SHOW #ok
+exec_test 'export TE+S=T="" ;' $ENV_SHOW #ok
+exec_test 'export TEST=LOL ; echo $TEST ;' $ENV_SHOW #ok
+exec_test 'export TEST=LOL ; echo $TEST$TEST$TEST=lol$TEST' #ok
+exec_test 'export TEST=LOL; export TEST+=LOL ; echo $TEST ;' $ENV_SHOW #ok
 exec_test $ENV_SHOW
 exec_test $EXPORT_SHOW
-exec_test 'export TEST="ls       -l     - a" ; echo $TEST ; $LS ; ' $ENV_SHOW
+exec_test 'export TEST="ls       -l     - a" ; echo $TEST ; $LS ; ' $ENV_SHOW #ok
 
 # REDIRECTIONS
 exec_test 'echo test > ls ; cat ls' #ok
@@ -198,6 +198,5 @@ exec_test '> FILE ; ls > FILE | rev | wc -c >> FILE ; cat FILE ; < INFILE cat' #
 exec_test 'echo test "" test ""' #ok
 exec_test 'echo test '' test ''' #ok
 "\\\\"
-' \\\ '
 
 rm lol ls test

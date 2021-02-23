@@ -6,13 +6,13 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 16:37:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 00:01:45 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/22 20:03:06 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list		*ft_lstcopy(t_list *list)
+t_list	*ft_lstcopy(t_list *list)
 {
 	t_list	*tmp;
 	t_list	*ret;

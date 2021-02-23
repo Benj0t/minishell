@@ -75,6 +75,7 @@ int			set_env(const char *name, char *value, int replace);
 int			contains_egal(const char *name);
 int			unset_env(const char *name);
 
+int			is_valid_env(char *s);
 int			scan_builtins(t_command *cmd, s_pipe *spipe);
 int			listlen(t_command *list);
 int			gnl_prompt(int fd, char **line, int *last_ret);

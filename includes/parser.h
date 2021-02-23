@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/18 12:17:04 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 01:45:18 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ t_token			others_tok(t_managparse *manag);
 t_token			error_quote(t_managparse *manag, char quote);
 size_t			quote_pass(t_managparse *manag, size_t i, char quote);
 t_token			next_token(t_managparse *manag);
+char			*env_dbl_join(char **str, t_managparse *manag, char *var, size_t ret);
+char			*env_sub_var(t_managparse *manag, char *tmp);
+size_t			env_sub(char **str, t_managparse *manag, size_t i);
 
 char			*join_name(t_token *tok, t_managparse *manag, char *result);
 char			*dup_name(t_token *tok, t_managparse *manag,\
@@ -73,6 +76,8 @@ char			*quote_exp(t_token *tok, t_managparse *manag,\
 							char *result, size_t *i);
 int				expansion(t_token *tok, t_managparse *manag);
 int				backslash_remove(t_token *tok, t_managparse *manag);
+int				backslash_lvl(char *str, size_t i);
+void			backslash_quote(t_token *tok, size_t *i, char quote);
 
 void			malloc_fail(t_token tok, t_managparse *manag);
 int				error_parser(char *str, char *name);
