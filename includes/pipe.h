@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 12:25:51 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 16:40:16 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,5 @@ int		init_pipe(t_pipe *spipe);
 int		init_spipe(t_pipe *spipe);
 int		err_msg(char *str);
 int		middle_commands(t_command *cmd, t_pipe *spipe, t_redir *redir);
-void	save_std(t_redir *redir, t_list **tmp, t_command *cmd);
+void	save_std(t_redir *redir, t_command *cmd);
 #endif

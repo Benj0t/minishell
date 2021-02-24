@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 12:39:47 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 17:29:29 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		get_ret_values(t_pipe *spipe)
 	{
 		if (spipe->ret[end] == 1)
 		{
-			waitpid(spipe->child[spipe->n_bin--], (int *)&(spipe->pid[i]), 0);
+			waitpid(spipe->child[end], (int *)&(spipe->pid[i]), 0);
 			spipe->ret[end] = WEXITSTATUS(spipe->pid[i++]);
 		}
 		end--;

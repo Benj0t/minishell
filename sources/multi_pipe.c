@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:19:00 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 17:31:05 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,6 @@ static int	last_command(t_command *cmd,\
 	if (spipe->ret[spipe->index++] == 1 &&\
 		(spipe->child[spipe->i_comm++] = fork()) == 0)
 		exec_lcomm(spipe, redir, comm1);
-	end_redir(redir);
-	if (redir->std_out != -1)
-		return (0);
 	++spipe->i_pipe;
 	close_pipe(spipe);
 	free(comm1.argument);
@@ -79,5 +76,6 @@ int			multi_pipe(t_command *cmd,\
 	ret = last_command(tmp, spipe, redir);
 	spipe->i_pipe++;
 	get_ret_values(spipe);
+	end_redir(redir);
 	return (0);
 }

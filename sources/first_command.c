@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 16:44:57 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	second_command(t_command *cmd,\
 	if ((get_command(cmd->pipe->argument, &comm2)) == -1)
 		free_struct(spipe, redir, cmd);
 	set_local_env(spipe);
-	if (exec_redir(cmd, redir) == -1)
+	if (exec_redir(cmd->pipe, redir) == -1)
 		return (0);
 	if ((spipe->ret[spipe->index] = scan_builtins(cmd->pipe, spipe)) == 0)
 	{
