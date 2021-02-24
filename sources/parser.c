@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 01:49:28 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 02:53:29 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		save_tok_out(t_token *tok, t_managparse *manag)
 	{
 		next_free_token(tok, manag);
 		if (tok->type == tok_word)
-			return (test_arg(tok, manag, &manag->command->redir_append));
+			return (test_arg(tok, manag, 2));
 		else
 		{
 			tok->type = tok_error;
@@ -31,7 +31,7 @@ int		save_tok_out(t_token *tok, t_managparse *manag)
 		if (tok->type == tok_space || tok->type == tok_space)
 			next_free_token(tok, manag);
 		if (tok->type == tok_word)
-			return (test_arg(tok, manag, &manag->command->redir_out));
+			return (test_arg(tok, manag, 1));
 		else
 		{
 			tok->type = tok_error;
@@ -45,7 +45,7 @@ int		save_tok_in(t_token *tok, t_managparse *manag)
 {
 	next_free_token(tok, manag);
 	if (tok->type == tok_word)
-		return (test_arg(tok, manag, &manag->command->redir_in));
+		return (test_arg(tok, manag, 0));
 	else
 	{
 		tok->type = tok_error;

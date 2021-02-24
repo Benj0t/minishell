@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enter.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 02:01:53 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 03:02:53 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ int			check_pipe(t_command *command)
 	tmp = command->pipe;
 	while (tmp != NULL)
 	{
-		if (tmp->argument == NULL && tmp->redir_in == NULL\
-			&& tmp->redir_out == NULL && tmp->redir_append == NULL)
+		if (tmp->argument == NULL && tmp->redirection == NULL)
 			return (1);
 		tmp = tmp->pipe;
 	}
@@ -36,9 +35,7 @@ void		clear_multi_command(t_command *command)
 	{
 		tmp = command->pipe;
 		ft_lstclear(&command->argument, free);
-		ft_lstclear(&command->redir_in, free);
-		ft_lstclear(&command->redir_append, free);
-		ft_lstclear(&command->redir_out, free);
+		ft_lstclear(&command->redirection, dealloc_redirection);
 		free(command);
 		command = tmp;
 	}
@@ -59,22 +56,14 @@ void		print_multi_command(t_command *command)//sup
 			printf("	arg: -%s-\n", (char *)lst_tmp->content);
 			lst_tmp = lst_tmp->next;
 		}
-		lst_tmp = tmp->redir_in;
+		lst_tmp = tmp->redirection;
 		while (lst_tmp != NULL)
 		{
-			printf("	redir_in: -%s-\n", (char *)lst_tmp->content);
-			lst_tmp = lst_tmp->next;
-		}
-		lst_tmp = tmp->redir_out;
-		while (lst_tmp != NULL)
-		{
-			printf("	redir_out: -%s-\n", (char *)lst_tmp->content);
-			lst_tmp = lst_tmp->next;
-		}
-		lst_tmp = tmp->redir_append;
-		while (lst_tmp != NULL)
-		{
-			printf("	redir_append: -%s-\n", (char *)lst_tmp->content);
+			printf("in:%d out:%d ap:%d: -%s-\n",
+				((t_redirection *)lst_tmp->content)->in,
+				((t_redirection *)lst_tmp->content)->out,
+				((t_redirection *)lst_tmp->content)->append,
+				((t_redirection *)lst_tmp->content)->arg);
 			lst_tmp = lst_tmp->next;
 		}
 		tmp = tmp->pipe;
@@ -89,9 +78,7 @@ t_command	*setup_command(void)
 	if (ret == NULL)
 		return (NULL);
 	ret->argument = NULL;
-	ret->redir_in = NULL;
-	ret->redir_out = NULL;
-	ret->redir_append = NULL;
+	ret->redirection = NULL;
 	ret->pipe = NULL;
 	return (ret);
 }

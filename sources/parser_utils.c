@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 11:31:23 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 16:30:28 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 03:00:13 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,49 @@ void	malloc_fail(t_token tok, t_managparse *manag)
 	exit(1);
 }
 
-int		save_arg(t_token *tok, t_managparse *manag, t_list **list)
+t_redirection	*malloc_redirection(char *arg, int flag)
+{
+	t_redirection	*ret;
+
+	ret = (t_redirection *)malloc(sizeof(t_redirection));
+	ret->arg = arg;
+	ret->in = 0;
+	ret->out = 0;
+	ret->append = 0;
+	if (flag == 1)
+		ret->out = 1;
+	else if (flag == 2)
+		ret->append = 1;
+	else
+		ret->in = 1;
+	return (ret);
+}
+
+void			dealloc_redirection(void *content)
+{
+	t_redirection	*malloc;
+
+	malloc = (t_redirection *)content;
+	free(malloc->arg);
+	free(malloc);
+}
+
+int		save_arg(t_token *tok, t_managparse *manag, int flag)
 {
 	t_list	*tmp;
 
 	if (environnment_expander(tok, manag) && backslash_remove(tok, manag)\
 		&& expansion(tok, manag))
 	{
-		tmp = ft_lstnew(tok->name);
+		tmp = ft_lstnew(malloc_redirection(tok->name, flag));
 		if (tmp == NULL)
 			malloc_fail(*tok, manag);
-		ft_lstadd_back(list, tmp);
+		ft_lstadd_back(malloc_redirection(tok->name, flag), tmp);
 	}
 	return (parser_token(manag));
 }
 
-int		test_arg(t_token *tok, t_managparse *manag, t_list **list)
+int		test_arg(t_token *tok, t_managparse *manag, int flag)
 {
 	if (tok->type == tok_space || tok->type == tok_tab)
 	{
@@ -58,7 +85,7 @@ int		test_arg(t_token *tok, t_managparse *manag, t_list **list)
 	}
 	if (tok->type > T_NOWORD)
 		return (error_parser(EUNEXPECTED, tok->name));
-	return (save_arg(tok, manag, list));
+	return (save_arg(tok, manag, flag));
 }
 
 void	next_free_token(t_token *tok, t_managparse *manag)
