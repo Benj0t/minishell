@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 02:10:41 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/23 20:43:03 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 01:52:19 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,48 +34,52 @@ int			get_command(t_list *argument, t_parser *parse)
 int		scan_builtins(t_command *cmd, s_pipe *spipe)
 {
 	t_parser parse;
+	int ret;
 
+	ret = 1;
 	if ((get_command(cmd->argument, &parse)) == -1)
 		return (-1);
 	if (ft_strncmp(parse.command, "cd", 3) == 0)
-		return (0);
+		ret = 0;
 	if (ft_strncmp(parse.command, "unset", 6) == 0)
-		return (0);
+		ret = 0;
 	if (ft_strncmp(parse.command, "env", 4) == 0)
-		return (0);
+		ret = 0;
 	if (ft_strncmp(parse.command, "echo", 5) == 0)
-		return (0);
+		ret = 0;
 	if (ft_strncmp(parse.command, "exit", 5) == 0)
-		return (0);
+		ret = 0;
 	if (ft_strncmp(parse.command, "export", 7) == 0)
-		return (0);
+		ret = 0;
 	if (ft_strncmp(parse.command, "pwd", 4) == 0)
-		return (0);
+		ret = 0;
 	free(parse.argument);
-	return (1);
+	return (ret);
 }
 
 int		builtins(t_command *cmd, s_pipe *spipe)
 {
 	t_parser parse;
+	int ret;
 
+	ret = 1;
 	spipe->n_bin--;
 	if ((get_command(cmd->argument, &parse)) == -1)
 		return (-1);
 	if (ft_strncmp(parse.command, "pwd", 4) == 0)
-		return (ft_pwd());
+		ret = ft_pwd();
 	if (ft_strncmp(parse.command, "cd", 3) == 0 && listlen(cmd) < 2)
-		return (ft_cd(parse.argument));
+		ret = ft_cd(parse.argument);
 	if (ft_strncmp(parse.command, "export", 7) == 0)
-		return (ft_export(parse.argument));
+		ret = ft_export(parse.argument);
 	if (ft_strncmp(parse.command, "unset", 6) == 0 && listlen(cmd) < 2)
-		return (ft_unset(parse.argument));
+		ret = ft_unset(parse.argument);
 	if (ft_strncmp(parse.command, "env", 4) == 0)
-		return (ft_env());
+		ret = ft_env();
 	if (ft_strncmp(parse.command, "echo", 5) == 0)
-		return (ft_echo(parse.argument));
+		ret = ft_echo(parse.argument);
 	if (ft_strncmp(parse.command, "exit", 5) == 0 && listlen(cmd) < 2)
-		return (ft_exit(parse.argument, spipe, cmd));
+		ret = ft_exit(parse.argument, spipe, cmd);
 	free(parse.argument);
-	return (1);
+	return (ret);
 }

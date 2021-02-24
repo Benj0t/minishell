@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/23 17:27:54 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 00:31:26 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 void		get_ret_values(s_pipe *spipe)
 {
 	int i;
+	int end;
 
 	i = 0;
-	while (spipe->n_bin >= 0)
+	end = spipe->index;
+	while (end > 0)
 	{
-		if (spipe->ret[i] == 1)
+		if (spipe->ret[end] == 1)
 		{
 			waitpid(spipe->child[spipe->n_bin--], (int *)&(spipe->pid[i]), 0);
-			spipe->ret[i] = WEXITSTATUS(spipe->pid[i]);
+			spipe->ret[end] = WEXITSTATUS(spipe->pid[i++]);
 		}
-		i++;
+		end--;
 	}
 }
 

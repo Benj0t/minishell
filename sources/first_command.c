@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/23 17:27:57 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 01:14:59 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static int	second_command(t_command *cmd,\
 	if (redir->std_out != -1)
 		return (0);
 	close_pipe(spipe);
+	free(comm2.argument);
 	return (1);
 }
 
@@ -87,5 +88,6 @@ int			first_command(t_command *cmd,\
 	end_redir(redir);
 	if (redir->std_out != -1)
 		return (0);
+	free(comm1.argument);
 	return (second_command(cmd, spipe, redir));
 }

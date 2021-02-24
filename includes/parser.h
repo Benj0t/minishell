@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 14:28:13 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 23:44:33 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 typedef struct	s_managparse
 {
 	t_command	*command;
-	t_redir		redir;
-	s_pipe		spipe;
+	t_redir		*redir;
+	s_pipe		*spipe;
 	char		*str;
 }				t_managparse;
 

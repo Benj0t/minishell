@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   enter.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
 /*   Updated: 2021/02/24 02:01:53 by psemsari         ###   ########.fr       */
@@ -101,7 +101,7 @@ int			parser_fail(t_managparse *manag, char **str, t_command *base)
 	manag->command = base;
 	clear_multi_command(manag->command);
 	*str = manag->str;
-	manag->spipe.last_ret = 2;
+	manag->spipe->last_ret = 2;
 	return (1);
 }
 
@@ -111,7 +111,7 @@ int			parser(char **str, t_redir *redir, s_pipe *spipe)
 	t_command		*base;
 
 	manag.str = *str;
-	manag.spipe = *spipe;
+	manag.spipe = spipe;
 	while (*manag.str)
 	{
 		manag.command = setup_command();

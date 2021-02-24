@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/23 20:23:10 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 01:14:13 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static int	left_command(s_pipe *spipe, t_redir *redir,\
 			return (0);
 		}
 	}
+	free(comm1.argument);
 	return (child);
 }
 
@@ -70,6 +71,7 @@ static int	right_command(s_pipe *spipe, t_redir *redir,\
 	}
 	close(p[0]);
 	close(p[1]);
+	free(comm2.argument);
 	spipe->index++;
 	return (child);
 }
