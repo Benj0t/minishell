@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 16:44:22 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int			single_pipe(t_command *command,\
 		return (0);
 	end_redir(redir);
 	set_local_env(spipe);
-	if (exec_redir(command, redir) == -1)
+	if (exec_redir(command->pipe, redir) == -1)
 		return (-1);
 	check_builtin(spipe, redir, command);
 	if ((child[1] = right_command(spipe, redir, command, spipe->curr_p)) == -1)
