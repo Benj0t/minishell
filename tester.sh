@@ -171,7 +171,7 @@ exec_test 'echo "$ $ $ $ $SHELL----------$LOL.......$123TEST"' #ok
 exec_test 'echo $PWD; echo $OLDPWD; cd ../../../..; pwd; echo $PWD; echo $OLDPWD' #bop revoir pwd
 exec_test 'export HELLO\\WORLD' #parser ok : exec nop revoir export LEAK
 exec_test 'export N\\T' #parser ok : exec nop revoir export
-exec_test 'export bO_nJq123o__1ju_je3134sui__a=a; echo $bO_nJq123o__1ju_je3134sui__a' #nop revoir export
+exec_test 'export bO_nJq123o__1ju_je3134sui__a=a; echo $bO_nJq123o__1ju_je3134sui__a' #ok
 exec_test 'export A==a; echo $A' #nop
 exec_test 'export A=a=a=a=a=a; echo $A' #nop
 exec_test 'echo TEST > foo > bar' #ok
@@ -186,7 +186,7 @@ exec_test "echo s'h'e'l'l" #ok
 #exec_test echo a'b'c"d"e'f'g"h"i'j'k"l"m'n'o"p'q'r"s't'u"v"w"x"y'z' #ok
 exec_test 'echo \$SHELL' #nop backslash
 exec_test 'echo "a\\b"' #nop backslash
-#echo "a\\ \ b c\" \'$SHELL\'"
+#echo "a\\ \ b c\" \'$SHELL\'"bug
 #exec_test "echo \"a\\ \ b c\" \'$SHELL\'\"" #nop backslash
 exec_test "echo $\"SHELL\"" #ok
 exec_test "echo $\'SHELL\'" #ok

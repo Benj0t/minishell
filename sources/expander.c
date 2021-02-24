@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 14:08:54 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 16:19:07 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ char	*quote_exp(t_token *tok, t_managparse *manag, char *result, size_t *i)
 	result = join_name(tok, manag, result);
 	tok->name = dup_name(tok, manag, result, *i);
 	*i = 0;
-	while (tok->name[*i] != '\0' && (tok->name[*i] != quote || tok->name[*i - 1] == '\\'))
+	while (tok->name[*i] != '\0')
 	{
-		backslash_quote(tok, i, quote);
+		*i = backslash_quote(tok, *i, quote);
 		(*i)++;
 	}
 	tok->name[*i] = '\0';
@@ -95,14 +95,8 @@ int		expansion(t_token *tok, t_managparse *manag)
 		malloc_fail(*tok, manag);
 	while (tok->name[i] != '\0')
 	{
-		if (is_quote(tok->name[i]) && tok->name[i - 1] != '\\')
+		if (is_quote(tok->name[i]) && !backslash(tok->name, i))
 			result = quote_exp(tok, manag, result, &i);
-		if (is_quote(tok->name[i]) && tok->name[i - 1] == '\\')
-		{
-			if (remove_char(&tok->name, i - 1))
-				malloc_fail(*tok, manag);
-			continue ;
-		}
 		i++;
 	}
 	result = join_name(tok, manag, result);
@@ -121,33 +115,28 @@ int		backslash_remove(t_token *tok, t_managparse *manag)
 	i = 0;
 	while (tok->name[i] != '\0')
 	{
+		while (tok->name[i] == '\\')
+				i++;
 		if ((tok->name[i] == '"' || tok->name[i] == '\'') \
-			&& tok->name[i - 1] != '\\')
+			&& !backslash(tok->name, i))
 		{
 			quote = tok->name[i];
 			i++;
-			while (tok->name[i] != quote || backslash(tok->name, i))
+			while (tok->name[i] != quote || (tok->name[i] == quote && backslash(tok->name, i)))
 				i++;
 			i++;
+			continue ;
 		}
-		if (!is_quote(tok->name[i]))
+		blvl = backslash_lvl(tok->name, i);
+		if ((blvl % 2) == 1 || blvl == 1)
+			blvl = (blvl / 2) + 1;
+		else
+			blvl = blvl / 2;
+		while (blvl)
 		{
-			if (tok->name[i] == '\\')
-			{
-				while (tok->name[i] == '\\')
-					i++;
-				blvl = backslash_lvl(tok->name, i);
-				if ((blvl % 2) == 1 || blvl == 1)
-					blvl = (blvl / 2) + 1;
-				else
-					blvl = blvl / 2;
-				while (blvl)
-				{
-					remove_char(&tok->name, i - 1);
-					blvl--;
-					i--;
-				}
-			}
+			remove_char(&tok->name, i - 1);
+			blvl--;
+			i--;
 		}
 		i++;
 	}

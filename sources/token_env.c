@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:44:00 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 14:53:30 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 16:59:38 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ size_t		env_sub(char **str, t_managparse *manag, size_t i)
 	str[0][i] = '\0';
 	ret = 1;
 	while (str[0][i + 1 + ret] && str[0][i + 1] != '?' \
-		&& !ft_isdigit(str[0][i + 1]))
+		&& !ft_isdigit(str[0][i + 1]) && !is_quote(str[0][i + 1 + ret]))
 	{
 		if (!ft_isalnum(str[0][i + 1 + ret]) \
 			&& str[0][i + 1 + ret] != '_')

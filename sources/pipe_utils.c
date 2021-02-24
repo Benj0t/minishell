@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 12:39:47 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 15:23:18 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void		get_ret_values(t_pipe *spipe)
 	{
 		if (spipe->ret[end] == 1)
 		{
-			waitpid(spipe->child[spipe->n_bin--], (int *)&(spipe->pid[i]), 0);
-			spipe->ret[end] = WEXITSTATUS(spipe->pid[i++]);
+			waitpid(spipe->child[spipe->n_bin--], (int *)&(spipe->pid[--spipe->i_comm]), 0);
+			spipe->ret[end] = WEXITSTATUS(spipe->pid[spipe->i_comm]);
 		}
 		end--;
 	}

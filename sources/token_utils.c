@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 12:04:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 12:30:53 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 16:14:26 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,8 @@ int				is_quote(char c)
 
 int				backslash(char *str, size_t i)
 {
-	if (i > 0 && str[i - 1] == '\\')
-	{
-		if (backslash(str, i - 1))
-			return (0);
+	if (backslash_lvl(str, i) % 2 == 0 || backslash_lvl(str, i) == 1)
 		return (1);
-	}
 	return (0);
 }
 
