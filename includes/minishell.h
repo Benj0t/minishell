@@ -17,13 +17,13 @@ typedef struct s_cd
 
 typedef	struct	s_redirection
 {
-	char					*arg;
-	int						in;
-	int						out;
-	int						append;
-}				t_redirection;
+	char		*arg;
+	int			in;
+	int			out;
+	int			append;
+}					t_redirection;
 
-typedef struct	s_command
+typedef	struct	s_command
 {
 		t_list				*argument;
 		t_list				*redirection;

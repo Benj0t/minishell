@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 23:44:33 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 03:14:14 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ char			*env_dbl_join(char **str, char *var, size_t ret);
 char			*env_sub_var(t_managparse *manag, char *tmp);
 size_t			env_sub(char **str, t_managparse *manag, size_t i);
 size_t			env_token(char **str, t_managparse *manag, size_t i);
+void			dealloc_redirection(void *content);
 
 char			*join_name(t_token *tok, t_managparse *manag, char *result);
 char			*dup_name(t_token *tok, t_managparse *manag,\
@@ -82,8 +83,8 @@ void			backslash_quote(t_token *tok, size_t *i, char quote);
 
 void			malloc_fail(t_token tok, t_managparse *manag);
 int				error_parser(char *str, char *name);
-int				save_arg(t_token *tok, t_managparse *manag, t_list **list);
-int				test_arg(t_token *tok, t_managparse *manag, t_list **list);
+int				save_arg(t_token *tok, t_managparse *manag, int flag);
+int				test_arg(t_token *tok, t_managparse *manag, int flag);
 void			next_free_token(t_token *tok, t_managparse *manag);
 int				save_tok_out(t_token *tok, t_managparse *manag);
 int				save_tok_in(t_token *tok, t_managparse *manag);
