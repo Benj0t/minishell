@@ -6,13 +6,13 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 12:48:33 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 14:55:01 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			init_spipe(t_pipe *spipe)
+ int			init_spipe(t_pipe *spipe)
 {
 	int i;
 	spipe->i_comm = 0;
@@ -20,14 +20,17 @@ int			init_spipe(t_pipe *spipe)
 	spipe->n_pipe = spipe->n_comm - 1;
 	spipe->index = 0;
 	spipe->path = NULL;
+	spipe->child = NULL;
 	spipe->l_env = NULL;
+	spipe->pid = NULL;
+	spipe->ret = NULL;
 	i = 0;
 	if (!(spipe->child = (pid_t *)malloc(sizeof(pid_t) * (spipe->n_comm))))
-		return (0);
+		return (free_spipe(spipe));
 	if (!(spipe->pid = (int *)malloc(sizeof(int) * (spipe->n_comm))))
-		return (0);
+		return (free_spipe(spipe));
 	if (!(spipe->ret = (int *)malloc(sizeof(int) * (spipe->n_comm))))
-		return (0);
+		return (free_spipe(spipe));
 	while (i < spipe->n_comm)
 	{
 		spipe->child[i] = 0;

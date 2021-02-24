@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 11:31:23 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 03:45:35 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 14:30:21 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ int		error_parser(char *str, char *name)
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd(" ", 2);
 	}
+	ft_putchar_fd('\'', 2);
 	ft_putstr_fd(name, 2);
-	ft_putstr_fd("\n", 2);
+	ft_putstr_fd("'\n", 2);
 	free(name);
 	return (1);
 }
