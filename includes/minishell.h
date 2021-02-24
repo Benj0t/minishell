@@ -21,7 +21,6 @@ typedef	struct	s_redirection
 	int						in;
 	int						out;
 	int						append;
-	t_redirection 			*next;
 }				t_redirection;
 
 typedef struct	s_command
