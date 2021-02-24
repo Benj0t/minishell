@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 02:56:30 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 03:14:14 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void			backslash_quote(t_token *tok, size_t *i, char quote);
 void			malloc_fail(t_token tok, t_managparse *manag);
 int				error_parser(char *str, char *name);
 int				save_arg(t_token *tok, t_managparse *manag, int flag);
-int				test_arg(t_token *tok, t_managparse *manag, t_list **list);
+int				test_arg(t_token *tok, t_managparse *manag, int flag);
 void			next_free_token(t_token *tok, t_managparse *manag);
 int				save_tok_out(t_token *tok, t_managparse *manag);
 int				save_tok_in(t_token *tok, t_managparse *manag);
