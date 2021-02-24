@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 02:53:29 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 03:43:30 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int		parser_token(t_managparse *manag)
 	if (tok.type > T_NOWORD && manag->command->argument == NULL)
 		return (error_parser(EUNEXPECTED, tok.name));
 	if (tok.type == tok_word)
-		return (save_arg(&tok, manag, &manag->command->argument));
+		return (save_arg(&tok, manag, 4));
 	if (tok.type == tok_out)
 		return (save_tok_out(&tok, manag));
 	if (tok.type == tok_in)

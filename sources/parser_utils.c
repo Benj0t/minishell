@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 11:31:23 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 03:13:07 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 03:45:35 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,26 @@ void			dealloc_redirection(void *content)
 int		save_arg(t_token *tok, t_managparse *manag, int flag)
 {
 	t_list	*tmp;
+	t_redirection	*redir;
 
 	if (environnment_expander(tok, manag) && backslash_remove(tok, manag)\
 		&& expansion(tok, manag))
 	{
-		tmp = malloc_redirection(tok->name, flag);
+		if (flag < 4)
+		{
+			redir = malloc_redirection(tok->name, flag);
+			if (redir == NULL)
+				malloc_fail(*tok, manag);
+			tmp = ft_lstnew(redir);
+		}
+		else
+			tmp = ft_lstnew(tok->name);
 		if (tmp == NULL)
 			malloc_fail(*tok, manag);
-		tmp = ft_lstnew(tmp);
-		if (tmp == NULL)
-			malloc_fail(*tok, manag);
-		ft_lstadd_back(&manag->command->redirection, tmp);
+		if (flag < 4)
+			ft_lstadd_back(&manag->command->redirection, tmp);
+		else
+			ft_lstadd_back(&manag->command->argument, tmp);
 	}
 	return (parser_token(manag));
 }
