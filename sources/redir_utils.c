@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 05:39:44 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 03:32:11 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:37:37 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,15 @@
 void	end_redir(t_redir *redir)
 {
 	dup2(redir->save_stdin, 0);
-	close(redir->save_stdin);
-	close(redir->std_in);
+	if (redir->save_stdin != -1)
+		close(redir->save_stdin);
+	if (redir->std_in != -1)
+		close(redir->std_in);
 	dup2(redir->save_stdout, 1);
-	close(redir->save_stdout);
-	close(redir->std_out);
+	if (redir->save_stdout != -1)
+		close(redir->save_stdout);
+	if (redir->std_out != -1)
+		close(redir->std_out);
 }
 
 int		err_msg(char *str)

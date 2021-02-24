@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:48:33 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int			init_spipe(t_pipe *spipe)
 {
 	int i;
-
 	spipe->i_comm = 0;
 	spipe->i_pipe = 0;
 	spipe->n_pipe = spipe->n_comm - 1;
@@ -27,15 +26,14 @@ int			init_spipe(t_pipe *spipe)
 		return (0);
 	if (!(spipe->pid = (int *)malloc(sizeof(int) * (spipe->n_comm))))
 		return (0);
-	i = 0;
-	while (i < spipe->n_comm)
-		spipe->pid[i++] = -1;
-	i = 0;
 	if (!(spipe->ret = (int *)malloc(sizeof(int) * (spipe->n_comm))))
 		return (0);
-	i = 0;
 	while (i < spipe->n_comm)
-		spipe->ret[i++] = 0;
+	{
+		spipe->child[i] = 0;
+		spipe->ret[i] = 0;
+		spipe->pid[i++] = 0;
+	}
 	return (1);
 }
 

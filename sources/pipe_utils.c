@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:39:47 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void		get_ret_values(t_pipe *spipe)
 	int end;
 
 	i = 0;
-	end = spipe->index;
-	while (end > 0)
+	end = spipe->index - 1;
+	while (end >= 0)
 	{
 		if (spipe->ret[end] == 1)
 		{

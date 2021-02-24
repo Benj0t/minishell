@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 01:44:00 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 23:46:43 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:47:32 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char		*env_sub_var(t_managparse *manag, char *tmp)
 	}
 	else
 	{
-		var = get_env(tmp);
+		var = ft_strdup(get_env(tmp));
 		if (var == NULL)
 			var = "";
 	}
@@ -71,6 +71,7 @@ size_t		env_sub(char **str, t_managparse *manag, size_t i)
 	free(tmp);
 	ret = i + 1 + ret;
 	*str = env_dbl_join(str, var, ret);
+	free(var);
 	return (i);
 }
 

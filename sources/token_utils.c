@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 12:04:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/18 12:13:56 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:30:53 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,15 @@ int				backslash(char *str, size_t i)
 
 int				is_backslash(char *str, size_t i)
 {
-	if ((str[i + 1] == '\\' && (str[i] != ' ' && str[i] != '	'))\
-		|| (i > 0 && str[i - 1] == '\\'))
+	if (i < 0)
 	{
-		if (backslash(str, i - 1))
-			return (0);
-		return (1);
+		if ((str[i + 1] == '\\' && (str[i] != ' ' && str[i] != '	'))\
+			|| str[i - 1] == '\\')
+		{
+			if (backslash(str, i - 1))
+				return (0);
+			return (1);
+		}
 	}
 	return (0);
 }
