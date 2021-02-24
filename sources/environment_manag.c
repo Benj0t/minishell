@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:17:32 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 21:42:18 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 14:25:56 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,11 @@ char		**list_to_envp(void)
 	i = 0;
 	while (tmp != NULL)
 	{
-		ret[i] = ft_strjoin_c(((t_var_env *)tmp->content)->key,
-					((t_var_env *)tmp->content)->var, '=');
+		if (((t_var_env *)tmp->content)->var != NULL)
+			ret[i] = ft_strjoin_c(((t_var_env *)tmp->content)->key,\
+						((t_var_env *)tmp->content)->var, '=');
+		else
+			ret[i] = ft_strdup(((t_var_env *)tmp->content)->key);
 		if (ret[i] == NULL)
 		{
 			dealloc_tab(ret);

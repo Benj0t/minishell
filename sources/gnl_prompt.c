@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gnl_prompt.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 20:43:23 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 13:57:27 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,10 @@ int		prompt_test(int check, char *str, char **line, int *last_ret)
 	}
 	if ((check == 0) && (ft_strlen(*line) == 0))
 	{
-		*last_ret = 130;
 		write(2, "exit\n", 5);
 		free(*line);
 		ft_lstclear(&g_env, &dealloc_varenv);
-		exit(9);
+		exit(*last_ret);
 	}
 	if (check == 0)
 		check = 1;

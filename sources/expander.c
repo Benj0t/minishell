@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 21:46:27 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 14:08:54 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int		backslash_remove(t_token *tok, t_managparse *manag)
 {
 	char	*result;
 	char	quote;
+	int		blvl;
 	size_t	i;
 
 	i = 0;
@@ -129,11 +130,24 @@ int		backslash_remove(t_token *tok, t_managparse *manag)
 				i++;
 			i++;
 		}
-		if (!is_quote(tok->name[i]) && i > 0)
+		if (!is_quote(tok->name[i]))
 		{
-			if (tok->name[i - 1] == '\\')
-				if (remove_char(&tok->name, i - 1))
-					malloc_fail(*tok, manag);
+			if (tok->name[i] == '\\')
+			{
+				while (tok->name[i] == '\\')
+					i++;
+				blvl = backslash_lvl(tok->name, i);
+				if ((blvl % 2) == 1 || blvl == 1)
+					blvl = (blvl / 2) + 1;
+				else
+					blvl = blvl / 2;
+				while (blvl)
+				{
+					remove_char(&tok->name, i - 1);
+					blvl--;
+					i--;
+				}
+			}
 		}
 		i++;
 	}

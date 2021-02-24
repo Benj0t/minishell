@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 15:43:34 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 02:08:02 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 13:51:57 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ t_token			next_token(t_managparse *manag)
 	tok.type = tok_eof;
 	if (manag->str[i] == '\0')
 		return (tok);
-	while ((!in_list(manag->str[i], T_ALL) && manag->str[i] != '\0')\
-			|| is_backslash(manag->str, i))
+	while ((!in_list(manag->str[i], T_ALL) && manag->str[i] != '\0') ||\
+	backslash_lvl(manag->str, i) % 2 == 1 || backslash_lvl(manag->str, i) == 1)
 	{
 		if (is_quote(manag->str[i]) && !backslash(manag->str, i))
 		{
