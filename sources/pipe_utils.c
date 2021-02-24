@@ -6,13 +6,13 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 00:31:26 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		get_ret_values(s_pipe *spipe)
+void		get_ret_values(t_pipe *spipe)
 {
 	int i;
 	int end;
@@ -45,14 +45,14 @@ int			listlen(t_command *list)
 	return (i);
 }
 
-int			invalid_command(s_pipe *spipe, t_parser comm1)
+int			invalid_command(t_pipe *spipe, t_parser comm1)
 {
 	ft_putstr_fd(comm1.argument[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
 	return (127);
 }
 
-void		close_pipe(s_pipe *spipe)
+void		close_pipe(t_pipe *spipe)
 {
 	close(spipe->prev_p[0]);
 	close(spipe->prev_p[1]);

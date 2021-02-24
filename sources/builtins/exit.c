@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 02:19:36 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int						exit_neg(long long int nb)
 }
 
 
-void						free_exit(char **arg, s_pipe *spipe, t_command *command)
+void						free_exit(char **arg, t_pipe *spipe, t_command *command)
 {
 	free(arg);
 	free_spipe(spipe);
@@ -134,7 +134,7 @@ void					print_exit(int nb)
 	exit(nb);
 }
 
-int						ft_exit(char **arg, s_pipe *spipe, t_command *command)
+int						ft_exit(char **arg, t_pipe *spipe, t_command *command)
 {
 	unsigned long long int unb;
 	long long int nb;

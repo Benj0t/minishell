@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 22:17:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 00:10:34 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int		main(int ac, char **av, char **envp)
 {
 	char		*str;
 	t_redir		redir;
-	s_pipe		spipe;
+	t_pipe		spipe;
 
 	(void)ac;
 	spipe.last_ret = 0;

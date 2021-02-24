@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/24 01:13:19 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	sig_quit(int sigid)
 }
 
 int		simple_command(t_command *cmd,\
-						t_redir *redir, s_pipe *spipe)
+						t_redir *redir, t_pipe *spipe)
 {
 	t_parser	comm1;
 	int			ret;
@@ -69,7 +69,7 @@ int		ft_ret(int *ret)
 	return ((unsigned char)ret[i - 1]);
 }
 
-int		execution(t_command *cmd, t_redir *redir, s_pipe *spipe)
+int		execution(t_command *cmd, t_redir *redir, t_pipe *spipe)
 {
 	int i;
 	int ret;

@@ -6,13 +6,13 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 01:14:59 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		exec_fcomm_2(t_redir *redir, s_pipe *spipe, t_parser comm2)
+void		exec_fcomm_2(t_redir *redir, t_pipe *spipe, t_parser comm2)
 {
 	if (redir->std_in == -1)
 		dup2(spipe->prev_p[0], 0);
@@ -24,7 +24,7 @@ void		exec_fcomm_2(t_redir *redir, s_pipe *spipe, t_parser comm2)
 }
 
 static int	second_command(t_command *cmd,\
-			s_pipe *spipe, t_redir *redir)
+			t_pipe *spipe, t_redir *redir)
 {
 	t_parser	comm2;
 
@@ -54,7 +54,7 @@ static int	second_command(t_command *cmd,\
 	return (1);
 }
 
-void		exec_fcomm_1(t_redir *redir, s_pipe *spipe, t_parser comm1)
+void		exec_fcomm_1(t_redir *redir, t_pipe *spipe, t_parser comm1)
 {
 	if (redir->std_out == -1)
 		dup2(spipe->prev_p[1], 1);
@@ -63,7 +63,7 @@ void		exec_fcomm_1(t_redir *redir, s_pipe *spipe, t_parser comm1)
 }
 
 int			first_command(t_command *cmd,\
-			s_pipe *spipe, t_redir *redir)
+			t_pipe *spipe, t_redir *redir)
 {
 	t_parser comm1;
 

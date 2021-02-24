@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 03:14:14 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct	s_managparse
 {
 	t_command	*command;
 	t_redir		*redir;
-	s_pipe		*spipe;
+	t_pipe		*spipe;
 	char		*str;
 }				t_managparse;
 
@@ -94,6 +94,6 @@ int				parser_token(t_managparse *manag);
 void			clear_multi_command(t_command *command);
 void			print_multi_command(t_command *command);
 t_command		*setup_command(void);
-int				parser(char **str, t_redir *redir, s_pipe *spipe);
+int				parser(char **str, t_redir *redir, t_pipe *spipe);
 
 #endif

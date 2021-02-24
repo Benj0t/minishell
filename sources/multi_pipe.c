@@ -6,13 +6,13 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:19:00 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 01:15:15 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		exec_lcomm(s_pipe *spipe, t_redir *redir, t_parser comm1)
+void		exec_lcomm(t_pipe *spipe, t_redir *redir, t_parser comm1)
 {
 	if (redir->std_in == -1)
 		dup2(spipe->prev_p[0], 0);
@@ -21,7 +21,7 @@ void		exec_lcomm(s_pipe *spipe, t_redir *redir, t_parser comm1)
 }
 
 static int	last_command(t_command *cmd,\
-						s_pipe *spipe, t_redir *redir)
+						t_pipe *spipe, t_redir *redir)
 {
 	int			ret;
 	t_parser	comm1;
@@ -55,7 +55,7 @@ static int	last_command(t_command *cmd,\
 }
 
 int			multi_pipe(t_command *cmd,\
-						s_pipe *spipe, t_redir *redir)
+						t_pipe *spipe, t_redir *redir)
 {
 	int			i;
 	int			ret;

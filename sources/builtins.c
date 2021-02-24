@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 02:10:41 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 01:52:19 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int			get_command(t_list *argument, t_parser *parse)
 	return (0);
 }
 
-int		scan_builtins(t_command *cmd, s_pipe *spipe)
+int		scan_builtins(t_command *cmd, t_pipe *spipe)
 {
 	t_parser parse;
 	int ret;
@@ -57,7 +57,7 @@ int		scan_builtins(t_command *cmd, s_pipe *spipe)
 	return (ret);
 }
 
-int		builtins(t_command *cmd, s_pipe *spipe)
+int		builtins(t_command *cmd, t_pipe *spipe)
 {
 	t_parser parse;
 	int ret;

@@ -6,18 +6,18 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 13:58:07 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/23 16:11:32 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_struct(s_pipe *spipe, t_redir *redir, t_command *command)
+void	free_struct(t_pipe *spipe, t_redir *redir, t_command *command)
 {
 	exit(42);
 }
 
-int		free_spipe(s_pipe *spipe)
+int		free_spipe(t_pipe *spipe)
 {
 	int i;
 

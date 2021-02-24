@@ -6,13 +6,13 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 04:32:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 01:15:08 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		exec_middle_command(t_redir *redir, s_pipe *spipe, t_parser comm1)
+void		exec_middle_command(t_redir *redir, t_pipe *spipe, t_parser comm1)
 {
 	if (redir->std_in == -1)
 		dup2(spipe->prev_p[0], 0);
@@ -23,7 +23,7 @@ void		exec_middle_command(t_redir *redir, s_pipe *spipe, t_parser comm1)
 	execve(spipe->path, comm1.argument, spipe->l_env);
 }
 
-void		exec_middle_builtin(s_pipe *spipe, \
+void		exec_middle_builtin(t_pipe *spipe, \
 						t_command *cmd, t_redir *redir)
 {
 	if ((spipe->ret[spipe->index] = scan_builtins(cmd, spipe)) == 0)
@@ -39,7 +39,7 @@ void		exec_middle_builtin(s_pipe *spipe, \
 }
 
 int			middle_commands(t_command *cmd,\
-			s_pipe *spipe, t_redir *redir)
+			t_pipe *spipe, t_redir *redir)
 {
 	int			ret;
 	t_parser	comm1;

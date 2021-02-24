@@ -6,13 +6,13 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 01:14:13 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		pid_manager(s_pipe *spipe, int child[2])
+void		pid_manager(t_pipe *spipe, int child[2])
 {
 	if (spipe->ret[0] == 1)
 	{
@@ -26,7 +26,7 @@ void		pid_manager(s_pipe *spipe, int child[2])
 	}
 }
 
-static int	left_command(s_pipe *spipe, t_redir *redir,\
+static int	left_command(t_pipe *spipe, t_redir *redir,\
 						t_command *command, int p[2])
 {
 	int			child;
@@ -52,7 +52,7 @@ static int	left_command(s_pipe *spipe, t_redir *redir,\
 	return (child);
 }
 
-static int	right_command(s_pipe *spipe, t_redir *redir,\
+static int	right_command(t_pipe *spipe, t_redir *redir,\
 						t_command *command, int p[2])
 {
 	int			child;
@@ -76,7 +76,7 @@ static int	right_command(s_pipe *spipe, t_redir *redir,\
 	return (child);
 }
 
-void		check_builtin(s_pipe *spipe, t_redir *redir, t_command *command)
+void		check_builtin(t_pipe *spipe, t_redir *redir, t_command *command)
 {
 	if ((spipe->ret[1] = scan_builtins(command, spipe)) == 0)
 	{
@@ -87,7 +87,7 @@ void		check_builtin(s_pipe *spipe, t_redir *redir, t_command *command)
 }
 
 int			single_pipe(t_command *command,\
-					t_redir *redir, s_pipe *spipe)
+					t_redir *redir, t_pipe *spipe)
 {
 	int			child[2];
 

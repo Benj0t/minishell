@@ -6,13 +6,13 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/23 17:27:44 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			init_spipe(s_pipe *spipe)
+int			init_spipe(t_pipe *spipe)
 {
 	int i;
 
@@ -39,7 +39,7 @@ int			init_spipe(s_pipe *spipe)
 	return (1);
 }
 
-char		*init_path(char **env, t_parser command, s_pipe *spipe)
+char		*init_path(char **env, t_parser command, t_pipe *spipe)
 {
 	if (spipe->path)
 	{
@@ -52,7 +52,7 @@ char		*init_path(char **env, t_parser command, s_pipe *spipe)
 	return (spipe->path);
 }
 
-char		**set_local_env(s_pipe *spipe)
+char		**set_local_env(t_pipe *spipe)
 {
 	if (spipe->l_env)
 	{
