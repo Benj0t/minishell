@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 11:31:23 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 14:30:21 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 16:28:03 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_redirection	*malloc_redirection(char *arg, int flag)
 		ret->out = 1;
 	else if (flag == 2)
 		ret->append = 1;
-	else
+	else if (flag == 0)
 		ret->in = 1;
 	return (ret);
 }
