@@ -15,13 +15,19 @@ typedef struct s_cd
 	int			bool;
 }				t_cd;
 
+typedef	struct	s_redirection
+{
+	char					*arg;
+	int						in;
+	int						out;
+	int						append;
+	t_redirection 			*next;
+}				t_redirection;
 
 typedef struct	s_command
 {
-		t_list			*argument;
-		t_list			*redir_append;
-		t_list			*redir_out;
-		t_list			*redir_in;
+		t_list				*argument;
+		t_list				*redirection;
 		struct s_command	*pipe;
 }				t_command;
 
