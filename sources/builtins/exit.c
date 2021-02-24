@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 01:39:54 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 02:19:36 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void						free_exit(char **arg, s_pipe *spipe, t_command *command)
 
 void					print_exit(int nb)
 {
-	ft_putstr_fd("exit\n", 1);
+	ft_putstr_fd("exit\n", 2);
 	exit(nb);
 }
 
