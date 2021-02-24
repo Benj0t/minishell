@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 20:40:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 20:43:09 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 00:16:10 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int			valid_env(char *s)
 	return (i);
 }
 
-void		print_env(char *prefix, t_list *env, int print_null)
+void		print_env(char *prefix, t_list *env)
 {
 	t_var_env	*var_env;
 	t_list		*tmp_env;
@@ -64,12 +64,6 @@ void		print_env(char *prefix, t_list *env, int print_null)
 			ft_putstr_fd(var_env->key, 1);
 			ft_putchar_fd('=', 1);
 			ft_putstr_fd(var_env->var, 1);
-			ft_putchar_fd('\n', 1);
-		}
-		else if (!var_env->var && print_null)
-		{
-			ft_putstr_fd(prefix, 1);
-			ft_putstr_fd(var_env->key, 1);
 			ft_putchar_fd('\n', 1);
 		}
 		tmp_env = tmp_env->next;

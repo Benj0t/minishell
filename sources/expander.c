@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 20:22:15 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/23 21:46:27 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*quote_exp(t_token *tok, t_managparse *manag, char *result, size_t *i)
 	result = join_name(tok, manag, result);
 	tok->name = dup_name(tok, manag, result, *i);
 	*i = 0;
-	while (tok->name[*i] != quote || tok->name[*i - 1] == '\\')
+	while (tok->name[*i] != '\0' && (tok->name[*i] != quote || tok->name[*i - 1] == '\\'))
 	{
 		backslash_quote(tok, i, quote);
 		(*i)++;

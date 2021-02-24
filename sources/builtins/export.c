@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 14:56:27 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 00:18:01 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,28 @@ int		invalid_id(char *arg)
 	return (1);
 }
 
+void		print_export(char *prefix, t_list *env)
+{
+	t_var_env	*var_env;
+	t_list		*tmp_env;
+
+	tmp_env = env;
+	while (tmp_env != NULL)
+	{
+		var_env = (t_var_env *)tmp_env->content;
+		ft_putstr_fd(prefix, 1);
+		ft_putstr_fd(var_env->key, 1);
+		if (var_env->var)
+		{
+			ft_putstr_fd("=\"", 1);
+			ft_putstr_fd(var_env->var, 1);
+			ft_putchar_fd('"', 1);
+		}
+		ft_putchar_fd('\n', 1);
+		tmp_env = tmp_env->next;
+	}
+}
+
 int		ft_export(char **arg)
 {
 	t_list *copy;
@@ -50,7 +72,7 @@ int		ft_export(char **arg)
 		if (copy == NULL)
 			return (1);
 		bubble_sort(copy);
-		print_env("declare -x ", copy, 1);
+		print_export("declare -x ", copy);
 		ft_lstclear(&copy, NULL);
 		return (0);
 	}
