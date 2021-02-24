@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 20:38:51 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/23 22:11:59 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ static int				ft_isnum(char *str)
 static int				error_exit(char *str)
 {
 	ft_putendl_fd(str, 2);
-	return (-1);
+	return (1);
 }
 
 long long int	ft_atoll(const char *str)
 {
 	int					i;
-	long long	result;
+	long long			result;
 	int					neg;
 
 	i = 0;
@@ -59,6 +59,32 @@ long long int	ft_atoll(const char *str)
 		i++;
 	}
 	return (result * (long long int)neg);
+}
+
+unsigned long long int	ft_atoull(const char *str)
+{
+	int							i;
+	unsigned long long			result;
+	int							neg;
+
+	i = 0;
+	result = 0;
+	neg = 1;
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			neg = -1;
+		i++;
+	}
+	while (ft_isdigit((int)str[i]))
+	{
+		result *= 10;
+		result += (unsigned long long int)str[i] - 48;
+		i++;
+	}
+	return (result * (unsigned long long int)neg);
 }
 
 int						exit_neg(long long int nb)
@@ -86,8 +112,8 @@ int						ft_exit(char **arg, s_pipe *spipe, t_command *command)
 		exit(spipe->last_ret);
 	}
 	if (arg[2])
-		return (error_exit(EMANYARG));
-	if (ft_isnum(arg[1]) || ft_strlen(arg[1]) > 18)
+		return(error_exit(EMANYARG));
+	if (ft_isnum(arg[1]) && ft_strlen(arg[1]) > 18 && ft_atoull(arg[1]) > 9223372036854775807)
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(arg[1], 2);
@@ -95,10 +121,12 @@ int						ft_exit(char **arg, s_pipe *spipe, t_command *command)
 		free_exit(arg, spipe, command);
 		exit(2);
 	}
-	nb = ft_atoll(arg[1]);
-	free_exit(arg, spipe, command);
-	if (nb < 0)
+	if (nb > 9223372036854775807 && arg[1][0] == '-')
+	{
+		nb = ft_atoll(arg[1]);
+		free_exit(arg, spipe, command);
 		exit(exit_neg(nb));
+	}
 	exit(nb % 256);
 	return (-1);
 }
