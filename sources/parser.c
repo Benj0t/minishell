@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 14:03:22 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 01:49:28 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 int		save_tok_out(t_token *tok, t_managparse *manag)
 {
-	free(tok->name);
-	*tok = next_token(manag);
+	next_free_token(tok, manag);
 	if (tok->type == tok_out)
 	{
 		next_free_token(tok, manag);
@@ -29,7 +28,8 @@ int		save_tok_out(t_token *tok, t_managparse *manag)
 	}
 	else
 	{
-		next_free_token(tok, manag);
+		if (tok->type == tok_space || tok->type == tok_space)
+			next_free_token(tok, manag);
 		if (tok->type == tok_word)
 			return (test_arg(tok, manag, &manag->command->redir_out));
 		else
@@ -63,8 +63,17 @@ int		save_tok_pipe(t_token *tok, t_managparse *manag)
 	return (parser_token(manag));
 }
 
-int		free_ret(t_token *tok)
+int		free_ret(t_token *tok, t_managparse *manag)
 {
+	size_t	i;
+
+	i = 0;
+	while (manag->str[i] != '\0' && (manag->str[i] == ' ' || manag->str[i] == ';'))
+	{
+		if (manag->str[i] == ';')
+			return (error_parser("syntax error near unexpected token", tok->name));
+		i++;
+	}
 	free(tok->name);
 	return (0);
 }
@@ -78,7 +87,7 @@ int		parser_token(t_managparse *manag)
 	if (tok.type == tok_space || tok.type == tok_tab)
 		next_free_token(&tok, manag);
 	if (tok.type == tok_eof || tok.type == tok_end)
-		return (free_ret(&tok));
+		return (free_ret(&tok, manag));
 	if (tok.type > T_NOWORD && manag->command->argument == NULL)
 		return (error_parser(EUNEXPECTED, tok.name));
 	if (tok.type == tok_word)

@@ -63,7 +63,8 @@ t_list*		ft_lstcopy(t_list* head);
 
 int			check_env(char *s);
 int			valid_env(char *s);
-void		print_env(char	*prefix, t_list *env, int print_null);
+void		print_env(char	*prefix, t_list *env);
+void		print_export(char	*prefix, t_list *env);
 t_var_env	*malloc_varenv(const char *key, const char *str);
 void		dealloc_varenv(void *content);
 t_list		*envp_to_list(char **envp);
