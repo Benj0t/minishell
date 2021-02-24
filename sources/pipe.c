@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/24 00:26:03 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 01:13:19 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,8 @@ int		simple_command(t_command *cmd,\
 	}
 	end_redir(redir);
 	if (spipe->path)
-	{
 		free(spipe->path);
-	}
+	free(comm1.argument);
 	return (spipe->ret[0]);
 }
 

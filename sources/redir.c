@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/08 15:52:01 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/12 22:08:25 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 00:48:48 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		try_rdonly(int *fd, t_list *tmp, t_redir *redir)
 {
-	if ((*fd = open(tmp->content, O_RDONLY)) == -1)
+	if ((*fd = open(tmp->content, O_RDONLY, 0644)) == -1)
 		return (err_msg("Can't open redirection file !"));
 	if (tmp->next == NULL)
 	{
@@ -30,14 +30,14 @@ int		try_rdonly(int *fd, t_list *tmp, t_redir *redir)
 
 int		try_wronly(int *fd, t_list *tmp, t_redir *redir)
 {
-	if ((*fd = open(tmp->content, O_WRONLY)) == -1)
+	if ((*fd = open(tmp->content, O_WRONLY, 0644)) == -1)
 	{
-		if ((*fd = open(tmp->content, O_CREAT)) == -1)
+		if ((*fd = open(tmp->content, O_CREAT, 0644)) == -1)
 			return (err_msg("Can't create redirection file !"));
 		else
 		{
 			close(*fd);
-			if ((*fd = open(tmp->content, O_WRONLY)) == -1)
+			if ((*fd = open(tmp->content, O_WRONLY, 0644)) == -1)
 				return (err_msg("Can't open redirection file !"));
 		}
 	}
@@ -55,15 +55,15 @@ int		try_wronly(int *fd, t_list *tmp, t_redir *redir)
 
 int		try_append(int *fd, t_list *tmp, t_redir *redir)
 {
-	if ((*fd = open(tmp->content, O_WRONLY | O_APPEND)) == -1)
+	if ((*fd = open(tmp->content, O_WRONLY | O_APPEND, 0644)) == -1)
 	{
-		if ((*fd = open(tmp->content, O_CREAT)) == -1)
+		if ((*fd = open(tmp->content, O_CREAT, 0644)) == -1)
 			return (err_msg("Can't create redirection file !"));
 		else
 		{
 			close(*fd);
 		}
-		if ((*fd = open(tmp->content, O_WRONLY | O_APPEND)) == -1)
+		if ((*fd = open(tmp->content, O_WRONLY | O_APPEND, 0644)) == -1)
 			return (err_msg("Can't append redirection file !"));
 	}
 	if (tmp->next == NULL)

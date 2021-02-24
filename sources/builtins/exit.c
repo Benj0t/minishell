@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 23:26:46 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 01:39:54 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,12 @@ void						free_exit(char **arg, s_pipe *spipe, t_command *command)
 	ft_lstclear(&g_env, &dealloc_varenv);
 }
 
+void					print_exit(int nb)
+{
+	ft_putstr_fd("exit\n", 1);
+	exit(nb);
+}
+
 int						ft_exit(char **arg, s_pipe *spipe, t_command *command)
 {
 	unsigned long long int unb;
@@ -137,7 +143,7 @@ int						ft_exit(char **arg, s_pipe *spipe, t_command *command)
 	if (!arg[1])
 	{
 		free_exit(arg, spipe, command);
-		exit(spipe->last_ret);
+		print_exit(spipe->last_ret);
 	}
 	if (arg[2])
 		return(error_exit(EMANYARG));
@@ -149,13 +155,13 @@ int						ft_exit(char **arg, s_pipe *spipe, t_command *command)
 		ft_putstr_fd(arg[1], 2);
 		ft_putstr_fd(": numeric argument required", 2);
 		free_exit(arg, spipe, command);
-		exit(2);
+		print_exit(2);
 	}
 	if (nb < 0)
 	{
 		free_exit(arg, spipe, command);
-		exit(exit_neg(nb));
+		print_exit(exit_neg(nb));
 	}
-	exit(unb % 256);
+	print_exit(unb % 256);
 	return (-1);
 }
