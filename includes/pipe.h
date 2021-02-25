@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/25 13:55:31 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 00:02:30 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct	s_redir
 	int 		save_stdout;
 }				t_redir;
 
-int		invalid_command(t_pipe *spipe, t_parser comm1);
+int		invalid_command(t_pipe *spipe, t_parser *comm1);
 void	close_pipe(t_pipe *spipe);
 void	end_redir(t_redir *redir);
 char	**set_local_env(t_pipe *spipe);

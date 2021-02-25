@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/25 15:55:01 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 00:02:53 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int		simple_command(t_command *cmd,\
 	else
 	{
 		if (init_path(spipe->l_env, comm1, spipe) == NULL)
-			return (spipe->ret[spipe->index] = invalid_command(spipe, comm1));
+			return (spipe->ret[spipe->index] = invalid_command(spipe, &comm1));
 		else
 		{
 			if ((g_child = fork()) == 0)
@@ -58,6 +58,7 @@ int		simple_command(t_command *cmd,\
 	end_redir(redir);
 	if (spipe->path)
 		free(spipe->path);
+	free(comm1.argument);
 	return (spipe->ret[0]);
 }
 

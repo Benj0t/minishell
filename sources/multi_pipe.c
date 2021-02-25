@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:19:00 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/25 13:54:32 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 00:09:36 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	last_command(t_command *cmd,\
 	set_local_env(spipe);
 	spipe->b_ret[++spipe->index] = scan_builtins(cmd, spipe);
 	if (init_path(spipe->l_env, comm1, spipe) == NULL && spipe->b_ret[spipe->index] == 1)
-		return (spipe->ret[spipe->index] = invalid_command(spipe, comm1));
+		return (spipe->ret[spipe->index] = invalid_command(spipe, &comm1));
 	if ((g_child = fork()) == 0)
 		exec_lcomm(spipe, redir, comm1, cmd);
 	spipe->child[spipe->index] = g_child;
@@ -48,6 +48,7 @@ static int	last_command(t_command *cmd,\
 	close_pipe(spipe);
 	close(spipe->prev_p[0]);
 	close(spipe->prev_p[1]);
+	free(spipe->path);
 	free(comm1.argument);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/25 13:46:44 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 00:04:13 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	left_command(t_pipe *spipe, t_redir *redir,\
 	if ((get_command(command->argument, &comm1)) == -1)
 		free_struct(spipe, &comm1, command);
 	if (init_path(spipe->l_env, comm1, spipe) == NULL && spipe->b_ret[spipe->index] == 1)
-			return (spipe->ret[0] = invalid_command(spipe, comm1));
+			return (spipe->ret[0] = invalid_command(spipe, &comm1));
 	if ((g_child = fork()) == 0)
 	{
 		if (redir->std_in == -1 && redir->std_out == -1)
@@ -76,7 +76,7 @@ static int	right_command(t_pipe *spipe, t_redir *redir,\
 	if ((get_command(command->pipe->argument, &comm2)) == -1)
 		free_struct(spipe, &comm2, command);
 	if (init_path(spipe->l_env, comm2, spipe) == NULL  && spipe->b_ret[spipe->index] == 1)
-			return (spipe->ret[spipe->index] = invalid_command(spipe, comm2));
+			return (spipe->ret[spipe->index] = invalid_command(spipe, &comm2));
 	if ((g_child = fork()) == 0)
 	{
 		if (redir->std_in == -1)
@@ -91,6 +91,7 @@ static int	right_command(t_pipe *spipe, t_redir *redir,\
 	close(spipe->curr_p[0]);
 	close(spipe->curr_p[1]);
 	free(comm2.argument);
+	free(spipe->path);
 	return (g_child);
 }
 
@@ -109,11 +110,13 @@ int			single_pipe(t_command *command,\
 	if (exec_redir(command->pipe, redir) == -1)
 		return (-1);
 	spipe->b_ret[++spipe->index] = scan_builtins(command->pipe, spipe);
+
 	if ((right_command(spipe, redir, command)) == -1)
 		return (0);
 	close(spipe->curr_p[0]);
 	close(spipe->curr_p[1]);
 	pid_manager(spipe);
+	
 	end_redir(redir);
 	return (1);
 }

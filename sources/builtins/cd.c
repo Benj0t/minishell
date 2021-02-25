@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 14:43:48 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/25 11:58:48 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 22:42:50 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,38 @@ static int		cd_error(char *error)
 	return (1);
 }
 
+int				add_dot(void)
+{
+	char *name;
+	char *tmp;
+
+	tmp = get_env("PWD");
+	name = ft_strjoin(tmp, "/.");
+	if (name)
+	{
+		set_env("PWD", name, 1);
+		free(name);
+	}
+	return (1);
+}
+
 int				wrong_file(int *bool, int *ret, char **pwd, char **arg)
 {
+	char *tmp;
+
+	tmp = NULL;
 	if (*pwd == NULL)
 	{
-		if ((*ret = chdir(arg[1]) == -1 && getcwd(NULL, MAXPATHLEN) == NULL)\
+		if ((*ret = chdir(arg[1]) == -1 && ((tmp = getcwd(NULL, MAXPATHLEN)) == NULL))\
 									|| ft_strncmp(arg[1], ".", 2) == 0)
 		{
+			if (!ft_strncmp(arg[1], ".", 2))
+				return (add_dot());
 			ft_putstr_fd("Can't find current working directory\n", 2);
 			return (1);
 		}
+		if (tmp)
+			free(tmp);
 		*bool = 1;
 		*pwd = getcwd(NULL, MAXPATHLEN);
 	}
@@ -80,17 +102,25 @@ int				ft_cd(char **arg)
 	cd.previous = get_env("OLDPWD");
 	cd.home = get_env("HOME");
 	if (get_arg(arg, &cd.new, cd.previous, cd.home))
+	{
+		free(cd.pwd);
 		return (1);
+	}
 	if (!cd.bool)
 		cd.ret = chdir(cd.new);
 	cd.tmp = getcwd(NULL, MAXPATHLEN);
 	if (cd.tmp != NULL)
 		set_env("PWD", cd.tmp, 1);
+	free(cd.tmp);
 	if (cd.ret != 0)
+	{
+		free(cd.pwd);
 		return (cd_error(ENODIR));
+	}
 	if (!ft_strncmp(cd.previous, cd.new, MAXPATHLEN))
 		ft_pwd();
 	if (ft_strncmp(cd.pwd, cd.new, MAXPATHLEN))
 		set_env("OLDPWD", cd.pwd, 1);
+	free(cd.pwd);
 	return (0);
 }

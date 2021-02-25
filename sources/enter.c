@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 23:25:28 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 00:15:15 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ int			parser(char **str, t_redir *redir, t_pipe *spipe)
 			return (parser_fail(&manag, str, base));
 		}
 		manag.command = base;
-		print_multi_command(base);
 		execution(manag.command, redir, spipe);
 		clear_multi_command(manag.command);
 	}

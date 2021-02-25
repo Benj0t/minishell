@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 04:32:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/25 13:45:20 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 00:09:22 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,10 @@ int			middle_commands(t_command *cmd,\
 		return (-1);
 	spipe->b_ret[++spipe->index] = scan_builtins(cmd, spipe);
 	if (init_path(spipe->l_env, comm1, spipe) == NULL && spipe->b_ret[spipe->index] == 1)
-		return (spipe->ret[spipe->index] = invalid_command(spipe, comm1));
+		return (spipe->ret[spipe->index] = invalid_command(spipe, &comm1));
 	if ((g_child = fork()) == 0)
 		exec_middle_command(redir, spipe, comm1, cmd);
 	spipe->child[spipe->index] = g_child;
-	if (redir->std_out != -1)
-	{
-		end_redir(redir);
-		return (0);
-	}
 	end_redir(redir);
 	++(spipe->i_pipe);
 	close_pipe(spipe);

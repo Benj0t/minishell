@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/25 15:59:18 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 23:53:20 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,23 @@ int			listlen(t_command *list)
 	return (i);
 }
 
-int			invalid_command(t_pipe *spipe, t_parser comm1)
+int			invalid_command(t_pipe *spipe, t_parser *comm1)
 {
 	if (spipe->b_ret[spipe->index] == 3)
 	{
 		ft_putstr_fd("minishell: permission denied\n", 2);
-		free(comm1.argument);
+		free(comm1->argument);
 		return (2);
 	}
 	if (spipe->b_ret[spipe->index] == 2)
 	{
 		ft_putstr_fd("minishell: .: filename argument required\n", 2);
-		free(comm1.argument);
+		free(comm1->argument);
 		return (2);
 	}
-	ft_putstr_fd(comm1.argument[0], 2);
+	ft_putstr_fd(comm1->argument[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
-	free(comm1.argument);
+	free(comm1->argument);
 	return (127);
 }
 

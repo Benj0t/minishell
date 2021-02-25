@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:12:28 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 23:20:25 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 23:22:51 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ int		ft_echo(char **arg)
 {
 	int		opt_n;
 
+	if (!arg || !(*arg))
+	{
+		ft_putchar_fd('\n', 2);
+		return (0);
+	}
 	opt_n = 0;
 	arg++;
 	while (*arg && check_opt_n(*arg))
@@ -37,7 +42,7 @@ int		ft_echo(char **arg)
 		opt_n = 1;
 		arg++;
 	}
-	if (arg[1] == NULL && !ft_strncmp(*arg, "~", 2))
+	if (arg && *arg && arg[1] == NULL && !ft_strncmp(*arg, "~", 2))
 	{
 		ft_putstr_fd(get_env("HOME"), 1);
 		arg++;
