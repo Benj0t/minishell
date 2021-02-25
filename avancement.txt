@@ -1,0 +1,20 @@
+Pierre:
+"" et ''
+$ seul , mal malloc ???
+cat < (file) | grep ... | grep $ > out : erreur avec le $
+> fix.txt | echo blabla
+echo toto > > toto ne doit pas executer la commande
+echo bonjour > $test redirection ambiguë
+
+
+Ben:
+
+cat Makefile | grep pr | head -n 5 | cd zzqqdqzdqdzq cd command not found et return 127
+
+./file sans la permission de l'executer, return 126 avec un message d'erreur
+
+ctrl \ doit return 131
+
+cat | cat | cat | ls doit quitter au bout de 3 fois entrer
+
+
