@@ -3,14 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 00:18:01 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/24 22:42:56 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		is_exportable(char *arg)
+{
+	int i;
+	int j;
+	char *s;
+
+	s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNIPQRSTUVWXYZ0123456789_";
+	i = -1;
+	j = 0;
+	while (arg[++i])
+	{
+		while(s[j])
+		{
+			if (s[j++] != arg[i])
+				return(1);
+		}
+		j = 0;
+		i++;
+	}
+	return (0);
+}
 
 int		is_valid_env(char *s)
 {
@@ -78,7 +100,7 @@ int		ft_export(char **arg)
 	}
 	while (*arg != NULL)
 	{
-		if (!is_valid_env(*arg))
+		if (!is_valid_env(*arg) || is_exportable(*arg))
 			return (invalid_id(*arg));
 		put_env(*arg);
 		arg++;

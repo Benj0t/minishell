@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 14:55:01 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/25 01:49:33 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,11 @@
 		return (free_spipe(spipe));
 	if (!(spipe->ret = (int *)malloc(sizeof(int) * (spipe->n_comm))))
 		return (free_spipe(spipe));
+	if (!(spipe->b_ret = (int *)malloc(sizeof(int) * (spipe->n_comm))))
+		return (free_spipe(spipe));
 	while (i < spipe->n_comm)
 	{
+		spipe->b_ret[i] = 0;
 		spipe->child[i] = 0;
 		spipe->ret[i] = 0;
 		spipe->pid[i++] = 0;
@@ -46,6 +49,11 @@ char		*init_path(char **env, t_parser command, t_pipe *spipe)
 	{
 		free(spipe->path);
 		spipe->path = NULL;
+	}
+	if (command.argument && !ft_strncmp(".", command.argument[0], 2))
+	{
+		spipe->b_ret[spipe->index] = 2;
+		return(NULL);
 	}
 	spipe->path = ft_path(env, command);
 	if (!(spipe->path))

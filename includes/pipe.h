@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 16:40:16 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 00:23:45 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 typedef struct	s_pipe
 {
+	int			*b_ret;
 	int			n_bin;
 	char		*path;
 	char		**l_env;

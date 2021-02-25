@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 16:44:22 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 01:12:16 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void		pid_manager(t_pipe *spipe, int child[2])
 {
-	if (spipe->ret[0] == 1)
+	if (spipe->b_ret[0] == 1)
 	{
 		waitpid(child[0], (int *)&(spipe->pid[0]), 0);
 		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
 	}
-	if (spipe->ret[1] == 1)
+	if (spipe->b_ret[1] == 1)
 	{
 		waitpid(child[1], (int *)&(spipe->pid[1]), 0);
 		spipe->ret[1] = WEXITSTATUS(spipe->pid[1]);
@@ -33,10 +33,10 @@ static int	left_command(t_pipe *spipe, t_redir *redir,\
 	t_parser	comm1;
 
 	if ((get_command(command->argument, &comm1)) == -1)
-		free_struct(spipe, redir, command);
+		free_struct(spipe, &comm1, command);
 	if (init_path(spipe->l_env, comm1, spipe) == NULL)
-		spipe->ret[0] = invalid_command(spipe, comm1);
-	if (spipe->ret[0] == 1 && (child = fork()) == 0)
+			return (spipe->ret[0] = invalid_command(spipe, comm1));
+	if (spipe->b_ret[spipe->index] == 1 && (child = fork()) == 0)
 	{
 		if (redir->std_in == -1 && redir->std_out == -1)
 			dup2(p[1], 1);
@@ -59,10 +59,10 @@ static int	right_command(t_pipe *spipe, t_redir *redir,\
 	t_parser	comm2;
 
 	if ((get_command(command->pipe->argument, &comm2)) == -1)
-		free_struct(spipe, redir, command);
+		free_struct(spipe, &comm2, command);
 	if (init_path(spipe->l_env, comm2, spipe) == NULL)
-		spipe->ret[1] = invalid_command(spipe, comm2);
-	if (spipe->ret[1] == 1 && (child = fork()) == 0)
+			return (spipe->ret[spipe->index] = invalid_command(spipe, comm2));
+	if (spipe->b_ret[1] == 1 && (child = fork()) == 0)
 	{
 		if (redir->std_in == -1)
 			dup2(p[0], 0);
@@ -72,13 +72,12 @@ static int	right_command(t_pipe *spipe, t_redir *redir,\
 	close(p[0]);
 	close(p[1]);
 	free(comm2.argument);
-	spipe->index++;
 	return (child);
 }
 
 void		check_builtin(t_pipe *spipe, t_redir *redir, t_command *command)
 {
-	if ((spipe->ret[1] = scan_builtins(command, spipe)) == 0)
+	if ((spipe->b_ret[++spipe->index] = scan_builtins(command->pipe, spipe)) == 0)
 	{
 		if (redir->std_in == -1)
 			dup2(spipe->curr_p[0], 0);
@@ -94,11 +93,11 @@ int			single_pipe(t_command *command,\
 	if (exec_redir(command, redir) == -1 || pipe(spipe->curr_p) < 0)
 		return (-1);
 	set_local_env(spipe);
-	if ((spipe->ret[0] = scan_builtins(command, spipe)) == 0)
+	if ((spipe->b_ret[spipe->index] = scan_builtins(command, spipe)) == 0)
 	{
 		if (redir->std_in == -1 && redir->std_out == -1)
 			dup2(spipe->curr_p[1], 1);
-		builtins(command, spipe);
+		spipe->ret[0] = builtins(command, spipe);
 	}
 	if ((child[0] = left_command(spipe, redir, command, spipe->curr_p)) == -1)
 		return (0);

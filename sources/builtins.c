@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 02:10:41 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 01:01:54 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,17 @@ int		builtins(t_command *cmd, t_pipe *spipe)
 		return (-1);
 	if (ft_strncmp(parse.command, "pwd", 4) == 0)
 		ret = ft_pwd();
-	if (ft_strncmp(parse.command, "cd", 3) == 0 && listlen(cmd) < 2)
+	if (ft_strncmp(parse.command, "cd", 3) == 0 && spipe->n_comm < 2)
 		ret = ft_cd(parse.argument);
 	if (ft_strncmp(parse.command, "export", 7) == 0)
 		ret = ft_export(parse.argument);
-	if (ft_strncmp(parse.command, "unset", 6) == 0 && listlen(cmd) < 2)
+	if (ft_strncmp(parse.command, "unset", 6) == 0 && spipe->n_comm < 2)
 		ret = ft_unset(parse.argument);
 	if (ft_strncmp(parse.command, "env", 4) == 0)
 		ret = ft_env();
 	if (ft_strncmp(parse.command, "echo", 5) == 0)
 		ret = ft_echo(parse.argument);
-	if (ft_strncmp(parse.command, "exit", 5) == 0 && listlen(cmd) < 2)
+	if (ft_strncmp(parse.command, "exit", 5) == 0 && spipe->n_comm < 2)
 		ret = ft_exit(parse.argument, spipe, cmd);
 	free(parse.argument);
 	return (ret);

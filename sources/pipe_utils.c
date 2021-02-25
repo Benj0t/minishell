@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 15:23:18 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/25 02:01:09 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		get_ret_values(t_pipe *spipe)
 	end = spipe->index - 1;
 	while (end >= 0)
 	{
-		if (spipe->ret[end] == 1)
+		if (spipe->b_ret[end] == 1)
 		{
 			waitpid(spipe->child[end], (int *)&(spipe->pid[i]), 0);
 			spipe->ret[end] = WEXITSTATUS(spipe->pid[i++]);
@@ -47,8 +47,20 @@ int			listlen(t_command *list)
 
 int			invalid_command(t_pipe *spipe, t_parser comm1)
 {
+	if (spipe->b_ret[spipe->index] == 0)
+	{
+		free(comm1.argument);
+		return (0);
+	}
+	if (spipe->b_ret[spipe->index] == 2)
+	{
+		ft_putstr_fd("minishell: .: filename argument required\n", 2);
+		free(comm1.argument);
+		return (2);
+	}
 	ft_putstr_fd(comm1.argument[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
+	free(comm1.argument);
 	return (127);
 }
 

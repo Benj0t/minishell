@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 12:25:28 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 21:12:05 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,9 @@ int						ft_exit(char **arg, t_pipe *spipe, t_command *command)
 
 	if (!arg[1])
 	{
+		nb = spipe->last_ret;
 		free_exit(arg, spipe, command);
-		print_exit(spipe->last_ret);
+		print_exit(nb);
 	}
 	if (arg[2])
 		return(error_exit(EMANYARG));

@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 14:43:48 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 02:02:47 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/24 22:47:01 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int		cd_error(char *error)
 	ft_putstr_fd("cd: ", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("\n", 2);
-	return (-1);
+	return (1);
 }
 
 int				wrong_file(int *bool, int *ret, char **pwd, char **arg)

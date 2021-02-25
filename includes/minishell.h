@@ -61,7 +61,7 @@ extern t_list *g_env;
 # include "pipe.h"
 # include "parser.h"
 
-void		free_struct(t_pipe *spipe, t_redir *redir, t_command *command);
+int			free_struct(t_pipe *spipe, t_parser *parser, t_command *command);
 int			prompt_malloc(char **line, char *str);
 void		bubble_sort(t_list *list);
 t_list*		ft_lstcopy(t_list* head);
