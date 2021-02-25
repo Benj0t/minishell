@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 03:43:30 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/25 21:21:59 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int		parser_token(t_managparse *manag)
 	t_token		tok;
 	t_list		*tmp;
 
-	tok = next_token(manag);
+	tok = next_token(manag); > file 
 	if (tok.type == tok_space || tok.type == tok_tab)
 		next_free_token(&tok, manag);
 	if (tok.type == tok_eof || tok.type == tok_end)

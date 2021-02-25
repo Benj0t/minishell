@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 16:19:07 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/25 22:19:07 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,14 @@ int		environnment_expander(t_token *tok, t_managparse *manag)
 	return (1);
 }
 
-char	*quote_exp(t_token *tok, t_managparse *manag, char *result, size_t *i)
+char	*quote_exp(char *result, size_t *i, t_token *tok, t_managparse *manag)
 {
+	if (tok->name[*i] == '\'')
+		simple_quote(result, i, tok, manag);
+	if (tok->name[*i] == '"')
+		double_quote(result, i, tok, manag);
+
+
 	char	quote;
 
 	quote = tok->name[*i];
@@ -84,8 +90,62 @@ char	*quote_exp(t_token *tok, t_managparse *manag, char *result, size_t *i)
 	return (result);
 }
 
+void		add_char(char **result, size_t *i, t_token *tok, t_managparse *manag)
+{
+	char	*tmp;
+
+	free(*result);
+	tmp = ft_calloc(ft_strlen(*result) + 1, sizeof(char));
+	ft_strlcpy(tmp, *result, ft_strlen(*result));
+	tmp[ft_strlen(*result) - 1] = tok->name[*i];
+	tmp[ft_strlen(*result)] = '\0';
+	free(*result);
+	result = tmp;
+}
+
+void		remove_backslash(char **result, char *tok_word, size_t *i, bool check_special)
+{
+	if (check_special)
+	{
+		if ((tok_word[*i + 1] == '$') || (tok_word[*i + 1] == '"')
+			|| (tok_word[*i + 1] == '\'') || (tok_word[*i + 1] == '\\'))
+			(*i)++;
+	}
+	else
+		(*i)++;
+	*result = ft_append_char(*result, tok_word + *i, true);
+}
+
 int		expansion(t_token *tok, t_managparse *manag)
 {
+	char	*result;
+	size_t	i;
+
+	i = 0;
+	result = ft_strdup("");
+	while (tok->name[i] != '\0')
+	{
+		if (is_quote(tok->name[i]))
+			quote_exp(&result, &i, tok, manag);
+		else if (tok->name[i] == '\\')
+			remove_backslash(&result, &i, tok, manag);
+		else if (tok->name[i] == '$')
+			ft_subvar(&result, &i, tok, manag);
+		else
+			add_char(&result, &i, tok, manag);
+		i++;
+	}
+	
+
+
+
+
+
+
+
+
+
+
 	char	*result;
 	size_t	i;
 
