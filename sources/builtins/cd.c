@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 14:43:48 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 22:47:01 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 11:58:48 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int				ft_cd(char **arg)
 	if (cd.tmp != NULL)
 		set_env("PWD", cd.tmp, 1);
 	if (cd.ret != 0)
-		return (cd_error(NULL));
+		return (cd_error(ENODIR));
 	if (!ft_strncmp(cd.previous, cd.new, MAXPATHLEN))
 		ft_pwd();
 	if (ft_strncmp(cd.pwd, cd.new, MAXPATHLEN))

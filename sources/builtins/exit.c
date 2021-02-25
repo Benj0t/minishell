@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 21:12:05 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 09:11:44 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,6 @@ int						ft_exit(char **arg, t_pipe *spipe, t_command *command)
 	if (!arg[1])
 	{
 		nb = spipe->last_ret;
-		free_exit(arg, spipe, command);
 		print_exit(nb);
 	}
 	if (arg[2])
@@ -155,14 +154,10 @@ int						ft_exit(char **arg, t_pipe *spipe, t_command *command)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(arg[1], 2);
 		ft_putstr_fd(": numeric argument required", 2);
-		free_exit(arg, spipe, command);
 		print_exit(2);
 	}
 	if (nb < 0)
-	{
-		free_exit(arg, spipe, command);
 		print_exit(exit_neg(nb));
-	}
 	print_exit(unb % 256);
 	return (-1);
 }

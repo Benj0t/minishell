@@ -6,27 +6,35 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/25 02:01:09 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 15:59:18 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_child;
+extern int	g_signal_b;
 
 void		get_ret_values(t_pipe *spipe)
 {
 	int i;
 	int end;
 
-	i = 0;
-	end = spipe->index - 1;
-	while (end >= 0)
+	i = spipe->index;
+	while (i >= 0)
 	{
-		if (spipe->b_ret[end] == 1)
+		if (spipe->ret[i] == 0)
 		{
-			waitpid(spipe->child[end], (int *)&(spipe->pid[i]), 0);
-			spipe->ret[end] = WEXITSTATUS(spipe->pid[i++]);
+			waitpid(spipe->child[i], (int *)&(spipe->pid[i]), 0);
+			spipe->ret[i] = WEXITSTATUS(spipe->pid[i]);
+			if (g_signal_b == 131)
+			{
+				spipe->ret[i] = 131;
+				g_signal_b = 0;
+				printf("i: %d\n", i);
+			}
 		}
-		end--;
+		i--;
 	}
 }
 
@@ -47,10 +55,11 @@ int			listlen(t_command *list)
 
 int			invalid_command(t_pipe *spipe, t_parser comm1)
 {
-	if (spipe->b_ret[spipe->index] == 0)
+	if (spipe->b_ret[spipe->index] == 3)
 	{
+		ft_putstr_fd("minishell: permission denied\n", 2);
 		free(comm1.argument);
-		return (0);
+		return (2);
 	}
 	if (spipe->b_ret[spipe->index] == 2)
 	{

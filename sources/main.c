@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 22:17:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/25 00:57:58 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 11:47:57 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "parser.h"
 
 t_list	*g_env;
+pid_t	g_child;
 
 void	init_env(char **envp)
 {

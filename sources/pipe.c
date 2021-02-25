@@ -6,21 +6,23 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/25 02:01:55 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 15:55:01 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-pid_t	g_child;
+extern	int	g_child;
+extern	int	g_signal_b;
 
-void	sig_quit(int sigid)
+int		is_bslash(int ret)
 {
-	if (sigid == SIGQUIT && g_child != 0)
+	if (g_signal_b == 131)
 	{
-		write(1, "\n", 2);
-		kill(g_child, SIGTERM);
+		g_signal_b = 0;
+		return (131);
 	}
+	return (ret);
 }
 
 int		simple_command(t_command *cmd,\
@@ -38,9 +40,8 @@ int		simple_command(t_command *cmd,\
 	}
 	else
 	{
-		signal(SIGQUIT, &sig_quit);
 		if (init_path(spipe->l_env, comm1, spipe) == NULL)
-			spipe->ret[spipe->index] = invalid_command(spipe, comm1);
+			return (spipe->ret[spipe->index] = invalid_command(spipe, comm1));
 		else
 		{
 			if ((g_child = fork()) == 0)
@@ -48,6 +49,11 @@ int		simple_command(t_command *cmd,\
 			waitpid(g_child, (int *)&(spipe->pid[0]), 0);
 			spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
 		}
+	}
+	if (g_signal_b == 131)
+	{
+		spipe->ret[0] = 131;
+		g_signal_b = 0;
 	}
 	end_redir(redir);
 	if (spipe->path)
@@ -86,14 +92,9 @@ int		execution(t_command *cmd, t_redir *redir, t_pipe *spipe)
 	if (spipe->n_comm == 1)
 		simple_command(cmd, redir, spipe);
 	else if (spipe->n_comm == 2)
-	{
 		single_pipe(cmd, redir, spipe);
-	}
 	else if (spipe->n_comm > 2)
-	{
 		multi_pipe(cmd, spipe, redir);
-		spipe->index--;
-	}
 	spipe->last_ret = spipe->ret[spipe->index];
 	if (spipe)
 		free_spipe(spipe);

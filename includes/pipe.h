@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/25 00:23:45 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/25 13:55:31 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ char	**set_local_env(t_pipe *spipe);
 int		free_spipe(t_pipe *spipe);
 int		first_command(t_command *cmd,\
 		t_pipe *spipe, t_redir *redir);
+int		second_command(t_command *cmd,t_pipe *spipe, t_redir *redir);
 void	dealloc_tab(char **tab);
 char	*init_path(char **env, t_parser command, t_pipe *spipe);
 char	**set_local_env(t_pipe *spipe);
