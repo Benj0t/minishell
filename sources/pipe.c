@@ -92,7 +92,7 @@ int		execution(t_command *cmd, t_redir *redir, t_pipe *spipe)
 	int ret;
 
 	i = 0;
-	if (cmd->argument == NULL && cmd->pipe == NULL)
+	if ((cmd->argument == NULL || !(ft_strncmp(cmd->argument->content, "", 2))) && cmd->pipe == NULL)
 	{
 		exec_redir(cmd, redir);
 		end_redir(redir);

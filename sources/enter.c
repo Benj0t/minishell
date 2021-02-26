@@ -111,6 +111,7 @@ int			parser(char **str, t_redir *redir, t_pipe *spipe)
 			return (parser_fail(&manag, str, base));
 		}
 		manag.command = base;
+		printf("exec:\n");
 		execution(manag.command, redir, spipe);
 		clear_multi_command(manag.command);
 	}
