@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 15:41:43 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/26 12:15:41 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 # define T_ALL " 	><;|"
 # define T_EOF '\0'
-# define T_NOWORD 4
+# define T_NOWORD 5
 
 # define EUNEXPECTED "syntax error near unexpected token"
 
@@ -71,13 +71,18 @@ char			*dup_name(t_token *tok, t_managparse *manag,\
 char			*dbl_join(t_token *tok, t_managparse *manag,\
 							char *var, size_t ret);
 char			*var_to_replace(t_token *tok, t_managparse *manag, char *tmp);
-size_t			ft_subvar(t_token *tok, t_managparse *manag, size_t i);
-int				environnment_expander(t_token *tok, t_managparse *manag);
-int				remove_char(char **s, size_t here);
-char			*quote_exp(t_token *tok, t_managparse *manag,\
-							char *result, size_t *i);
-int				expansion(t_token *tok, t_managparse *manag);
-int				backslash_remove(t_token *tok, t_managparse *manag);
+char	*ft_subvar(char *name, t_managparse *manag);
+int		get_len(char *str);
+char	*get_value(char *str, size_t *i);
+char	*join_protect(char *str1, char *str2);
+void	simple_quote(char **result, size_t *i, t_token *tok, t_managparse *manag);
+int		environnment_expander(char **result, size_t *i, t_token *tok, t_managparse *manag);
+int		double_quote(char **result, size_t *i, t_token *tok, t_managparse *manag);
+int		quote_exp(char **result, size_t *i, t_token *tok, t_managparse *manag);
+void		add_char(char **result, size_t *i, t_token *tok, t_managparse *manag);
+void		remove_backslash(char **result, size_t *i, t_token *tok, t_managparse *manag);
+void		remove_backslash_check(char **result, size_t *i, t_token *tok, t_managparse *manag);
+int		expansion(t_token *tok, t_managparse *manag);
 int				backslash_lvl(char *str, size_t i);
 size_t			backslash_quote(t_token *tok, size_t i, char quote);
 

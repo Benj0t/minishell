@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 03:43:30 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/26 11:30:04 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,13 @@
 
 int		save_tok_out(t_token *tok, t_managparse *manag)
 {
-	next_free_token(tok, manag);
+	free(tok->name);
+	*tok = next_token(manag);
 	if (tok->type == tok_out)
 	{
 		next_free_token(tok, manag);
+		if (tok->type == tok_end || tok->type == tok_in || tok->type == tok_out || tok->type == tok_pipe)
+			error_parser(EUNEXPECTED, tok->name);
 		if (tok->type == tok_word)
 			return (test_arg(tok, manag, 2));
 		else
@@ -28,6 +31,8 @@ int		save_tok_out(t_token *tok, t_managparse *manag)
 	}
 	else
 	{
+		if (tok->type == tok_end || tok->type == tok_in || tok->type == tok_out || tok->type == tok_pipe)
+			error_parser(EUNEXPECTED, tok->name);
 		if (tok->type == tok_space || tok->type == tok_space)
 			next_free_token(tok, manag);
 		if (tok->type == tok_word)
@@ -71,7 +76,7 @@ int		free_ret(t_token *tok, t_managparse *manag)
 	while (manag->str[i] != '\0' && (manag->str[i] == ' ' || manag->str[i] == ';'))
 	{
 		if (manag->str[i] == ';')
-			return (error_parser("syntax error near unexpected token", tok->name));
+			return (error_parser(EUNEXPECTED, tok->name));
 		i++;
 	}
 	free(tok->name);
@@ -88,7 +93,8 @@ int		parser_token(t_managparse *manag)
 		next_free_token(&tok, manag);
 	if (tok.type == tok_eof || tok.type == tok_end)
 		return (free_ret(&tok, manag));
-	if (tok.type > T_NOWORD && manag->command->argument == NULL)
+	if (tok.type > T_NOWORD && manag->command->argument == NULL
+		&& manag->command->redirection == NULL)
 		return (error_parser(EUNEXPECTED, tok.name));
 	if (tok.type == tok_word)
 		return (save_arg(&tok, manag, 4));

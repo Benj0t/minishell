@@ -6,139 +6,205 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 16:19:07 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/26 12:07:21 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	ft_subvar(t_token *tok, t_managparse *manag, size_t i)
+char	*ft_subvar(char *name, t_managparse *manag)
 {
-	size_t	ret;
 	char	*tmp;
-	char	*tmp2;
-	char	*var;
 
-	tok->name[i] = '\0';
-	ret = 1;
-	while (tok->name[i + 1 + ret] && tok->name[i + 1] != '?' \
-		&& !ft_isdigit(tok->name[i + 1]))
-	{
-		if (!ft_isalnum(tok->name[i + 1 + ret]) \
-			&& tok->name[i + 1 + ret] != '_')
-			break ;
-		ret++;
-	}
-	tmp = ft_substr(&tok->name[i + 1], 0, ret);
+	if (strcmp(name, "?") == 0)
+		return (ft_itoa(manag->spipe->last_ret));
+	tmp = get_env(name);
 	if (tmp == NULL)
-		malloc_fail(*tok, manag);
-	var = var_to_replace(tok, manag, tmp);
-	free(tmp);
-	ret = i + 1 + ret;
-	tok->name = dbl_join(tok, manag, var, ret);
-	return (i + ft_strlen(var));
+		return (ft_strdup(""));
+	return(ft_strdup(get_env(name)));
 }
 
-int		environnment_expander(t_token *tok, t_managparse *manag)
+int		get_len(char *str)
 {
-	size_t	i;
-	int		quote;
+	size_t len;
 
-	i = 0;
-	quote = 1;
-	while (tok->name[i] != '\0')
+	len = 0;
+	if (ft_isdigit(str[len]))
+		return (1);
+	while ((ft_isalnum(str[len])) || (str[len] == '_'))
+		len++;
+	return (len);
+}
+
+char	*get_value(char *str, size_t *i)
+{
+	char	*name;
+	size_t	len;
+	size_t	start;
+
+	name = NULL;
+	len = 0;
+	start = *i + 1;
+	if (str[start + len] == '?')
+		len++;
+	else
+		len = get_len(&str[start]);
+	if (len)
 	{
-		if (tok->name[i] == '\'' && !backslash(tok->name, i))
-			quote *= -1;
-		if (tok->name[i] == '$' && quote == 1 && check_env(&tok->name[i + 1]) \
-			&& !backslash(tok->name, i))
-		{
-			i = ft_subvar(tok, manag, i);
-			continue ;
-		}
-		i++;
+		name = ft_substr(str, start, len);
+		*i += len;
+		return (name);
 	}
-	if (tok->name[0] == '\0')
+	return (NULL);
+}
+
+char	*join_protect(char *str1, char *str2)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin(str1, str2);
+	if (tmp == NULL)
+		return (NULL);
+	free(str1);
+	return (tmp);
+}
+
+int		environnment_expander(char **result, size_t *i, t_token *tok, t_managparse *manag)
+{
+	char	*var;
+	char	*value;
+	size_t len;
+
+	var = NULL;
+	value = NULL;
+	if (is_quote(tok->name[*i + 1]))
 		return (0);
+	len = get_len(tok->name);
+	var = get_value(tok->name, i);
+	if (var)
+	{
+		if (is_valid_env(var) || strcmp(var, "?") == 0)//a changer
+		{
+			value = ft_subvar(var, manag);
+			if (value)
+				*result = join_protect(*result, value);
+			if (value)
+				free(value);
+			else
+				malloc_fail(*tok, manag);
+		}
+		free(var);
+	}
+	else
+		add_char(result, i, tok, manag);
 	return (1);
 }
 
-char	*quote_exp(t_token *tok, t_managparse *manag, char *result, size_t *i)
+void	simple_quote(char **result, size_t *i, t_token *tok, t_managparse *manag)
 {
-	char	quote;
-
-	quote = tok->name[*i];
-	tok->name[*i] = '\0';
-	result = join_name(tok, manag, result);
-	tok->name = dup_name(tok, manag, result, *i);
-	*i = 0;
-	while (tok->name[*i] != '\0')
+	(*i)++;
+	while (tok->name[*i] != '\'')
 	{
-		*i = backslash_quote(tok, *i, quote);
+		add_char(result, i, tok, manag);
 		(*i)++;
 	}
-	tok->name[*i] = '\0';
-	result = join_name(tok, manag, result);
-	tok->name = dup_name(tok, manag, result, *i);
-	*i = 0;
-	return (result);
+}
+
+int		double_quote(char **result, size_t *i, t_token *tok, t_managparse *manag)
+{
+	int		env_sub;
+
+	(*i)++;
+	while (tok->name[*i] != '"')
+	{
+		if (tok->name[*i] == '\\')
+			remove_backslash(result, i, tok, manag);
+		else if (tok->name[*i] == '$')
+			env_sub = environnment_expander(result, i, tok, manag);
+		else
+			add_char(result, i, tok, manag);
+		(*i)++;
+	}
+	return (env_sub);
+}
+
+int		quote_exp(char **result, size_t *i, t_token *tok, t_managparse *manag)
+{
+	if (tok->name[*i] == '\'')
+		simple_quote(result, i, tok, manag);
+	if (tok->name[*i] == '"')
+		return(double_quote(result, i, tok, manag));
+	return (0);
+}
+
+size_t	ft_strcpy(char *dst, const char *src)
+{
+	size_t	i;
+
+	if (!dst || !src)
+		return (0);
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (ft_strlen(src));
+}
+
+void		add_char(char **result, size_t *i, t_token *tok, t_managparse *manag)
+{
+	size_t	len;
+	char	*tmp;
+
+	len = ft_strlen(*result);
+	tmp = malloc(len + 1 + 1);
+	ft_strcpy(tmp, *result);
+	tmp[len] = tok->name[*i];
+	tmp[len + 1] = '\0';
+	free(*result);
+	*result = tmp;
+}
+
+void		remove_backslash(char **result, size_t *i, t_token *tok, t_managparse *manag)
+{
+	(*i)++;
+	add_char(result, i, tok, manag);
+}
+
+void		remove_backslash_check(char **result, size_t *i, t_token *tok, t_managparse *manag)
+{
+	if ((tok->name[*i + 1] == '$') || (tok->name[*i + 1] == '"')
+		|| (tok->name[*i + 1] == '\'') || (tok->name[*i + 1] == '\\'))
+		(*i)++;
+	else
+		(*i)++;
+	add_char(result, i, tok, manag);
 }
 
 int		expansion(t_token *tok, t_managparse *manag)
 {
 	char	*result;
+	int		env_sub;
 	size_t	i;
 
 	i = 0;
+	env_sub = 0;
 	result = ft_strdup("");
-	if (result == NULL)
-		malloc_fail(*tok, manag);
 	while (tok->name[i] != '\0')
 	{
-		if (is_quote(tok->name[i]) && !backslash(tok->name, i))
-			result = quote_exp(tok, manag, result, &i);
+		if (is_quote(tok->name[i]))
+			quote_exp(&result, &i, tok, manag);
+		else if (tok->name[i] == '\\')
+			remove_backslash_check(&result, &i, tok, manag);
+		else if (tok->name[i] == '$')
+			env_sub = environnment_expander(&result, &i, tok, manag);
+		else
+			add_char(&result, &i, tok, manag);
 		i++;
 	}
-	result = join_name(tok, manag, result);
 	free(tok->name);
 	tok->name = result;
-	return (1);
-}
-
-int		backslash_remove(t_token *tok, t_managparse *manag)
-{
-	char	*result;
-	char	quote;
-	int		blvl;
-	size_t	i;
-
-	i = 0;
-	while (tok->name[i] != '\0')
-	{
-		while (tok->name[i] == '\\')
-				i++;
-		if ((tok->name[i] == '"' || tok->name[i] == '\'') \
-			&& !backslash(tok->name, i))
-		{
-			quote = tok->name[i];
-			i++;
-			while (tok->name[i] != quote || (tok->name[i] == quote && backslash(tok->name, i)))
-				i++;
-			i++;
-			continue ;
-		}
-		blvl = backslash_lvl(tok->name, i);
-		if ((blvl % 2) == 1 || blvl == 1)
-			blvl = (blvl / 2) + 1;
-		else
-			blvl = blvl / 2;
-		while (blvl)
-		{
-			remove_char(&tok->name, i - 1);
-			blvl--;
-			i--;
-		}
-		i++;
-	}
-	return (1);
+	return (env_sub);
 }
