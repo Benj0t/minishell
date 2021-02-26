@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/24 22:42:56 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 11:12:30 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int		ft_export(char **arg)
 	}
 	while (*arg != NULL)
 	{
-		if (!is_valid_env(*arg) || is_exportable(*arg))
+		if (!is_valid_env(*arg))
 			return (invalid_id(*arg));
 		put_env(*arg);
 		arg++;
