@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/25 12:26:31 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 01:04:12 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,15 @@ extern int		g_child;
 
 void	sig_handler(int sigid)
 {
-	if (sigid == SIGINT)
+	if (sigid == SIGINT && g_child != 0)
 	{
+		ft_putchar_fd('\n', 2);
+		kill(g_child, SIGINT);
 		g_signal_c = 1;
+		g_child = 0;
+	}
+	else if (sigid == SIGINT)
+	{
 		ft_putstr_fd("\n> ", 2);
 	}
 	return ;
@@ -28,7 +34,6 @@ void	sig_handler(int sigid)
 
 void	ign_sig(int sigid)
 {
-	ft_putnbr_fd(g_child, 2);
 	if (sigid == SIGQUIT && g_child != 0)
 	{
 		kill(g_child, SIGQUIT);

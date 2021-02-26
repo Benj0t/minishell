@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/26 00:04:13 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 01:14:04 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 extern pid_t	g_child;
 extern int		g_signal_b;
+extern int		g_signal_c;
 
 void		pid_manager(t_pipe *spipe)
 {
@@ -27,10 +28,20 @@ void		pid_manager(t_pipe *spipe)
 		spipe->ret[0] = 131;
 		g_signal_b = 0;
 	}
+	if (g_signal_c == 1)
+	{
+		spipe->ret[0] = 130;
+		g_signal_b = 0;
+	}
 	if (spipe->ret[1] == 0)
 	{
 		waitpid(spipe->child[1], (int *)&(spipe->pid[1]), 0);
 		spipe->ret[1] = WEXITSTATUS(spipe->pid[1]);
+	}
+	if (g_signal_c == 131)
+	{
+		spipe->ret[1] = 130;
+		g_signal_c = 0;
 	}
 	if (g_signal_b == 131)
 	{
@@ -110,13 +121,11 @@ int			single_pipe(t_command *command,\
 	if (exec_redir(command->pipe, redir) == -1)
 		return (-1);
 	spipe->b_ret[++spipe->index] = scan_builtins(command->pipe, spipe);
-
 	if ((right_command(spipe, redir, command)) == -1)
 		return (0);
 	close(spipe->curr_p[0]);
 	close(spipe->curr_p[1]);
 	pid_manager(spipe);
-	
 	end_redir(redir);
 	return (1);
 }

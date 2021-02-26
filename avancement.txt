@@ -9,4 +9,10 @@ echo bonjour > $test redirection ambiguë
 
 Ben:
 
-./file sans la permission de l'executer, return 126 avec un message d'erreur
+Verifier:
+
+Unset leaks dans tous les cas.
+La norme fdp de pute
+set_local_env a proteger
+Et builtins aussi je crois et peut etre scan builtins. En gros revoir toute la protection des mallocs
+

@@ -6,13 +6,14 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/26 00:02:53 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 01:13:57 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 extern	int	g_child;
+extern	int	g_signal_c;
 extern	int	g_signal_b;
 
 int		is_bslash(int ret)
@@ -21,6 +22,11 @@ int		is_bslash(int ret)
 	{
 		g_signal_b = 0;
 		return (131);
+	}
+	if (g_signal_c == 1)
+	{
+		g_signal_c = 0;
+		return (130);
 	}
 	return (ret);
 }
@@ -54,6 +60,12 @@ int		simple_command(t_command *cmd,\
 	{
 		spipe->ret[0] = 131;
 		g_signal_b = 0;
+	}
+	if (g_signal_c == 1)
+	{
+		spipe->ret[0] = 130;
+		g_signal_c = 0;
+		return (130);
 	}
 	end_redir(redir);
 	if (spipe->path)

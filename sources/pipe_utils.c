@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/25 23:53:20 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 00:55:22 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 extern int	g_child;
 extern int	g_signal_b;
+extern int	g_signal_c;
 
 void		get_ret_values(t_pipe *spipe)
 {
@@ -31,7 +32,11 @@ void		get_ret_values(t_pipe *spipe)
 			{
 				spipe->ret[i] = 131;
 				g_signal_b = 0;
-				printf("i: %d\n", i);
+			}
+			if (g_signal_c == 1)
+			{
+				spipe->ret[i] = 130;
+				g_signal_c = 0;
 			}
 		}
 		i--;
