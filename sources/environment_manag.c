@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:17:32 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 10:50:20 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/26 14:52:54 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,29 @@
 
 t_list		*envp_to_list(char **envp)
 {
-	int		i;
-	char	*c;
-	t_list	*ret;
+	int			i;
+	char		*c;
+	t_list		*ret;
+	t_list		*tmp;
+	t_var_env	*malloc;
 
 	ret = NULL;
+	tmp = NULL;
 	i = 0;
 	while (envp[i] != NULL)
 	{
 		c = ft_strchr(envp[i], '=');
 		c[0] = '\0';
+		malloc = malloc_varenv(envp[i], &c[1]);
+		if (malloc == NULL)
+			return (NULL);
+		tmp = ft_lstnew(malloc);
+		if (tmp == NULL)
+			return (NULL);
 		if (i == 0)
-		{
-			ret = ft_lstnew(malloc_varenv(envp[i], &c[1]));
-			if (ret == NULL)
-				return (NULL);
-		}
+			ret = tmp;
 		else
-		{
-			ft_lstadd_back(&ret, ft_lstnew(malloc_varenv(envp[i], &c[1])));
-			if (ret == NULL)
-				return (NULL);
-		}
+			ft_lstadd_back(&ret, tmp);
 		i++;
 	}
 	return (ret);

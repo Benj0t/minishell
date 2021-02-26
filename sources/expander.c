@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 12:07:21 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/26 15:24:18 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ int		environnment_expander(char **result, size_t *i, t_token *tok, t_managparse 
 	var = NULL;
 	value = NULL;
 	if (is_quote(tok->name[*i + 1]))
+	{
+		add_char(result, i, tok, manag);
 		return (0);
+	}
 	len = get_len(tok->name);
 	var = get_value(tok->name, i);
 	if (var)
@@ -112,20 +115,18 @@ void	simple_quote(char **result, size_t *i, t_token *tok, t_managparse *manag)
 
 int		double_quote(char **result, size_t *i, t_token *tok, t_managparse *manag)
 {
-	int		env_sub;
-
 	(*i)++;
 	while (tok->name[*i] != '"')
 	{
 		if (tok->name[*i] == '\\')
 			remove_backslash(result, i, tok, manag);
 		else if (tok->name[*i] == '$')
-			env_sub = environnment_expander(result, i, tok, manag);
+			environnment_expander(result, i, tok, manag);
 		else
 			add_char(result, i, tok, manag);
 		(*i)++;
 	}
-	return (env_sub);
+	return (0);
 }
 
 int		quote_exp(char **result, size_t *i, t_token *tok, t_managparse *manag)
@@ -133,8 +134,8 @@ int		quote_exp(char **result, size_t *i, t_token *tok, t_managparse *manag)
 	if (tok->name[*i] == '\'')
 		simple_quote(result, i, tok, manag);
 	if (tok->name[*i] == '"')
-		return(double_quote(result, i, tok, manag));
-	return (0);
+		double_quote(result, i, tok, manag);
+	return (1);
 }
 
 size_t	ft_strcpy(char *dst, const char *src)
@@ -187,15 +188,17 @@ int		expansion(t_token *tok, t_managparse *manag)
 {
 	char	*result;
 	int		env_sub;
+	int		quote_sub;
 	size_t	i;
 
 	i = 0;
 	env_sub = 0;
+	quote_sub = 0;
 	result = ft_strdup("");
 	while (tok->name[i] != '\0')
 	{
 		if (is_quote(tok->name[i]))
-			quote_exp(&result, &i, tok, manag);
+			quote_sub = quote_exp(&result, &i, tok, manag);
 		else if (tok->name[i] == '\\')
 			remove_backslash_check(&result, &i, tok, manag);
 		else if (tok->name[i] == '$')
@@ -206,5 +209,7 @@ int		expansion(t_token *tok, t_managparse *manag)
 	}
 	free(tok->name);
 	tok->name = result;
+	if (quote_sub == 0 && env_sub == 1 && !ft_strncmp(result, "", 2))
+		return (-1);
 	return (env_sub);
 }

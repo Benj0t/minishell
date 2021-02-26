@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:16:07 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/22 21:22:57 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/26 15:02:16 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,9 @@ int		unset_env(const char *name)
 		{
 			tmp->next = tmp_env->next;
 			dealloc_varenv((t_var_env *)tmp_env->content);
+			free(tmp_env);
+			tmp_env = tmp->next;
+			continue ;
 		}
 		tmp = tmp_env;
 		tmp_env = tmp_env->next;
