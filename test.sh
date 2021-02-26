@@ -198,5 +198,7 @@ exec_test '> FILE ; ls > FILE | rev | wc -c >> FILE ; cat FILE ; < INFILE cat' #
 exec_test 'echo test "" test ""' #ok
 exec_test 'echo test '' test ''' #ok
 "\\\\"
-
+"echo    $TEST lol $TEST"
+"echo "$""
+"echo $TEST $TEST"
 rm lol ls test

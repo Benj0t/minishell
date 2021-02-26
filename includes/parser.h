@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 12:15:41 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/26 13:13:04 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 # define T_ALL " 	><;|"
 # define T_EOF '\0'
-# define T_NOWORD 5
+# define T_NOWORD 4
 
 # define EUNEXPECTED "syntax error near unexpected token"
 

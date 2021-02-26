@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 11:30:04 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/26 13:19:03 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,13 @@ int		parser_token(t_managparse *manag)
 	tok = next_token(manag);
 	if (tok.type == tok_space || tok.type == tok_tab)
 		next_free_token(&tok, manag);
-	if (tok.type == tok_eof || tok.type == tok_end)
+	if (tok.type == tok_eof)
 		return (free_ret(&tok, manag));
 	if (tok.type > T_NOWORD && manag->command->argument == NULL
 		&& manag->command->redirection == NULL)
 		return (error_parser(EUNEXPECTED, tok.name));
+	if (tok.type == tok_end)
+		return (free_ret(&tok, manag));
 	if (tok.type == tok_word)
 		return (save_arg(&tok, manag, 4));
 	if (tok.type == tok_out)
