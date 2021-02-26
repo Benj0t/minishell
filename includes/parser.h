@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 13:13:04 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/26 15:53:08 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,6 @@ t_token			others_tok(t_managparse *manag);
 t_token			error_quote(t_managparse *manag, char quote);
 size_t			quote_pass(t_managparse *manag, size_t i, char quote);
 t_token			next_token(t_managparse *manag);
-char			*env_dbl_join(char **str, char *var, size_t ret);
-char			*env_sub_var(t_managparse *manag, char *tmp);
-size_t			env_sub(char **str, t_managparse *manag, size_t i);
-size_t			env_token(char **str, t_managparse *manag, size_t i);
 void			dealloc_redirection(void *content);
 
 char			*join_name(t_token *tok, t_managparse *manag, char *result);
@@ -71,20 +67,19 @@ char			*dup_name(t_token *tok, t_managparse *manag,\
 char			*dbl_join(t_token *tok, t_managparse *manag,\
 							char *var, size_t ret);
 char			*var_to_replace(t_token *tok, t_managparse *manag, char *tmp);
-char	*ft_subvar(char *name, t_managparse *manag);
-int		get_len(char *str);
-char	*get_value(char *str, size_t *i);
-char	*join_protect(char *str1, char *str2);
-void	simple_quote(char **result, size_t *i, t_token *tok, t_managparse *manag);
-int		environnment_expander(char **result, size_t *i, t_token *tok, t_managparse *manag);
-int		double_quote(char **result, size_t *i, t_token *tok, t_managparse *manag);
-int		quote_exp(char **result, size_t *i, t_token *tok, t_managparse *manag);
-void		add_char(char **result, size_t *i, t_token *tok, t_managparse *manag);
-void		remove_backslash(char **result, size_t *i, t_token *tok, t_managparse *manag);
-void		remove_backslash_check(char **result, size_t *i, t_token *tok, t_managparse *manag);
-int		expansion(t_token *tok, t_managparse *manag);
+char			*ft_subvar(char *name, t_managparse *manag);
+int				get_len(char *str);
+char			*get_value(char *str, size_t *i);
+char			*join_protect(char *str1, char *str2);
+void			simple_quote(char **result, size_t *i, t_token *tok, t_managparse *manag);
+int				environnment_expander(char **result, size_t *i, t_token *tok, t_managparse *manag);
+int				double_quote(char **result, size_t *i, t_token *tok, t_managparse *manag);
+int				quote_exp(char **result, size_t *i, t_token *tok, t_managparse *manag);
+void			add_char(char **result, size_t *i, t_token *tok, t_managparse *manag);
+void			remove_backslash(char **result, size_t *i, t_token *tok, t_managparse *manag);
+void			remove_backslash_check(char **result, size_t *i, t_token *tok, t_managparse *manag);
+int				expansion(t_token *tok, t_managparse *manag);
 int				backslash_lvl(char *str, size_t i);
-size_t			backslash_quote(t_token *tok, size_t i, char quote);
 
 void			malloc_fail(t_token tok, t_managparse *manag);
 int				error_parser(char *str, char *name);
