@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/27 01:37:21 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 09:16:39 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,12 @@ int		simple_command(t_command *cmd,\
 	t_parser	comm1;
 
 	g_child = 0;
+	if((cmd->argument == NULL || cmd->argument->content == NULL))
+	{
+		exec_redir(cmd, redir);
+		end_redir(redir);
+		return (-1);
+	}
 	if ((exec_redir(cmd, redir) == -1) || (get_command(cmd->argument, &comm1)) == -1 || (set_local_env(spipe) == NULL))
 		return (-1);
 	if ((spipe->b_ret[spipe->index] = scan_builtins(cmd, spipe)) == 0)
