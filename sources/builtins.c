@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 02:10:41 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 19:37:04 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:49:34 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,55 +48,47 @@ int		get_command(t_list *argument, t_parser *parse)
 	return (0);
 }
 
-int		scan_builtins(t_command *cmd, t_pipe *spipe)
+int		scan_builtins(t_command *cmd, t_pipe *spipe, t_parser *parse)
 {
-	t_parser	parse;
 	int			ret;
 
 	ret = 1;
-	if ((get_command(cmd->argument, &parse)) == -1)
-		return (-1);
-	if (ft_strncmp(parse.command, "cd", 3) == 0)
+	if (ft_strncmp(parse->command, "cd", 3) == 0)
 		ret = 0;
-	if (ft_strncmp(parse.command, "unset", 6) == 0)
+	if (ft_strncmp(parse->command, "unset", 6) == 0)
 		ret = 0;
-	if (ft_strncmp(parse.command, "env", 4) == 0)
+	if (ft_strncmp(parse->command, "env", 4) == 0)
 		ret = 0;
-	if (ft_strncmp(parse.command, "echo", 5) == 0)
+	if (ft_strncmp(parse->command, "echo", 5) == 0)
 		ret = 0;
-	if (ft_strncmp(parse.command, "exit", 5) == 0)
+	if (ft_strncmp(parse->command, "exit", 5) == 0)
 		ret = 0;
-	if (ft_strncmp(parse.command, "export", 7) == 0)
+	if (ft_strncmp(parse->command, "export", 7) == 0)
 		ret = 0;
-	if (ft_strncmp(parse.command, "pwd", 4) == 0)
+	if (ft_strncmp(parse->command, "pwd", 4) == 0)
 		ret = 0;
-	free(parse.argument);
 	return (ret);
 }
 
-int		builtins(t_command *cmd, t_pipe *spipe)
+int		builtins(t_command *cmd, t_pipe *spipe, t_parser *parse)
 {
-	t_parser	parse;
 	int			ret;
 
 	ret = 1;
 	spipe->n_bin--;
-	if ((get_command(cmd->argument, &parse)) == -1)
-		return (-1);
-	if (ft_strncmp(parse.command, "pwd", 4) == 0)
+	if (ft_strncmp(parse->command, "pwd", 4) == 0)
 		ret = ft_pwd();
-	if (ft_strncmp(parse.command, "cd", 3) == 0)
-		ret = ft_cd(parse.argument);
-	if (ft_strncmp(parse.command, "export", 7) == 0)
-		ret = ft_export(parse.argument);
-	if (ft_strncmp(parse.command, "unset", 6) == 0)
-		ret = ft_unset(parse.argument);
-	if (ft_strncmp(parse.command, "env", 4) == 0)
+	if (ft_strncmp(parse->command, "cd", 3) == 0)
+		ret = ft_cd(parse->argument);
+	if (ft_strncmp(parse->command, "export", 7) == 0)
+		ret = ft_export(parse->argument);
+	if (ft_strncmp(parse->command, "unset", 6) == 0)
+		ret = ft_unset(parse->argument);
+	if (ft_strncmp(parse->command, "env", 4) == 0)
 		ret = ft_env();
-	if (ft_strncmp(parse.command, "echo", 5) == 0)
-		ret = ft_echo(parse.argument);
-	if (ft_strncmp(parse.command, "exit", 5) == 0)
-		ret = ft_exit(parse.argument, spipe, cmd);
-	free(parse.argument);
+	if (ft_strncmp(parse->command, "echo", 5) == 0)
+		ret = ft_echo(parse->argument);
+	if (ft_strncmp(parse->command, "exit", 5) == 0)
+		ret = ft_exit(parse->argument, spipe, cmd);
 	return (ret);
 }

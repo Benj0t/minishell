@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:19:00 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 13:55:34 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:52:08 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		exec_lcomm(t_pipe *spipe, t_redir *redir, t_parser comm1,\
 		dup2(spipe->prev_p[0], 0);
 	close(spipe->prev_p[1]);
 	if (spipe->b_ret[spipe->index] == 0)
-		exit(builtins(command, spipe));
+		exit(builtins(command, spipe, &comm1));
 	else if (spipe->b_ret[spipe->index] == 1)
 		execve(spipe->path, comm1.argument, spipe->l_env);
 }
@@ -39,7 +39,7 @@ static int	last_command(t_command *cmd,\
 	if ((get_command(cmd->argument, &comm1)) == -1)
 		return (free_struct(spipe, &comm1, cmd));
 	set_local_env(spipe);
-	spipe->b_ret[++spipe->index] = scan_builtins(cmd, spipe);
+	spipe->b_ret[++spipe->index] = scan_builtins(cmd, spipe, &comm1);
 	if (init_path(spipe->l_env, comm1, spipe) == NULL &&\
 						spipe->b_ret[spipe->index] == 1)
 		return (spipe->ret[spipe->index] = invalid_command(spipe, &comm1));

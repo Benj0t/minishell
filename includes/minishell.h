@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 18:28:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 19:10:59 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 20:15:58 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 
 typedef struct				s_pipe
 {
+	char					**str;
 	int						*b_ret;
 	int						n_bin;
 	char					*path;
@@ -139,7 +140,7 @@ void						dealloc_tab(char **tab);
 char						*init_path(char **env,\
 							t_parser command, t_pipe *spipe);
 char						**set_local_env(t_pipe *spipe);
-int							builtins(t_command *cmd, t_pipe *spipe);
+int							builtins(t_command *cmd, t_pipe *spipe, t_parser *parse);
 int							ft_ret(int *ret);
 void						end_redir(t_redir *redir);
 int							exec_redir(t_command *cmd, t_redir *redir);
@@ -266,7 +267,7 @@ int							contains_egal(const char *name);
 int							unset_env(const char *name);
 
 int							is_valid_env(char *s);
-int							scan_builtins(t_command *cmd, t_pipe *spipe);
+int							scan_builtins(t_command *cmd, t_pipe *spipe, t_parser *parse);
 int							listlen(t_command *list);
 int							gnl_prompt(int fd, char **line, int *last_ret);
 int							prompt_rec(int check, char *str,\

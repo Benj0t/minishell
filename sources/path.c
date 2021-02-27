@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/27 17:23:32 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 18:40:38 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char		*ft_path(char **env, t_parser comm, t_pipe *spipe)
 	int			i;
 	struct stat	buf;
 
-	if (s = try_path(env, comm, buf, spipe) || spipe->b_ret[spipe->index] > 1)
+	if ((s = try_path(env, comm, buf, spipe)) || (spipe->b_ret[spipe->index] > 1))
 		return (s);
 	i = get_path_id(env);
 	if (i < 0 || (tab = ft_split(env[i] + 5, ':')) == NULL)

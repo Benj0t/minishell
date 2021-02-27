@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/27 14:36:02 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:48:09 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ int		simple_command(t_command *cmd,\
 	if ((exec_redir(cmd, redir) == -1) ||\
 	(get_command(cmd->argument, &comm1)) == -1 || set_local_env(spipe) == NULL)
 		return (-1);
-	if ((spipe->b_ret[spipe->index] = scan_builtins(cmd, spipe)) == 0)
+	if ((spipe->b_ret[spipe->index] = scan_builtins(cmd, spipe, &comm1)) == 0)
 	{
 		if (spipe->b_ret[spipe->index] != -1)
-			spipe->ret[0] = builtins(cmd, spipe);
+			spipe->ret[0] = builtins(cmd, spipe, &comm1);
 	}
 	else if (simple_fork(cmd, redir, spipe, comm1) != -1)
 		return (spipe->ret[spipe->index]);
