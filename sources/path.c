@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/27 12:43:43 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 17:23:32 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,24 @@ int			get_path_id(char **env)
 
 char		*rel_path(char **env, t_parser comm, struct stat buf, t_pipe *spipe)
 {
-	if (!(comm.argument[0][0] == '.' && comm.argument[0][1] == '/'))
+	int ret;
+
+	ret = 0;
+	if ((!(comm.argument[0][0] == '.' && comm.argument[0][1] == '/')))
 		return (NULL);
-	if (stat(comm.argument[0], &buf) == 0 && buf.st_mode & S_IXUSR)
-	{
+	if ((ret = stat(comm.argument[0], &buf)) == 0 && (buf.st_mode & S_IXUSR)\
+												&& S_ISREG(buf.st_mode) == 1)
 		return (ft_strdup(comm.argument[0]));
-	}
 	else
 	{
-		spipe->b_ret[spipe->index] = 3;
+		if (ret == 1)
+			spipe->ret[spipe->index] = 127;
+		else if ((S_ISREG(buf.st_mode) == 0))
+		{
+			spipe->b_ret[spipe->index] = 6;
+		}
+		else
+			spipe->b_ret[spipe->index] = 7;
 	}
 	return (NULL);
 }
@@ -58,39 +67,37 @@ char		*try_path(char **env, t_parser comm, struct stat buf, t_pipe *spipe)
 	if (spipe->b_ret[spipe->index] == 3)
 		return (NULL);
 	path = rel_path(env, comm, buf, spipe);
-	if (path)
+	if (path || spipe->b_ret[spipe->index] > 1)
 		return (path);
 	path = abs_path(env, comm, buf);
-	if (path)
-		return (path);
 	return (path);
 }
 
 char		*ft_path(char **env, t_parser comm, t_pipe *spipe)
 {
-	char		*path;
+	char		*s;
 	char		**tab;
 	int			ret;
 	int			i;
 	struct stat	buf;
 
-	path = try_path(env, comm, buf, spipe);
-	if ((i = get_path_id(env)) < 0)
-		return (NULL);
-	if ((tab = ft_split(env[i] + 5, ':')) == NULL)
+	if (s = try_path(env, comm, buf, spipe) || spipe->b_ret[spipe->index] > 1)
+		return (s);
+	i = get_path_id(env);
+	if (i < 0 || (tab = ft_split(env[i] + 5, ':')) == NULL)
 		return (NULL);
 	i = 0;
 	ret = 0;
-	if ((path = ft_strjoin_c(tab[i], comm.command, '/')) == NULL)
+	if ((s = ft_strjoin_c(tab[i], comm.command, '/')) == NULL)
 	{
 		dealloc_tab(tab);
 		return (NULL);
 	}
-	while (tab[i] && (stat(path, &buf) == -1))
+	while (tab[i] && (stat(s, &buf) == -1))
 	{
-		free(path);
-		path = ft_strjoin_c(tab[++i], comm.command, '/');
+		free(s);
+		s = ft_strjoin_c(tab[++i], comm.command, '/');
 	}
 	dealloc_tab(tab);
-	return (path);
+	return (s);
 }

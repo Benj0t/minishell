@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 02:10:41 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 14:38:14 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 17:07:53 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int		ft_argsize(t_list *lst)
 	}
 	return (i);
 }
-
 
 int		get_command(t_list *argument, t_parser *parse)
 {
