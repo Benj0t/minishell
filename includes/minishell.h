@@ -104,6 +104,7 @@ int						ft_isnum(char *str);
 long long int			ft_atoll(const char *str);
 unsigned long long int	ft_atoull(const char *str);
 unsigned long long int	ft_getull(const char *str);
+int			      ft_strcmp(const char *s1, const char *s2);
 
 # include "path.h"
 # include "pipe.h"

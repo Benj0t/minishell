@@ -41,6 +41,28 @@ void		clear_multi_command(t_command *command)
 	}
 }
 
+t_command	*setup_command(void)
+{
+	t_command	*ret;
+
+	ret = malloc(sizeof(t_command));
+	if (ret == NULL)
+		return (NULL);
+	ret->argument = NULL;
+	ret->redirection = NULL;
+	ret->pipe = NULL;
+	return (ret);
+}
+
+int			parser_fail(t_managparse *manag, char **str, t_command *base)
+{
+	manag->command = base;
+	clear_multi_command(manag->command);
+	*str = manag->str;
+	manag->spipe->last_ret = 2;
+	return (1);
+}
+
 void		print_multi_command(t_command *command)//sup
 {
 	t_command	*tmp;
@@ -70,28 +92,6 @@ void		print_multi_command(t_command *command)//sup
 	}
 }
 
-t_command	*setup_command(void)
-{
-	t_command	*ret;
-
-	ret = malloc(sizeof(t_command));
-	if (ret == NULL)
-		return (NULL);
-	ret->argument = NULL;
-	ret->redirection = NULL;
-	ret->pipe = NULL;
-	return (ret);
-}
-
-int			parser_fail(t_managparse *manag, char **str, t_command *base)
-{
-	manag->command = base;
-	clear_multi_command(manag->command);
-	*str = manag->str;
-	manag->spipe->last_ret = 2;
-	return (1);
-}
-
 int			parser(char **str, t_redir *redir, t_pipe *spipe)
 {
 	t_managparse	manag;
@@ -111,7 +111,7 @@ int			parser(char **str, t_redir *redir, t_pipe *spipe)
 			return (parser_fail(&manag, str, base));
 		}
 		manag.command = base;
-		print_multi_command(manag.command);
+		//print_multi_command(manag.command);
 		execution(manag.command, redir, spipe);
 		clear_multi_command(manag.command);
 	}

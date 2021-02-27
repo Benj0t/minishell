@@ -6,90 +6,68 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 12:06:18 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 09:47:07 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 10:42:50 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*join_name(t_token *tok, t_managparse *manag, char *result)
+char	*join_protect(char *str1, char *str2)
 {
 	char	*tmp;
 
-	tmp = ft_strjoin(result, tok->name);
+	tmp = ft_strjoin(str1, str2);
 	if (tmp == NULL)
-		malloc_fail(*tok, manag);
-	free(result);
+		return (NULL);
+	free(str1);
 	return (tmp);
 }
 
-char	*dup_name(t_token *tok, t_managparse *manag, char *result, size_t i)
+size_t	ft_strcpy(char *dst, const char *src)
 {
-	char	*tmp;
-
-	tmp = ft_strdup(&tok->name[i + 1]);
-	if (tmp == NULL)
-		malloc_fail(*tok, manag);
-	free(tok->name);
-	return (tmp);
-}
-
-char	*dbl_join(t_token *tok, t_managparse *manag, char *var, size_t ret)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	tmp = ft_strjoin(tok->name, var);
-	if (tmp == NULL)
-		malloc_fail(*tok, manag);
-	tmp2 = ft_strjoin(tmp, &tok->name[ret]);
-	free(tmp);
-	if (tmp2 == NULL)
-		malloc_fail(*tok, manag);
-	free(tok->name);
-	return (tmp2);
-}
-
-char	*var_to_replace(t_token *tok, t_managparse *manag, char *tmp)
-{
-	char	*var;
-
-	if (tmp[0] == '?')
-	{
-		var = ft_itoa(manag->spipe->last_ret);
-		if (var == NULL)
-			malloc_fail(*tok, manag);
-	}
-	else
-	{
-		var = get_env(tmp);
-		if (var == NULL)
-			var = "";
-	}
-	return (var);
-}
-
-int		remove_char(char **s, size_t here)
-{
-	char	*result;
-	char	*base;
 	size_t	i;
 
+	if (!dst || !src)
+		return (0);
 	i = 0;
-	result = ft_calloc(ft_strlen(*s), sizeof(char));
-	if (result == NULL)
-		return (1);
-	base = result;
-	if (result == NULL)
-		*s = NULL;
-	while (s[0][i])
+	while (src[i] != '\0')
 	{
-		if (i != here)
-			*result++ = s[0][i];
+		dst[i] = src[i];
 		i++;
 	}
-	*result = '\0';
-	free(*s);
-	*s = base;
-	return (0);
+	dst[i] = '\0';
+	return (ft_strlen(src));
+}
+
+void	add_char(char **result, size_t *i,\
+		t_token *tok, t_managparse *manag)
+{
+	size_t	len;
+	char	*tmp;
+
+	len = ft_strlen(*result);
+	tmp = malloc(len + 1 + 1);
+	ft_strcpy(tmp, *result);
+	tmp[len] = tok->name[*i];
+	tmp[len + 1] = '\0';
+	free(*result);
+	*result = tmp;
+}
+
+void	remove_backslash_check(char **result, size_t *i,\
+		t_token *tok, t_managparse *manag)
+{
+	if ((tok->name[*i + 1] == '$') || (tok->name[*i + 1] == '"')\
+		|| (tok->name[*i + 1] == '\'') || (tok->name[*i + 1] == '\\'))
+		(*i)++;
+	else
+		(*i)++;
+	add_char(result, i, tok, manag);
+}
+
+void	remove_backslash(char **result, size_t *i,\
+		t_token *tok, t_managparse *manag)
+{
+	(*i)++;
+	add_char(result, i, tok, manag);
 }
