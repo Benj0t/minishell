@@ -6,73 +6,11 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:17:32 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 14:52:54 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 10:54:26 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_list		*envp_to_list(char **envp)
-{
-	int			i;
-	char		*c;
-	t_list		*ret;
-	t_list		*tmp;
-	t_var_env	*malloc;
-
-	ret = NULL;
-	tmp = NULL;
-	i = 0;
-	while (envp[i] != NULL)
-	{
-		c = ft_strchr(envp[i], '=');
-		c[0] = '\0';
-		malloc = malloc_varenv(envp[i], &c[1]);
-		if (malloc == NULL)
-			return (NULL);
-		tmp = ft_lstnew(malloc);
-		if (tmp == NULL)
-			return (NULL);
-		if (i == 0)
-			ret = tmp;
-		else
-			ft_lstadd_back(&ret, tmp);
-		i++;
-	}
-	return (ret);
-}
-
-char		**list_to_envp(void)
-{
-	int		len;
-	int		i;
-	char	**ret;
-	t_list	*tmp;
-
-	tmp = g_env;
-	len = ft_lstsize(tmp);
-	ret = (char **)malloc(sizeof(char *) * (len + 1));
-	if (ret == NULL)
-		return (NULL);
-	i = 0;
-	while (tmp != NULL)
-	{
-		if (((t_var_env *)tmp->content)->var != NULL)
-			ret[i] = ft_strjoin_c(((t_var_env *)tmp->content)->key,\
-						((t_var_env *)tmp->content)->var, '=');
-		else
-			ret[i] = ft_strdup(((t_var_env *)tmp->content)->key);
-		if (ret[i] == NULL)
-		{
-			dealloc_tab(ret);
-			return (NULL);
-		}
-		tmp = tmp->next;
-		i++;
-	}
-	ret[len] = NULL;
-	return (ret);
-}
 
 void		dealloc_tab(char **tab)
 {
@@ -96,7 +34,7 @@ char		*get_env(const char *name)
 	tmp_env = g_env;
 	while (tmp_env != NULL)
 	{
-		if (!strcmp(((t_var_env *)tmp_env->content)->key, name))//change
+		if (!ft_strcmp(((t_var_env *)tmp_env->content)->key, name))
 			return (((t_var_env *)tmp_env->content)->var);
 		tmp_env = tmp_env->next;
 	}

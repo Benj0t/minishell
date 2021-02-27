@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 15:53:08 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 10:46:55 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,14 @@ void			remove_backslash_check(char **result, size_t *i, t_token *tok, t_managpar
 int				expansion(t_token *tok, t_managparse *manag);
 int				backslash_lvl(char *str, size_t i);
 
+t_redirection	*malloc_redirection(char *arg, int flag);
 void			malloc_fail(t_token tok, t_managparse *manag);
 int				error_parser(char *str, char *name);
 int				save_arg(t_token *tok, t_managparse *manag, int flag);
 int				test_arg(t_token *tok, t_managparse *manag, int flag);
 void			next_free_token(t_token *tok, t_managparse *manag);
 int				save_tok_out(t_token *tok, t_managparse *manag);
+int				save_tok_append(t_token *tok, t_managparse *manag);
 int				save_tok_in(t_token *tok, t_managparse *manag);
 int				save_tok_pipe(t_token *tok, t_managparse *manag);
 int				parser_token(t_managparse *manag);

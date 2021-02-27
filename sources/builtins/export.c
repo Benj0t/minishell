@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 11:12:30 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 10:49:48 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 int		is_exportable(char *arg)
 {
-	int i;
-	int j;
-	char *s;
+	int		i;
+	int		j;
+	char	*s;
 
 	s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNIPQRSTUVWXYZ0123456789_";
 	i = -1;
 	j = 0;
 	while (arg[++i])
 	{
-		while(s[j])
+		while (s[j])
 		{
 			if (s[j++] != arg[i])
-				return(1);
+				return (1);
 		}
 		j = 0;
 		i++;
@@ -61,7 +61,7 @@ int		invalid_id(char *arg)
 	return (1);
 }
 
-void		print_export(char *prefix, t_list *env)
+void	print_export(char *prefix, t_list *env)
 {
 	t_var_env	*var_env;
 	t_list		*tmp_env;

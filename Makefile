@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+         #
+#    By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/13 19:04:13 by bemoreau          #+#    #+#              #
-#    Updated: 2021/02/23 20:52:17 by bemoreau         ###   ########.fr        #
+#    Updated: 2021/02/27 11:12:55 by psemsari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,8 +51,10 @@ FILES =		./sources/main\
 			./sources/backslash_quote\
 			./sources/environment_utils\
 			./sources/environment_manag\
-			./sources/token_env\
 			./sources/free\
+			./sources/parser_save\
+			./sources/environment_expander\
+			./sources/lst_change\
 
 SRCS = $(addsuffix .c, $(FILES))
 OBJ = $(SRCS:.c=.o)

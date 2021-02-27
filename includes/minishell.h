@@ -96,6 +96,7 @@ int			ft_echo(char **arg);
 int			ft_unset(char **arg);
 int			ft_export(char **arg);
 void		clear_multi_command(t_command *command);
+int			ft_strcmp(const char *s1, const char *s2);
 
 # include "path.h"
 # include "pipe.h"

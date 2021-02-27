@@ -6,13 +6,13 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 11:31:23 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 14:39:27 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/26 23:53:41 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		error_parser(char *str, char *name)
+int				error_parser(char *str, char *name)
 {
 	ft_putstr_fd("minishell: ", 2);
 	if (str != NULL)
@@ -31,7 +31,7 @@ int		error_parser(char *str, char *name)
 	return (1);
 }
 
-void	malloc_fail(t_token tok, t_managparse *manag)
+void			malloc_fail(t_token tok, t_managparse *manag)
 {
 	clear_multi_command(manag->command);
 	ft_lstclear(&g_env, &dealloc_varenv);
@@ -68,48 +68,7 @@ void			dealloc_redirection(void *content)
 	free(malloc);
 }
 
-int		save_arg(t_token *tok, t_managparse *manag, int flag)
-{
-	t_list	*tmp;
-	int		ret_expan;
-	t_redirection	*redir;
-
-	ret_expan = expansion(tok, manag);
-	if (ret_expan == -1)
-		return (parser_token(manag));
-	if ((flag == 1 || flag == 2) && !strcmp(tok->name, "") && ret_expan == 1)
-		return (error_parser("ambiguous redirect", NULL));
-	if (flag < 4)
-	{
-		redir = malloc_redirection(tok->name, flag);
-		if (redir == NULL)
-			malloc_fail(*tok, manag);
-		tmp = ft_lstnew(redir);
-	}
-	else
-		tmp = ft_lstnew(tok->name);
-	if (tmp == NULL)
-		malloc_fail(*tok, manag);
-	if (flag < 4)
-		ft_lstadd_back(&manag->command->redirection, tmp);
-	else
-		ft_lstadd_back(&manag->command->argument, tmp);
-	return (parser_token(manag));
-}
-
-int		test_arg(t_token *tok, t_managparse *manag, int flag)
-{
-	if (tok->type == tok_space || tok->type == tok_tab)
-	{
-		free(tok->name);
-		*tok = next_token(manag);
-	}
-	if (tok->type > T_NOWORD)
-		return (error_parser(EUNEXPECTED, tok->name));
-	return (save_arg(tok, manag, flag));
-}
-
-void	next_free_token(t_token *tok, t_managparse *manag)
+void			next_free_token(t_token *tok, t_managparse *manag)
 {
 	free(tok->name);
 	*tok = next_token(manag);
@@ -118,5 +77,4 @@ void	next_free_token(t_token *tok, t_managparse *manag)
 		free(tok->name);
 		*tok = next_token(manag);
 	}
-
 }
