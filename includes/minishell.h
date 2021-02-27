@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 18:28:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 23:43:54 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 22:44:27 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,10 +141,12 @@ void						dealloc_tab(char **tab);
 char						*init_path(char **env,\
 							t_parser command, t_pipe *spipe);
 char						**set_local_env(t_pipe *spipe);
-int							builtins(t_command *cmd, t_pipe *spipe, t_parser *parse);
+int							builtins(t_command *cmd, t_pipe *spipe,\
+													t_parser *parse);
 int							ft_ret(int *ret);
 void						end_redir(t_redir *redir);
-int							exec_redir(t_command *cmd, t_redir *redir, t_pipe *spipe);
+int							exec_redir(t_command *cmd, t_redir *redir,\
+															t_pipe *spipe);
 int							redir_manager(char **env, t_command *cmd);
 int							create_files_in(t_list *file);
 int							exec_redir_in(char **env,\
@@ -268,7 +270,8 @@ int							contains_egal(const char *name);
 int							unset_env(const char *name);
 
 int							is_valid_env(char *s);
-int							scan_builtins(t_command *cmd, t_pipe *spipe, t_parser *parse);
+int							scan_builtins(t_command *cmd, t_pipe *spipe,\
+													t_parser *parse);
 int							listlen(t_command *list);
 int							gnl_prompt(int fd, char **line, int *last_ret);
 int							prompt_rec(int check, char *str,\
