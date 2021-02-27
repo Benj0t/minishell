@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 05:39:44 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 23:15:00 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 22:25:41 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@ void	end_redir(t_redir *redir)
 		close(redir->std_out);
 }
 
-int		err_msg(char *str)
+int		err_msg(char *str, t_pipe *spipe)
 {
 	ft_putendl_fd(str, 2);
+	spipe->ret[spipe->index] = 1;
 	return (-1);
 }
 

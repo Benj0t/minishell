@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 19:53:44 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 22:27:21 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int			second_command(t_command *cmd, t_pipe *spipe, t_redir *redir)
 	if (spipe->prev_p[0] == -1 && spipe->prev_p[1] == -1)
 		if (pipe(spipe->prev_p) < 0)
 			return (0);
-	if (exec_redir(cmd, redir) == -1)
+	if (exec_redir(cmd, redir, spipe) == -1)
 		return (-1);
 	if ((get_command(cmd->argument, &comm2)) == -1)
 		free_struct(spipe, &comm2, cmd);
@@ -75,7 +75,7 @@ int			first_command(t_command *cmd,\
 {
 	t_parser comm1;
 
-	if (exec_redir(cmd, redir) == -1)
+	if (exec_redir(cmd, redir, spipe) == -1)
 		return (-1);
 	if (pipe(spipe->curr_p) < 0 || pipe(spipe->prev_p) < 0)
 	{

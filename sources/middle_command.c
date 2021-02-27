@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 04:32:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 19:52:53 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 22:27:21 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int			middle_commands(t_command *cmd,\
 	int			ret;
 	t_parser	comm1;
 
-	if (exec_redir(cmd, redir) == -1)
+	if (exec_redir(cmd, redir, spipe) == -1)
 		return (-1);
 	if (pipe(spipe->curr_p) < 0)
 		return (0);

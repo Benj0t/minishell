@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 21:30:00 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 22:28:53 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int				left_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
 {
 	t_parser comm;
 
-	if (exec_redir(command, redir) == -1 || pipe(spipe->curr_p) < 0)
+	if (exec_redir(command, redir, spipe) == -1 || pipe(spipe->curr_p) < 0)
 		return (-1);
 	if ((get_command(command->argument, &comm)) == -1)
 		return (-1);
@@ -88,7 +88,7 @@ int				right_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
 	if (spipe->curr_p[0] == -1 || spipe->curr_p[1] == -1)
 		if (pipe(spipe->curr_p) < 0)
 			return (0);
-	if (exec_redir(command, redir) == -1)
+	if (exec_redir(command, redir, spipe) == -1)
 		return (-1);
 	if ((get_command(command->argument, &comm)) == -1)
 		return (-1);
@@ -118,7 +118,7 @@ int				single_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
 	{
 		if ((tmp->argument == NULL || tmp->argument->content == NULL))
 		{
-			exec_redir(tmp, redir);
+			exec_redir(tmp, redir, spipe);
 			end_redir(redir);
 		}
 		else if (i == 0)

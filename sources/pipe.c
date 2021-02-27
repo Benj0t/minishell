@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/27 19:48:09 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 22:27:37 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ int		simple_command(t_command *cmd,\
 	g_child = 0;
 	if ((cmd->argument == NULL || cmd->argument->content == NULL))
 	{
-		exec_redir(cmd, redir);
+		exec_redir(cmd, redir, spipe);
 		end_redir(redir);
 		return (-1);
 	}
-	if ((exec_redir(cmd, redir) == -1) ||\
+	if ((exec_redir(cmd, redir, spipe) == -1) ||\
 	(get_command(cmd->argument, &comm1)) == -1 || set_local_env(spipe) == NULL)
 		return (-1);
 	if ((spipe->b_ret[spipe->index] = scan_builtins(cmd, spipe, &comm1)) == 0)
@@ -99,7 +99,7 @@ int		execution(t_command *cmd, t_redir *redir, t_pipe *spipe)
 	spipe->n_pipe = spipe->n_comm - 1;
 	if (!cmd || !init_spipe(spipe))
 		return (-1);
-	if (spipe->n_comm == 1)
+	if (spipe->n_comm == 1 || spipe->n_comm == 0)
 		simple_command(cmd, redir, spipe);
 	else if (spipe->n_comm == 2)
 		single_pipe(cmd, redir, spipe);

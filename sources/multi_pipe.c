@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:19:00 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 19:52:08 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 22:28:17 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	last_command(t_command *cmd,\
 	int			ret;
 	t_parser	comm1;
 
-	if (exec_redir(cmd, redir) == -1)
+	if (exec_redir(cmd, redir, spipe) == -1)
 		return (-1);
 	if (pipe(spipe->curr_p) < 0)
 		return (1);
@@ -67,7 +67,7 @@ int			multi_loop(t_command *tmp,\
 		if ((tmp->argument == NULL || tmp->argument->content == NULL))
 		{
 			exec = 1;
-			exec_redir(tmp, redir);
+			exec_redir(tmp, redir, spipe);
 		}
 		if (i == 0 && exec == 0)
 			ret = first_command(tmp, spipe, redir);

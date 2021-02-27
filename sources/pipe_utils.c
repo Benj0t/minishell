@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 17:18:04 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 22:30:23 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int			listlen(t_command *list)
 	int i;
 
 	i = 1;
-	if (!list)
+	if (!list || !list->argument || !list->argument->content)
 		return (0);
 	while (list->pipe != NULL)
 	{
