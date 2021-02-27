@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/27 12:58:51 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 13:29:16 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ int		execution(t_command *cmd, t_redir *redir, t_pipe *spipe)
 	spipe->n_comm = listlen(cmd);
 	spipe->n_bin = spipe->n_comm - 1;
 	spipe->n_pipe = spipe->n_comm - 1;
-	printf("n_pipe: %d\n", spipe->n_pipe);
 	if (!init_spipe(spipe))
 		return (-1);
 	if (spipe->n_comm == 1)
