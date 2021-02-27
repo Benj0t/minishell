@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 17:17:32 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 10:54:26 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 13:26:20 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_var_env	*getvar_env(const char *name)
 	tmp_env = g_env;
 	while (tmp_env != NULL)
 	{
-		if (!strcmp(((t_var_env *)tmp_env->content)->key, name))
+		if (!ft_strcmp(((t_var_env *)tmp_env->content)->key, name))
 			return ((t_var_env *)tmp_env->content);
 		tmp_env = tmp_env->next;
 	}

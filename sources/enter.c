@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 20:43:50 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 13:29:10 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,35 @@ int			parser_fail(t_managparse *manag, char **str, t_command *base)
 	return (1);
 }
 
+void		print_multi_command(t_command *command)//sup
+{
+	t_command	*tmp;
+	t_list		*lst_tmp;
+
+	tmp = command;
+	while (tmp != NULL)
+	{
+		printf("COMMAND:\n");
+		lst_tmp = tmp->argument;
+		while (lst_tmp != NULL)
+		{
+			printf("	arg: -%s-\n", (char *)lst_tmp->content);
+			lst_tmp = lst_tmp->next;
+		}
+		lst_tmp = tmp->redirection;
+		while (lst_tmp != NULL)
+		{
+			printf("in:%d out:%d ap:%d: -%s-\n",
+				((t_redirection *)lst_tmp->content)->in,
+				((t_redirection *)lst_tmp->content)->out,
+				((t_redirection *)lst_tmp->content)->append,
+				((t_redirection *)lst_tmp->content)->arg);
+			lst_tmp = lst_tmp->next;
+		}
+		tmp = tmp->pipe;
+	}
+}
+
 int			parser(char **str, t_redir *redir, t_pipe *spipe)
 {
 	t_managparse	manag;
@@ -82,6 +111,7 @@ int			parser(char **str, t_redir *redir, t_pipe *spipe)
 			return (parser_fail(&manag, str, base));
 		}
 		manag.command = base;
+		//print_multi_command(manag.command);
 		execution(manag.command, redir, spipe);
 		clear_multi_command(manag.command);
 	}

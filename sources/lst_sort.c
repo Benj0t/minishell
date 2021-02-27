@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 16:37:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/23 02:03:38 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 13:26:20 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int			ft_strcmp(const char *s1, const char *s2)
 		i++;
 	if ((unsigned char)s1[i] - (unsigned char)s2[i] > 0)
 		ret = 1;
+	else if ((unsigned char)s1[i] - (unsigned char)s2[i] < 0)
+		ret = -1;
 	else
 		ret = 0;
 	return (ret);

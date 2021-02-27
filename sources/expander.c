@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 10:42:42 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 14:19:41 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ int		expansion(t_token *tok, t_managparse *manag)
 		i++;
 	}
 	tok->name = replace(tok->name, result);
-	if (quote_sub == 0 && env_sub == 1 && !ft_strncmp(result, "", 2))
-		return (-1);
+	if (quote_sub == 0 && env_sub == 1 && !ft_strcmp(result, ""))
+	{
+		free(tok->name);
+		tok->name = NULL;
+	}
 	return (env_sub);
 }

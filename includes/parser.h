@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:19:52 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 10:46:55 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 13:59:19 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ int				save_tok_pipe(t_token *tok, t_managparse *manag);
 int				parser_token(t_managparse *manag);
 
 void			clear_multi_command(t_command *command);
-void			print_multi_command(t_command *command);
 t_command		*setup_command(void);
 int				parser(char **str, t_redir *redir, t_pipe *spipe);
 
