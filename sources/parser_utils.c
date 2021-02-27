@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 11:31:23 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 23:53:41 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:16:40 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void			malloc_fail(t_token tok, t_managparse *manag)
 {
 	clear_multi_command(manag->command);
 	ft_lstclear(&g_env, &dealloc_varenv);
-	printf("malloc_failed\n");
+	ft_putstr_fd("malloc_failed\n", 2);
 	exit(1);
 }
 

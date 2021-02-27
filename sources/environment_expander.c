@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 10:40:30 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 18:04:11 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:17:59 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*ft_subvar(char *name, t_managparse *manag)
 {
 	char	*tmp;
 
-	if (strcmp(name, "?") == 0)
+	if (ft_strcmp(name, "?") == 0)
 		return (ft_itoa(manag->spipe->last_ret));
 	tmp = get_env(name);
 	if (tmp == NULL)
