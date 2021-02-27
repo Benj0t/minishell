@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 09:47:32 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 12:31:54 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void		get_ret_values(t_pipe *spipe)
 	}
 }
 
-void			pid_manager(t_pipe *spipe)
+void		pid_manager(t_pipe *spipe)
 {
 	int i;
 

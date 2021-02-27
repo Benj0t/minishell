@@ -6,7 +6,7 @@
 #    By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/13 19:04:13 by bemoreau          #+#    #+#              #
-#    Updated: 2021/02/26 20:44:34 by bemoreau         ###   ########.fr        #
+#    Updated: 2021/02/27 13:23:10 by bemoreau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,12 +22,14 @@ FILES =		./sources/main\
 			./sources/pipe\
 			./sources/path\
 			./sources/builtins/cd\
+			./sources/builtins/cd_utils\
 			./sources/builtins/pwd\
 			./sources/builtins/env\
 			./sources/builtins/export\
 			./sources/builtins/unset\
 			./sources/builtins/echo\
 			./sources/builtins/exit\
+			./sources/builtins/exit_utils\
 			./sources/enter\
 			./sources/parser\
 			./sources/token\

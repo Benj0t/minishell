@@ -61,41 +61,49 @@ extern t_list *g_env;
 # include "pipe.h"
 # include "parser.h"
 
-int			free_struct(t_pipe *spipe, t_parser *parser, t_command *command);
-int			prompt_malloc(char **line, char *str);
-void		bubble_sort(t_list *list);
-t_list*		ft_lstcopy(t_list* head);
 
-int			check_env(char *s);
-int			valid_env(char *s);
-void		print_env(char	*prefix, t_list *env);
-void		print_export(char	*prefix, t_list *env);
-t_var_env	*malloc_varenv(const char *key, const char *str);
-void		dealloc_varenv(void *content);
-t_list		*envp_to_list(char **envp);
-char		**list_to_envp(void);
-void		dealloc_tab(char **tab);
-char		*get_env(const char *name);
-t_var_env	*getvar_env(const char *name);
-int			put_env(char *string);
-int			set_env(const char *name, char *value, int replace);
-int			contains_egal(const char *name);
-int			unset_env(const char *name);
+int						cd_error(char *error);
+int						add_dot(void);
+int						free_struct(t_pipe *spipe, t_parser *parser, t_command *command);
+int						prompt_malloc(char **line, char *str);
+void					bubble_sort(t_list *list);
+t_list*					ft_lstcopy(t_list* head);
 
-int			is_valid_env(char *s);
-int			scan_builtins(t_command *cmd, t_pipe *spipe);
-int			listlen(t_command *list);
-int			gnl_prompt(int fd, char **line, int *last_ret);
-int			prompt_rec(int check, char *str, char **line, int *last_ret);
-int			ft_pipe(char **env, char *command1, char *command2);
-int			ft_cd(char **arg);
-int			ft_pwd(void);
-int			ft_exit(char **arg, t_pipe *spipe, t_command *command);
-int			ft_env(void);
-int			ft_echo(char **arg);
-int			ft_unset(char **arg);
-int			ft_export(char **arg);
-void		clear_multi_command(t_command *command);
+int						check_env(char *s);
+int						valid_env(char *s);
+void					print_env(char	*prefix, t_list *env);
+void					print_export(char	*prefix, t_list *env);
+t_var_env				*malloc_varenv(const char *key, const char *str);
+void					dealloc_varenv(void *content);
+t_list					*envp_to_list(char **envp);
+char					**list_to_envp(void);
+void					dealloc_tab(char **tab);
+char					*get_env(const char *name);
+t_var_env				*getvar_env(const char *name);
+int						put_env(char *string);
+int						set_env(const char *name, char *value, int replace);
+int						contains_egal(const char *name);
+int						unset_env(const char *name);
+
+int						is_valid_env(char *s);
+int						scan_builtins(t_command *cmd, t_pipe *spipe);
+int						listlen(t_command *list);
+int						gnl_prompt(int fd, char **line, int *last_ret);
+int						prompt_rec(int check, char *str, char **line, int *last_ret);
+int						ft_pipe(char **env, char *command1, char *command2);
+int						ft_cd(char **arg);
+int						ft_pwd(void);
+int						ft_exit(char **arg, t_pipe *spipe, t_command *command);
+int						ft_env(void);
+int						ft_echo(char **arg);
+int						ft_unset(char **arg);
+int						ft_export(char **arg);
+void					clear_multi_command(t_command *command);
+
+int						ft_isnum(char *str);
+long long int			ft_atoll(const char *str);
+unsigned long long int	ft_atoull(const char *str);
+unsigned long long int	ft_getull(const char *str);
 
 # include "path.h"
 # include "pipe.h"

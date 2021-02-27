@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 01:19:39 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 12:33:57 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 extern pid_t	g_child;
 
-void		exec_fcomm_2(t_redir *redir, t_pipe *spipe, t_parser comm2, t_command *command)
+void		exec_fcomm_2(t_redir *redir, t_pipe *spipe, t_parser comm2,\
+													t_command *command)
 {
 	if (redir->std_in == -1)
 		dup2(spipe->prev_p[0], 0);
@@ -28,7 +29,7 @@ void		exec_fcomm_2(t_redir *redir, t_pipe *spipe, t_parser comm2, t_command *com
 		execve(spipe->path, comm2.argument, spipe->l_env);
 }
 
-int	second_command(t_command *cmd,t_pipe *spipe, t_redir *redir)
+int			second_command(t_command *cmd, t_pipe *spipe, t_redir *redir)
 {
 	t_parser	comm2;
 
@@ -55,7 +56,8 @@ int	second_command(t_command *cmd,t_pipe *spipe, t_redir *redir)
 	return (1);
 }
 
-void		exec_fcomm_1(t_redir *redir, t_pipe *spipe, t_parser comm1, t_command *command)
+void		exec_fcomm_1(t_redir *redir, t_pipe *spipe, t_parser comm1,\
+													t_command *command)
 {
 	close(spipe->curr_p[1]);
 	close(spipe->curr_p[0]);
@@ -83,7 +85,8 @@ int			first_command(t_command *cmd,\
 	if ((get_command(cmd->argument, &comm1)) == -1)
 		free_struct(spipe, &comm1, cmd);
 	spipe->b_ret[spipe->index] = scan_builtins(cmd, spipe);
-	if (init_path(spipe->l_env, comm1, spipe) == NULL && spipe->b_ret[spipe->index] == 1)
+	if (init_path(spipe->l_env, comm1, spipe) == NULL &&\
+						spipe->b_ret[spipe->index] == 1)
 		return (spipe->ret[spipe->index] = invalid_command(spipe, &comm1));
 	if (((g_child = fork()) == 0))
 		exec_fcomm_1(redir, spipe, comm1, cmd);
