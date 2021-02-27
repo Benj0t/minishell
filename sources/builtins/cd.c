@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 14:43:48 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 13:17:44 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 14:16:49 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int				wrong_file(int *bool, int *ret, char **pwd, char **arg)
 	tmp = NULL;
 	if (*pwd == NULL)
 	{
-		if ((*ret = chdir(arg[1]) == -1))
+		if ((*ret = chdir(arg[1]) == -1) || ft_strncmp(arg[1], ".", 2) == 0)
 			if ((((tmp = getcwd(NULL, MAXPATHLEN)) == NULL)) ||\
 									ft_strncmp(arg[1], ".", 2) == 0)
 			{

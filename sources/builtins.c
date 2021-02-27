@@ -6,25 +6,43 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 02:10:41 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 13:03:52 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 14:38:14 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		ft_argsize(t_list *lst)
+{
+	int i;
+
+	i = 0;
+	while (lst)
+	{
+		if (lst->content)
+			i++;
+		lst = lst->next;
+	}
+	return (i);
+}
+
 
 int		get_command(t_list *argument, t_parser *parse)
 {
 	int			len;
 	int			i;
 
-	len = ft_lstsize(argument);
+	len = ft_argsize(argument);
 	if ((parse->argument = (char **)malloc(sizeof(char *) * (len + 1))) == NULL)
 		return (-1);
 	parse->argument[len] = NULL;
-	i = -1;
-	while (++i < len)
+	i = 0;
+	while (i < len)
 	{
-		parse->argument[i] = argument->content;
+		if (argument->content)
+		{
+			parse->argument[i++] = argument->content;
+		}
 		argument = argument->next;
 	}
 	parse->command = parse->argument[0];

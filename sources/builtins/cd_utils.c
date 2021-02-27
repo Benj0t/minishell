@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 13:15:12 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 13:16:35 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 14:17:42 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int		add_dot(void)
 	char *name;
 	char *tmp;
 
+	ft_putstr_fd("Can't find current working directory\n", 2);
 	tmp = get_env("PWD");
 	name = ft_strjoin(tmp, "/.");
 	if (name)
