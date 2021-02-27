@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 14:18:38 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:08:19 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int		save_arg(t_token *tok, t_managparse *manag, int flag)
 	int				ret_expan;
 	t_redirection	*redir;
 
-	ret_expan = expansion(tok, manag);
+	ret_expan = expansion(tok, manag, 0);
 	if (flag < 4 && tok->name == NULL)
 		return (error_parser("ambiguous redirect", NULL));
 	if (flag < 4)

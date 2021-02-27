@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 10:54:15 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 12:39:22 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:10:03 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_var_env	*egal_replace(char **envp, size_t i)
 
 	c = ft_strchr(envp[i], '=');
 	c[0] = '\0';
-	return(malloc_varenv(envp[i], &c[1]));
+	return (malloc_varenv(envp[i], &c[1]));
 }
 
 t_list		*envp_to_list(char **envp)

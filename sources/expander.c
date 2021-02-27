@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 14:19:41 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:09:43 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		double_quote(char **result, size_t *i,\
 	while (tok->name[*i] != '"')
 	{
 		if (tok->name[*i] == '\\')
-			remove_backslash(result, i, tok, manag);
+			remove_backslash_check(result, i, tok, manag);
 		else if (tok->name[*i] == '$')
 			environnment_expander(result, i, tok, manag);
 		else
@@ -56,14 +56,12 @@ char	*replace(char *str, char *result)
 	return (result);
 }
 
-int		expansion(t_token *tok, t_managparse *manag)
+int		expansion(t_token *tok, t_managparse *manag, size_t i)
 {
 	char	*result;
 	int		env_sub;
 	int		quote_sub;
-	size_t	i;
 
-	i = 0;
 	env_sub = 0;
 	quote_sub = 0;
 	result = ft_strdup("");
@@ -72,7 +70,7 @@ int		expansion(t_token *tok, t_managparse *manag)
 		if (is_quote(tok->name[i]))
 			quote_sub = quote_exp(&result, &i, tok, manag);
 		else if (tok->name[i] == '\\')
-			remove_backslash_check(&result, &i, tok, manag);
+			remove_backslash(&result, &i, tok, manag);
 		else if (tok->name[i] == '$')
 			env_sub = environnment_expander(&result, &i, tok, manag);
 		else
@@ -81,9 +79,8 @@ int		expansion(t_token *tok, t_managparse *manag)
 	}
 	tok->name = replace(tok->name, result);
 	if (quote_sub == 0 && env_sub == 1 && !ft_strcmp(result, ""))
-	{
 		free(tok->name);
+	if (quote_sub == 0 && env_sub == 1 && !ft_strcmp(result, ""))
 		tok->name = NULL;
-	}
 	return (env_sub);
 }

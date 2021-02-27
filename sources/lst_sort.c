@@ -6,13 +6,13 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 16:37:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 16:29:52 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:13:02 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_lstrm(t_list **lst)
+void		ft_lstrm(t_list **lst)
 {
 	t_list	*tmp;
 	t_list	*base;
@@ -42,18 +42,16 @@ t_list		*ft_lstcopy(t_list *list)
 	{
 		if (ret == NULL)
 		{
-			ret = ft_lstnew(tmp->content);
-			if (ret == NULL)
+			if ((ret = ft_lstnew(tmp->content)) == NULL)
 				return (NULL);
 		}
 		else
 		{
 			tmp2 = ft_lstnew(tmp->content);
 			if (tmp2 == NULL)
-			{
 				ft_lstrm(&ret);
+			if (tmp2 == NULL)
 				return (NULL);
-			}
 			ft_lstadd_back(&ret, tmp2);
 		}
 		tmp = tmp->next;
