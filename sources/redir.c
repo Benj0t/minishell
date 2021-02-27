@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/08 15:52:01 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 17:29:48 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 13:03:14 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int		try_rdonly(int *fd, t_list *tmp, t_redir *redir)
 {
-	if ((*fd = open(((t_redirection *)tmp->content)->arg, O_RDONLY, 0644)) == -1)
+	if ((*fd = open(((t_redirection *)tmp->content)->arg,\
+								O_RDONLY, 0644)) == -1)
 		return (err_msg("Can't open redirection file !"));
 	if (tmp->next == NULL)
 	{
@@ -30,14 +31,17 @@ int		try_rdonly(int *fd, t_list *tmp, t_redir *redir)
 
 int		try_wronly(int *fd, t_list *tmp, t_redir *redir)
 {
-	if ((*fd = open(((t_redirection *)tmp->content)->arg, O_WRONLY, 0644)) == -1)
+	if ((*fd = open(((t_redirection *)tmp->content)->arg,\
+								O_WRONLY, 0644)) == -1)
 	{
-		if ((*fd = open(((t_redirection *)tmp->content)->arg, O_CREAT, 0644)) == -1)
+		if ((*fd = open(((t_redirection *)tmp->content)->arg,\
+									O_CREAT, 0644)) == -1)
 			return (err_msg("Can't create redirection file !"));
 		else
 		{
 			close(*fd);
-			if ((*fd = open(((t_redirection *)tmp->content)->arg, O_WRONLY, 0644)) == -1)
+			if ((*fd = open(((t_redirection *)tmp->content)->arg,\
+										O_WRONLY, 0644)) == -1)
 				return (err_msg("Can't open redirection file !"));
 		}
 	}
@@ -55,15 +59,18 @@ int		try_wronly(int *fd, t_list *tmp, t_redir *redir)
 
 int		try_append(int *fd, t_list *tmp, t_redir *redir)
 {
-	if ((*fd = open(((t_redirection *)tmp->content)->arg, O_WRONLY | O_APPEND, 0644)) == -1)
+	if ((*fd = open(((t_redirection *)tmp->content)->arg,\
+						O_WRONLY | O_APPEND, 0644)) == -1)
 	{
-		if ((*fd = open(((t_redirection *)tmp->content)->arg, O_CREAT, 0644)) == -1)
+		if ((*fd = open(((t_redirection *)tmp->content)->arg,\
+											O_CREAT, 0644)) == -1)
 			return (err_msg("Can't create redirection file !"));
 		else
 		{
 			close(*fd);
 		}
-		if ((*fd = open(((t_redirection *)tmp->content)->arg, O_WRONLY | O_APPEND, 0644)) == -1)
+		if ((*fd = open(((t_redirection *)tmp->content)->arg,\
+								O_WRONLY | O_APPEND, 0644)) == -1)
 			return (err_msg("Can't append redirection file !"));
 	}
 	if (tmp->next == NULL)
@@ -84,7 +91,7 @@ int		exec_redir(t_command *cmd, t_redir *redir)
 	int		fd;
 
 	save_std(redir, cmd);
-	if (cmd->redirection == NULL)
+	if (cmd == NULL || cmd->redirection == NULL)
 		return (1);
 	tmp = cmd->redirection;
 	while (tmp && tmp->content)

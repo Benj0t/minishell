@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/25 15:58:52 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 12:43:43 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int			get_path_id(char **env)
 
 char		*rel_path(char **env, t_parser comm, struct stat buf, t_pipe *spipe)
 {
-
 	if (!(comm.argument[0][0] == '.' && comm.argument[0][1] == '/'))
 		return (NULL);
 	if (stat(comm.argument[0], &buf) == 0 && buf.st_mode & S_IXUSR)
@@ -51,6 +50,22 @@ char		*abs_path(char **env, t_parser comm, struct stat buf)
 	return (NULL);
 }
 
+char		*try_path(char **env, t_parser comm, struct stat buf, t_pipe *spipe)
+{
+	char *path;
+
+	path = NULL;
+	if (spipe->b_ret[spipe->index] == 3)
+		return (NULL);
+	path = rel_path(env, comm, buf, spipe);
+	if (path)
+		return (path);
+	path = abs_path(env, comm, buf);
+	if (path)
+		return (path);
+	return (path);
+}
+
 char		*ft_path(char **env, t_parser comm, t_pipe *spipe)
 {
 	char		*path;
@@ -59,16 +74,10 @@ char		*ft_path(char **env, t_parser comm, t_pipe *spipe)
 	int			i;
 	struct stat	buf;
 
-	path = NULL;
-	path = rel_path(env, comm, buf, spipe);
-	if (spipe->b_ret[spipe->index] == 3)
+	path = try_path(env, comm, buf, spipe);
+	if ((i = get_path_id(env)) < 0)
 		return (NULL);
-	if (path)
-		return (path);
-	path = abs_path(env, comm, buf);
-	if (path)
-		return (path);
-	if ((i = get_path_id(env)) < 0 || (tab = ft_split(env[i] + 5, ':')) == NULL)
+	if ((tab = ft_split(env[i] + 5, ':')) == NULL)
 		return (NULL);
 	i = 0;
 	ret = 0;

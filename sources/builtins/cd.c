@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/05 14:43:48 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/25 22:42:50 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 13:17:44 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,35 +17,6 @@
 #define ENOPERM "permission denied"
 #define ENODIR "No such file or directory"
 
-static int		cd_error(char *error)
-{
-	char *str;
-
-	if (errno)
-		str = strerror(errno);
-	else
-		str = error;
-	ft_putstr_fd("cd: ", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd("\n", 2);
-	return (1);
-}
-
-int				add_dot(void)
-{
-	char *name;
-	char *tmp;
-
-	tmp = get_env("PWD");
-	name = ft_strjoin(tmp, "/.");
-	if (name)
-	{
-		set_env("PWD", name, 1);
-		free(name);
-	}
-	return (1);
-}
-
 int				wrong_file(int *bool, int *ret, char **pwd, char **arg)
 {
 	char *tmp;
@@ -53,14 +24,15 @@ int				wrong_file(int *bool, int *ret, char **pwd, char **arg)
 	tmp = NULL;
 	if (*pwd == NULL)
 	{
-		if ((*ret = chdir(arg[1]) == -1 && ((tmp = getcwd(NULL, MAXPATHLEN)) == NULL))\
-									|| ft_strncmp(arg[1], ".", 2) == 0)
-		{
-			if (!ft_strncmp(arg[1], ".", 2))
-				return (add_dot());
-			ft_putstr_fd("Can't find current working directory\n", 2);
-			return (1);
-		}
+		if ((*ret = chdir(arg[1]) == -1))
+			if ((((tmp = getcwd(NULL, MAXPATHLEN)) == NULL)) ||\
+									ft_strncmp(arg[1], ".", 2) == 0)
+			{
+				if (!ft_strncmp(arg[1], ".", 2))
+					return (add_dot());
+				ft_putstr_fd("Can't find current working directory\n", 2);
+				return (1);
+			}
 		if (tmp)
 			free(tmp);
 		*bool = 1;
@@ -90,6 +62,27 @@ int				get_arg(char **arg, char **new, char *previous, char *home)
 	return (0);
 }
 
+int				set_varenv(t_cd *cd)
+{
+	if (!cd->bool)
+		cd->ret = chdir(cd->new);
+	cd->tmp = getcwd(NULL, MAXPATHLEN);
+	if (cd->tmp != NULL)
+		set_env("PWD", cd->tmp, 1);
+	free(cd->tmp);
+	if (cd->ret != 0)
+	{
+		free(cd->pwd);
+		return (cd_error(ENODIR));
+	}
+	if (!ft_strncmp(cd->previous, cd->new, MAXPATHLEN))
+		ft_pwd();
+	if (ft_strncmp(cd->pwd, cd->new, MAXPATHLEN))
+		set_env("OLDPWD", cd->pwd, 1);
+	free(cd->pwd);
+	return (0);
+}
+
 int				ft_cd(char **arg)
 {
 	t_cd cd;
@@ -106,21 +99,5 @@ int				ft_cd(char **arg)
 		free(cd.pwd);
 		return (1);
 	}
-	if (!cd.bool)
-		cd.ret = chdir(cd.new);
-	cd.tmp = getcwd(NULL, MAXPATHLEN);
-	if (cd.tmp != NULL)
-		set_env("PWD", cd.tmp, 1);
-	free(cd.tmp);
-	if (cd.ret != 0)
-	{
-		free(cd.pwd);
-		return (cd_error(ENODIR));
-	}
-	if (!ft_strncmp(cd.previous, cd.new, MAXPATHLEN))
-		ft_pwd();
-	if (ft_strncmp(cd.pwd, cd.new, MAXPATHLEN))
-		set_env("OLDPWD", cd.pwd, 1);
-	free(cd.pwd);
-	return (0);
+	return (set_varenv(&cd));
 }

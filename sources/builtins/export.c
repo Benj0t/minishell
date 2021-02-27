@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
 /*   Updated: 2021/02/27 10:49:48 by psemsari         ###   ########.fr       */
@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int		is_exportable(char *arg)
+int			is_exportable(char *arg)
 {
 	int		i;
 	int		j;
@@ -34,7 +34,7 @@ int		is_exportable(char *arg)
 	return (0);
 }
 
-int		is_valid_env(char *s)
+int			is_valid_env(char *s)
 {
 	size_t i;
 
@@ -53,7 +53,7 @@ int		is_valid_env(char *s)
 	return (i);
 }
 
-int		invalid_id(char *arg)
+int			invalid_id(char *arg)
 {
 	ft_putstr_fd("export: ", 2);
 	ft_putstr_fd(arg, 2);
@@ -83,7 +83,7 @@ void	print_export(char *prefix, t_list *env)
 	}
 }
 
-int		ft_export(char **arg)
+int			ft_export(char **arg)
 {
 	t_list *copy;
 

@@ -1,32 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/11 17:03:17 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 20:33:42 by bemoreau         ###   ########.fr       */
+/*   Created: 2021/02/27 13:15:12 by bemoreau          #+#    #+#             */
+/*   Updated: 2021/02/27 13:16:35 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+int		cd_error(char *error)
 {
-	size_t	i;
-	int		ret;
+	char *str;
 
-	i = 0;
-	if (n == 0)
-		return (0);
-	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0' && i < n - 1)
-		i++;
-	if ((unsigned char)s1[i] - (unsigned char)s2[i] > 0)
-		ret = 1;
-	else if ((unsigned char)s1[i] - (unsigned char)s2[i] < 0)
-		ret = -1;
+	if (errno)
+		str = strerror(errno);
 	else
-		ret = 0;
-	return (ret);
+		str = error;
+	ft_putstr_fd("cd: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("\n", 2);
+	return (1);
+}
+
+int		add_dot(void)
+{
+	char *name;
+	char *tmp;
+
+	tmp = get_env("PWD");
+	name = ft_strjoin(tmp, "/.");
+	if (name)
+	{
+		set_env("PWD", name, 1);
+		free(name);
+	}
+	return (1);
 }

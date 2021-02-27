@@ -22,12 +22,14 @@ FILES =		./sources/main\
 			./sources/pipe\
 			./sources/path\
 			./sources/builtins/cd\
+			./sources/builtins/cd_utils\
 			./sources/builtins/pwd\
 			./sources/builtins/env\
 			./sources/builtins/export\
 			./sources/builtins/unset\
 			./sources/builtins/echo\
 			./sources/builtins/exit\
+			./sources/builtins/exit_utils\
 			./sources/enter\
 			./sources/parser\
 			./sources/token\

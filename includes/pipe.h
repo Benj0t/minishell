@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/19 16:39:22 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/26 00:02:30 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 09:47:09 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,15 @@ int		exec_redir_in(char **env, t_command *cmd, t_list *redir);
 int		listlen(t_command *list);
 int		multi_pipe(t_command *cmd, t_pipe *spipe, t_redir *redir);
 int		simple_command(t_command *cmd, t_redir *redir, t_pipe *spipe);
+int		left_pipe(t_command *command, t_redir *redir, t_pipe *spipe);
+int		right_pipe(t_command *command, t_redir *redir, t_pipe *spipe);
 int		single_pipe(t_command *command, t_redir *redir, t_pipe *spipe);
 int		exec_pipe(char **env, t_command *command, int pipe[2]);
 int		create_files_out(t_list *file);
 int		exec_redir_out(char **env, t_command *cmd, t_list *redir);
 int		execution(t_command *cmd, t_redir *redir, t_pipe *spipe);
 void	get_ret_values(t_pipe *spipe);
+void	pid_manager(t_pipe *spipe);
 int		init_pipe(t_pipe *spipe);
 int		init_spipe(t_pipe *spipe);
 int		err_msg(char *str);

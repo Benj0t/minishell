@@ -6,13 +6,13 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 02:10:41 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/25 09:10:36 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 13:03:52 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			get_command(t_list *argument, t_parser *parse)
+int		get_command(t_list *argument, t_parser *parse)
 {
 	int			len;
 	int			i;
@@ -33,8 +33,8 @@ int			get_command(t_list *argument, t_parser *parse)
 
 int		scan_builtins(t_command *cmd, t_pipe *spipe)
 {
-	t_parser parse;
-	int ret;
+	t_parser	parse;
+	int			ret;
 
 	ret = 1;
 	if ((get_command(cmd->argument, &parse)) == -1)
@@ -59,8 +59,8 @@ int		scan_builtins(t_command *cmd, t_pipe *spipe)
 
 int		builtins(t_command *cmd, t_pipe *spipe)
 {
-	t_parser parse;
-	int ret;
+	t_parser	parse;
+	int			ret;
 
 	ret = 1;
 	spipe->n_bin--;
