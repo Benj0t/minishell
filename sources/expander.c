@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 14:19:41 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 18:16:01 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int		double_quote(char **result, size_t *i,\
 	while (tok->name[*i] != '"')
 	{
 		if (tok->name[*i] == '\\')
-			remove_backslash(result, i, tok, manag);
+			remove_backslash_check(result, i, tok, manag);
 		else if (tok->name[*i] == '$')
 			environnment_expander(result, i, tok, manag);
 		else
@@ -72,7 +72,7 @@ int		expansion(t_token *tok, t_managparse *manag)
 		if (is_quote(tok->name[i]))
 			quote_sub = quote_exp(&result, &i, tok, manag);
 		else if (tok->name[i] == '\\')
-			remove_backslash_check(&result, &i, tok, manag);
+			remove_backslash(&result, &i, tok, manag);
 		else if (tok->name[i] == '$')
 			env_sub = environnment_expander(&result, &i, tok, manag);
 		else

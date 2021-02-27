@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 10:40:30 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 15:42:41 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 18:04:11 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,7 @@ int		environnment_expander(char **result, size_t *i,\
 	var = NULL;
 	value = NULL;
 	if (is_quote(tok->name[*i + 1]))
-	{
-		add_char(result, i, tok, manag);
 		return (0);
-	}
 	len = get_len(tok->name);
 	var = get_value(tok->name, i);
 	if (var)
