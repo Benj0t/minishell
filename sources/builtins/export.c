@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 10:49:48 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 14:01:55 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int			invalid_id(char *arg)
 	return (1);
 }
 
-void	print_export(char *prefix, t_list *env)
+void		print_export(char *prefix, t_list *env)
 {
 	t_var_env	*var_env;
 	t_list		*tmp_env;
