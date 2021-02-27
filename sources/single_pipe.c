@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   single_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 22:01:18 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 21:30:00 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,8 @@ int				right_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
 	spipe->b_ret[++spipe->index] = scan_builtins(command, spipe, &comm);
 	if ((right_command(spipe, redir, command, comm)) == -1)
 		return (0);
-	free(comm.argument);
+	if (spipe->ret[spipe->index] <= 1)
+		free(comm.argument);
 	close(spipe->curr_p[0]);
 	close(spipe->curr_p[1]);
 	return (1);

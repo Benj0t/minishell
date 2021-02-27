@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 21:28:10 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 21:21:04 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int						ft_exit(char **arg, t_pipe *spipe, t_command *command)
 	unb = ft_atoull(arg[1]);
 	nb = ft_atoll(arg[1]);
 	if ((ft_strlen(arg[1]) == 19 && nb < 0) || (ft_isnum(arg[1]) ||\
-				(ft_getull(arg[61]) > 9223372036854775807 && nb > 0)))
+				(ft_getull(arg[1]) > 9223372036854775807 && nb > 0)))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(arg[1], 2);
