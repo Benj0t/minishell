@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 10:40:30 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 19:17:59 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 23:19:10 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	environnment_join(char *value, char **result,\
 }
 
 int		environnment_expander(char **result, size_t *i,\
-		t_token *tok, t_managparse *manag)
+		t_token *tok, t_managparse *manag, int is_in_quote)
 {
 	char	*var;
 	char	*value;
@@ -79,7 +79,11 @@ int		environnment_expander(char **result, size_t *i,\
 	var = NULL;
 	value = NULL;
 	if (is_quote(tok->name[*i + 1]))
+	{
+		if (is_in_quote)
+			add_char(result, i, tok, manag);
 		return (0);
+	}
 	len = get_len(tok->name);
 	var = get_value(tok->name, i);
 	if (var)

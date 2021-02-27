@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 18:28:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 20:15:58 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 23:17:16 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,7 @@ char						*join_protect(char *str1, char *str2);
 void						simple_quote(char **result, size_t *i, \
 							t_token *tok, t_managparse *manag);
 int							environnment_expander(char **result, size_t *i,\
-							t_token *tok, t_managparse *manag);
+							t_token *tok, t_managparse *manag, int is_in_quote);
 int							double_quote(char **result, size_t *i,\
 							t_token *tok, t_managparse *manag);
 int							quote_exp(char **result, size_t *i,\
