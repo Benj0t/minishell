@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 18:28:02 by psemsari          #+#    #+#             */
 /*   Updated: 2021/02/27 22:44:27 by bemoreau         ###   ########.fr       */
@@ -102,6 +102,7 @@ typedef struct				s_managparse
 	t_command				*command;
 	t_redir					*redir;
 	t_pipe					*spipe;
+	int						is_in_quote;
 	char					*str;
 }							t_managparse;
 
@@ -205,7 +206,7 @@ char						*join_protect(char *str1, char *str2);
 void						simple_quote(char **result, size_t *i, \
 							t_token *tok, t_managparse *manag);
 int							environnment_expander(char **result, size_t *i,\
-							t_token *tok, t_managparse *manag, int is_in_quote);
+							t_token *tok, t_managparse *manag);
 int							double_quote(char **result, size_t *i,\
 							t_token *tok, t_managparse *manag);
 int							quote_exp(char **result, size_t *i,\
