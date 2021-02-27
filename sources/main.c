@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 22:17:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 18:52:30 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 21:21:02 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	init_env(char **envp)
 		return (ft_lstclear(&g_env, dealloc_varenv));
 	str = get_env("SHLVL");
 	if (!str)
-		return (ft_lstclear(&g_env, dealloc_varenv));
+		return ;
 	str = ft_itoa(ft_atoi(str) + 1);
 	set_env("SHLVL", str, 1);
 	free(str);
