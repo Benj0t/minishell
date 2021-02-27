@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/26 00:09:02 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 01:19:39 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,18 @@ int	second_command(t_command *cmd,t_pipe *spipe, t_redir *redir)
 {
 	t_parser	comm2;
 
-	if (exec_redir(cmd->pipe, redir) == -1)
-		return (0);
-	if ((get_command(cmd->pipe->argument, &comm2)) == -1)
+	if (spipe->curr_p[0] == -1 && spipe->curr_p[1] == -1)
+		if (pipe(spipe->curr_p) < 0)
+			return (0);
+	if (spipe->prev_p[0] == -1 && spipe->prev_p[1] == -1)
+		if (pipe(spipe->prev_p) < 0)
+			return (0);
+	if (exec_redir(cmd, redir) == -1)
+		return (-1);
+	if ((get_command(cmd->argument, &comm2)) == -1)
 		free_struct(spipe, &comm2, cmd);
 	set_local_env(spipe);
-	spipe->b_ret[++spipe->index] = scan_builtins(cmd->pipe, spipe);
+	spipe->b_ret[++spipe->index] = scan_builtins(cmd, spipe);
 	if (init_path(spipe->l_env, comm2, spipe) == NULL)
 		return (spipe->ret[spipe->index] = invalid_command(spipe, &comm2));
 	if ((g_child = fork()) == 0)
@@ -68,9 +74,11 @@ int			first_command(t_command *cmd,\
 	t_parser comm1;
 
 	if (exec_redir(cmd, redir) == -1)
-		return (0);
+		return (-1);
 	if (pipe(spipe->curr_p) < 0 || pipe(spipe->prev_p) < 0)
+	{
 		return (0);
+	}
 	set_local_env(spipe);
 	if ((get_command(cmd->argument, &comm1)) == -1)
 		free_struct(spipe, &comm1, cmd);

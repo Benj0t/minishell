@@ -6,7 +6,7 @@
 #    By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/13 19:04:13 by bemoreau          #+#    #+#              #
-#    Updated: 2021/02/23 20:52:17 by bemoreau         ###   ########.fr        #
+#    Updated: 2021/02/26 20:44:34 by bemoreau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,6 @@ FILES =		./sources/main\
 			./sources/backslash_quote\
 			./sources/environment_utils\
 			./sources/environment_manag\
-			./sources/token_env\
 			./sources/free\
 
 SRCS = $(addsuffix .c, $(FILES))

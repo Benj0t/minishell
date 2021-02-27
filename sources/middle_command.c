@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 04:32:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/26 00:09:22 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 23:57:04 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ int			middle_commands(t_command *cmd,\
 	int			ret;
 	t_parser	comm1;
 
+	if (exec_redir(cmd, redir) == -1)
+		return (-1);
 	if (pipe(spipe->curr_p) < 0)
 		return (0);
 	if ((get_command(cmd->argument, &comm1)) == -1)
 		free_struct(spipe, &comm1, cmd);
 	set_local_env(spipe);
-	if (exec_redir(cmd, redir) == -1)
-		return (-1);
 	spipe->b_ret[++spipe->index] = scan_builtins(cmd, spipe);
 	if (init_path(spipe->l_env, comm1, spipe) == NULL && spipe->b_ret[spipe->index] == 1)
 		return (spipe->ret[spipe->index] = invalid_command(spipe, &comm1));

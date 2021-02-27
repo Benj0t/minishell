@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/08 15:52:01 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/24 17:29:48 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 20:43:07 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int		exec_redir(t_command *cmd, t_redir *redir)
 	int		fd;
 
 	save_std(redir, cmd);
-	if (cmd->redirection == NULL)
+	if (cmd == NULL || cmd->redirection == NULL)
 		return (1);
 	tmp = cmd->redirection;
 	while (tmp && tmp->content)

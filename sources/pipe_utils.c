@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/26 00:55:22 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 22:54:54 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int			invalid_command(t_pipe *spipe, t_parser *comm1)
 		free(comm1->argument);
 		return (2);
 	}
+	spipe->b_ret[spipe->index] = 4;
 	ft_putstr_fd(comm1->argument[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
 	free(comm1->argument);

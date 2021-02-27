@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/26 01:13:57 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 01:37:21 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,14 +92,10 @@ int		execution(t_command *cmd, t_redir *redir, t_pipe *spipe)
 	int ret;
 
 	i = 0;
-	if ((cmd->argument == NULL || !(ft_strncmp(cmd->argument->content, "", 2))) && cmd->pipe == NULL)
-	{
-		exec_redir(cmd, redir);
-		end_redir(redir);
-		return (-1);
-	}
 	spipe->n_comm = listlen(cmd);
 	spipe->n_bin = spipe->n_comm - 1;
+	spipe->n_pipe =  spipe->n_comm - 1;
+	printf("n_pipe: %d\n", spipe->n_pipe);
 	if (!init_spipe(spipe))
 		return (-1);
 	if (spipe->n_comm == 1)

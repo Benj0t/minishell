@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:19:00 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/26 00:09:36 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 01:17:57 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ static int	last_command(t_command *cmd,\
 	int			ret;
 	t_parser	comm1;
 
+	if (exec_redir(cmd, redir) == -1)
+		return (-1);
 	if (pipe(spipe->curr_p) < 0)
 		return (1);
-	if (exec_redir(cmd, redir) == -1)
-		return (2);
 	if ((get_command(cmd->argument, &comm1)) == -1)
 		return (free_struct(spipe, &comm1, cmd));
 	set_local_env(spipe);
@@ -58,27 +58,37 @@ int			multi_pipe(t_command *cmd,\
 {
 	int			i;
 	int			ret;
+	int			exec;
 	t_command	*tmp;
 
 	spipe->index = 0;
 	i = 0;
 	tmp = cmd;
-	while (i < spipe->n_pipe - 1 && tmp)
+	spipe->curr_p[0] = -1;
+	spipe->curr_p[1] = -1;
+	spipe->prev_p[0] = -1;
+	spipe->prev_p[1] = -1;
+	while (i <= spipe->n_pipe && tmp)
 	{
-		if (i == 0)
+		exec = 0;
+		if((tmp->argument == NULL || tmp->argument->content == NULL))
 		{
-			ret = first_command(tmp, spipe, redir);
-			ret = second_command(tmp, spipe, redir);
-			tmp = tmp->pipe;
+			exec = 1;
+			exec_redir(tmp, redir);
 		}
-		if (i > 0)
+		if (i == 0 && exec == 0)
+			ret = first_command(tmp, spipe, redir);
+		if (i == 1 && exec == 0)
+			ret = second_command(tmp, spipe, redir);
+		if (i > 1 && i != spipe->n_pipe && exec == 0)
 			ret = middle_commands(tmp, spipe, redir);
+		if (i == spipe->n_pipe && exec == 0)
+			ret = last_command(tmp, spipe, redir);
 		tmp = tmp->pipe;
+		end_redir(redir);
 		i++;
 	}
-	ret = last_command(tmp, spipe, redir);
 	spipe->i_pipe++;
 	get_ret_values(spipe);
-	end_redir(redir);
 	return (0);
 }

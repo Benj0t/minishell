@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/26 01:14:04 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 01:48:08 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,35 +18,26 @@ extern int		g_signal_c;
 
 void		pid_manager(t_pipe *spipe)
 {
-	if (spipe->ret[0] == 0)
+	int i;
+
+	i = -1;
+	while (++i <= 1)
 	{
-		waitpid(spipe->child[0], (int *)&(spipe->pid[0]), 0);
-		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
-	}
-	if (g_signal_b == 131)
-	{
-		spipe->ret[0] = 131;
-		g_signal_b = 0;
-	}
-	if (g_signal_c == 1)
-	{
-		spipe->ret[0] = 130;
-		g_signal_b = 0;
-	}
-	if (spipe->ret[1] == 0)
-	{
-		waitpid(spipe->child[1], (int *)&(spipe->pid[1]), 0);
-		spipe->ret[1] = WEXITSTATUS(spipe->pid[1]);
-	}
-	if (g_signal_c == 131)
-	{
-		spipe->ret[1] = 130;
-		g_signal_c = 0;
-	}
-	if (g_signal_b == 131)
-	{
-		spipe->ret[0] = 131;
-		g_signal_b = 0;
+		if (spipe->ret[i] == 0)
+		{
+				waitpid(spipe->child[i], (int *)&(spipe->pid[i]), 0);
+				spipe->ret[i] = WEXITSTATUS(spipe->pid[i]);
+		}
+		if (g_signal_b == 131)
+		{
+			spipe->ret[i] = 131;
+			g_signal_b = 0;
+		}
+		if (g_signal_c == 1)
+		{
+			spipe->ret[i] = 130;
+			g_signal_b = 0;
+		}
 	}
 }
 
@@ -84,7 +75,7 @@ static int	right_command(t_pipe *spipe, t_redir *redir,\
 {
 	t_parser	comm2;
 
-	if ((get_command(command->pipe->argument, &comm2)) == -1)
+	if ((get_command(command->argument, &comm2)) == -1)
 		free_struct(spipe, &comm2, command);
 	if (init_path(spipe->l_env, comm2, spipe) == NULL  && spipe->b_ret[spipe->index] == 1)
 			return (spipe->ret[spipe->index] = invalid_command(spipe, &comm2));
@@ -94,7 +85,7 @@ static int	right_command(t_pipe *spipe, t_redir *redir,\
 			dup2(spipe->curr_p[0], 0);
 		close(spipe->curr_p[1]);
 		if (spipe->b_ret[spipe->index] == 0)
-			exit(builtins(command->pipe, spipe));
+			exit(builtins(command, spipe));
 		else if (spipe->b_ret[spipe->index] == 1)
 			execve(spipe->path, comm2.argument, spipe->l_env);
 	}
@@ -106,10 +97,9 @@ static int	right_command(t_pipe *spipe, t_redir *redir,\
 	return (g_child);
 }
 
-int			single_pipe(t_command *command,\
-					t_redir *redir, t_pipe *spipe)
-{
 
+int			left_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
+{
 	if (exec_redir(command, redir) == -1 || pipe(spipe->curr_p) < 0)
 		return (-1);
 	set_local_env(spipe);
@@ -118,14 +108,48 @@ int			single_pipe(t_command *command,\
 		return (0);
 	end_redir(redir);
 	set_local_env(spipe);
-	if (exec_redir(command->pipe, redir) == -1)
+	return (1);
+}
+
+int			right_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
+{
+	if (spipe->curr_p[0] == -1 || spipe->curr_p[1] == -1)
+		if (pipe(spipe->curr_p) < 0)
+			return (0);
+	if (exec_redir(command, redir) == -1)
 		return (-1);
-	spipe->b_ret[++spipe->index] = scan_builtins(command->pipe, spipe);
+	spipe->b_ret[++spipe->index] = scan_builtins(command, spipe);
 	if ((right_command(spipe, redir, command)) == -1)
 		return (0);
 	close(spipe->curr_p[0]);
 	close(spipe->curr_p[1]);
+	return (1);
+}
+
+int		single_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
+{
+	int			ret;
+	t_command	*tmp;
+
+	ret = 0;
+	tmp = command;
+	spipe->curr_p[0] = -1;
+	spipe->curr_p[1] = -1;
+	if((tmp->argument == NULL || tmp->argument->content == NULL))
+	{
+		exec_redir(tmp, redir);
+		end_redir(redir);
+	}
+	else
+		left_pipe(tmp, redir, spipe);
+	tmp = tmp->pipe;
+	if((tmp->argument == NULL || tmp->argument->content == NULL))
+	{
+		exec_redir(tmp, redir);
+		end_redir(redir);
+	}
+	else
+		right_pipe(tmp, redir, spipe);
 	pid_manager(spipe);
-	end_redir(redir);
 	return (1);
 }

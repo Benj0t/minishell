@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/25 14:45:22 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/26 21:05:23 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ char		*init_path(char **env, t_parser command, t_pipe *spipe)
 		free(spipe->path);
 		spipe->path = NULL;
 	}
+	if (command.argument && !ft_strncmp("", command.argument[0], 1))
+		return(NULL);
 	if (command.argument && !ft_strncmp(".", command.argument[0], 2))
 	{
 		spipe->b_ret[spipe->index] = 2;
