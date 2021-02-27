@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   single_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 19:55:34 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 22:01:18 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ static int		right_command(t_pipe *spipe, t_redir *redir,\
 	spipe->child[1] = g_child;
 	close(spipe->curr_p[0]);
 	close(spipe->curr_p[1]);
-	free(comm.argument);
 	free(spipe->path);
 	return (g_child);
 }

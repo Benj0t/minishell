@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 12:06:18 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 18:08:15 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 21:52:04 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	remove_backslash_check(char **result, size_t *i,\
 		t_token *tok, t_managparse *manag)
 {
 	if ((tok->name[*i + 1] == '$') || (tok->name[*i + 1] == '"')\
-		|| (tok->name[*i + 1] == '\'') || (tok->name[*i + 1] == '\\'))
+		|| (tok->name[*i + 1] == '\\'))
 		(*i)++;
 	add_char(result, i, tok, manag);
 }
