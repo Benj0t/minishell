@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 13:44:29 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 20:16:48 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 21:28:10 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int						exit_neg(long long int nb)
 void					free_exit(char **arg, t_pipe *spipe,\
 							t_command *command, unsigned long long int nb)
 {
-	printf("%s\n", *spipe->str);
 	free(arg);
 	free(*spipe->str);
 	free_spipe(spipe);
