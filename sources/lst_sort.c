@@ -6,11 +6,29 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 16:37:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 13:26:20 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 16:29:52 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_lstrm(t_list **lst)
+{
+	t_list	*tmp;
+	t_list	*base;
+
+	if (!lst || !(*lst))
+		return ;
+	tmp = NULL;
+	base = *lst;
+	while (base)
+	{
+		tmp = base->next;
+		free(base);
+		base = tmp;
+	}
+	*lst = NULL;
+}
 
 t_list		*ft_lstcopy(t_list *list)
 {
@@ -32,7 +50,10 @@ t_list		*ft_lstcopy(t_list *list)
 		{
 			tmp2 = ft_lstnew(tmp->content);
 			if (tmp2 == NULL)
+			{
+				ft_lstrm(&ret);
 				return (NULL);
+			}
 			ft_lstadd_back(&ret, tmp2);
 		}
 		tmp = tmp->next;

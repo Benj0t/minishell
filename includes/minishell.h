@@ -67,6 +67,7 @@ int						add_dot(void);
 int						free_struct(t_pipe *spipe, t_parser *parser, t_command *command);
 int						prompt_malloc(char **line, char *str);
 void					bubble_sort(t_list *list);
+void					ft_lstrm(t_list **lst);
 t_list*					ft_lstcopy(t_list* head);
 
 int						check_env(char *s);

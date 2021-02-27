@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 14:34:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 14:01:55 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/27 16:29:37 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int			ft_export(char **arg)
 			return (1);
 		bubble_sort(copy);
 		print_export("declare -x ", copy);
-		ft_lstclear(&copy, NULL);
+		ft_lstrm(&copy);
 		return (0);
 	}
 	while (*arg != NULL)

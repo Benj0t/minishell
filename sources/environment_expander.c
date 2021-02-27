@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 10:40:30 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 10:45:57 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 15:42:41 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int		environnment_expander(char **result, size_t *i,\
 	var = get_value(tok->name, i);
 	if (var)
 	{
-		if (is_valid_env(var) || ft_strcmp(var, "?") == 0)
+		if (is_valid_env(var) || ft_strcmp(var, "?") == 0 || ft_isdigit(var[0]))
 			value = ft_subvar(var, manag);
 		environnment_join(value, result, tok, manag);
 		free(var);
