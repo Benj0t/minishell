@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 17:21:51 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 18:16:01 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:09:43 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,12 @@ char	*replace(char *str, char *result)
 	return (result);
 }
 
-int		expansion(t_token *tok, t_managparse *manag)
+int		expansion(t_token *tok, t_managparse *manag, size_t i)
 {
 	char	*result;
 	int		env_sub;
 	int		quote_sub;
-	size_t	i;
 
-	i = 0;
 	env_sub = 0;
 	quote_sub = 0;
 	result = ft_strdup("");
@@ -81,9 +79,8 @@ int		expansion(t_token *tok, t_managparse *manag)
 	}
 	tok->name = replace(tok->name, result);
 	if (quote_sub == 0 && env_sub == 1 && !ft_strcmp(result, ""))
-	{
 		free(tok->name);
+	if (quote_sub == 0 && env_sub == 1 && !ft_strcmp(result, ""))
 		tok->name = NULL;
-	}
 	return (env_sub);
 }
