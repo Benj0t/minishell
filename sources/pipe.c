@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/28 18:06:05 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:31:11 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,22 @@ int		is_bslash(int ret)
 	return (ret);
 }
 
+void	check_signals(t_pipe *spipe, int i)
+{
+	if (g_signal_b == 131)
+	{
+		free(spipe->str);
+		spipe->ret[i] = 131;
+		g_signal_b = 0;
+	}
+	if (g_signal_c == 1)
+	{
+		free(spipe->str);
+		spipe->ret[i] = 130;
+		g_signal_c = 0;
+	}
+}
+
 int		simple_fork(t_command *amd, t_redir *redir, t_pipe *spipe,\
 													t_parser comm1)
 {
@@ -42,6 +58,7 @@ int		simple_fork(t_command *amd, t_redir *redir, t_pipe *spipe,\
 			exit(execve(spipe->path, comm1.argument, spipe->l_env));
 		waitpid(g_child, (int *)&(spipe->pid[0]), 0);
 		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
+		check_signals(spipe, i);
 	}
 	return (-1);
 }
@@ -74,18 +91,6 @@ int		simple_command(t_command *cmd,\
 		free(spipe->path);
 	free(comm1.argument);
 	return (spipe->ret[0]);
-}
-
-int		ft_ret(int *ret)
-{
-	int i;
-
-	i = 0;
-	while (ret[i] != -1)
-	{
-		i++;
-	}
-	return ((unsigned char)ret[i - 1]);
 }
 
 int		execution(t_command *cmd, t_redir *redir, t_pipe *spipe)

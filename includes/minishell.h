@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 18:28:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/28 17:46:10 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:29:39 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,6 @@ char						*init_path(char **env,\
 char						**set_local_env(t_pipe *spipe);
 int							builtins(t_command *cmd, t_pipe *spipe,\
 													t_parser *parse);
-int							ft_ret(int *ret);
 void						end_redir(t_redir *redir);
 int							exec_redir(t_command *cmd, t_redir *redir,\
 															t_pipe *spipe);

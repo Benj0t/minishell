@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/28 18:07:35 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:21:34 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 void		error_msg(t_pipe *spipe, struct stat buf, int ret)
 {
-	if (!(buf.st_mode & S_IFREG))
+	spipe->b_ret[spipe->index] = 8;
+	if (!(buf.st_mode & S_IFREG) && ret == 0)
 		spipe->b_ret[spipe->index] = 6;
-	else if (!(buf.st_mode & S_IXUSR))
+	if (!(buf.st_mode & S_IXUSR) && ret == 0)
 		spipe->b_ret[spipe->index] = 7;
-	if (ret != 0)
-		spipe->b_ret[spipe->index] = 8;
 }
 
 char		*rel_path(char **env, t_parser comm, struct stat buf, t_pipe *spipe)

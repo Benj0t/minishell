@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/28 18:08:01 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:28:01 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,13 @@ void		get_ret_values(t_pipe *spipe)
 			spipe->ret[i] = WEXITSTATUS(spipe->pid[i]);
 			if (g_signal_b == 131)
 			{
+				free(spipe->str);
 				spipe->ret[i] = 131;
 				g_signal_b = 0;
 			}
 			if (g_signal_c == 1)
 			{
+				free(spipe->str);
 				spipe->ret[i] = 130;
 				g_signal_c = 0;
 			}
@@ -47,8 +49,8 @@ void		pid_manager(t_pipe *spipe)
 {
 	int i;
 
-	i = -1;
-	while (++i <= 1)
+	i = 2;
+	while (--i >= 0)
 	{
 		if (spipe->ret[i] == 0)
 		{
@@ -57,11 +59,13 @@ void		pid_manager(t_pipe *spipe)
 		}
 		if (g_signal_b == 131)
 		{
+			free(spipe->str);
 			spipe->ret[i] = 131;
 			g_signal_b = 0;
 		}
 		if (g_signal_c == 1)
 		{
+			free(spipe->str);
 			spipe->ret[i] = 130;
 			g_signal_b = 0;
 		}
@@ -90,17 +94,21 @@ int			invalid_command(t_pipe *spipe, t_parser *comm1)
 	if (spipe->b_ret[spipe->index] == 2)
 		ft_putstr_fd("minishell: .: command not found\n", 2);
 	if (spipe->b_ret[spipe->index] == 6)
-		ft_putstr_fd("minishell: file is a folder\n", 2);
+		ft_putstr_fd("minishell: file is a directory\n", 2);
 	if (spipe->b_ret[spipe->index] == 7)
 		ft_putstr_fd("minishell: Can not execute your file\n", 2);
 	if (spipe->b_ret[spipe->index] == 8)
 		ft_putstr_fd("minishell: Can not find or execute your file\n", 2);
-	if (spipe->b_ret[spipe->index] == 2 || spipe->b_ret[spipe->index] == 3 ||\
-	spipe->b_ret[spipe->index] == 6 || spipe->b_ret[spipe->index] == 7 ||\
-											spipe->b_ret[spipe->index] == 8)
+	if (spipe->b_ret[spipe->index] == 3 || spipe->b_ret[spipe->index] == 6 ||\
+								spipe->b_ret[spipe->index] == 7)
 	{
 		free(comm1->argument);
-		return (2);
+		return (126);
+	}
+	if (spipe->b_ret[spipe->index] == 2 || spipe->b_ret[spipe->index] == 8)
+	{
+		free(comm1->argument);
+		return (127);
 	}
 	ft_putstr_fd(comm1->argument[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
