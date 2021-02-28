@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/28 18:16:26 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/28 19:33:12 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:41:15 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int			parser(char **str, t_redir *redir, t_pipe *spipe)
 
 	manag.str = *str;
 	manag.spipe = spipe;
-	while (manag.str && *manag.str)
+	while (*manag.str)
 	{
 		manag.command = setup_command();
 		base = manag.command;
