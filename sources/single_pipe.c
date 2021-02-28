@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   single_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
 /*   Updated: 2021/02/28 21:21:52 by bemoreau         ###   ########.fr       */
@@ -32,9 +32,7 @@ static int		left_command(t_pipe *spipe, t_redir *redir,\
 		if (spipe->b_ret[spipe->index] == 0)
 			exit(builtins(command, spipe, &comm));
 		else if (spipe->b_ret[spipe->index] == 1)
-		{
 			exit(execve(spipe->path, comm.argument, spipe->l_env));
-		}
 		if (redir->std_out != -1)
 		{
 			end_redir(redir);
