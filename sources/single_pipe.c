@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/28 19:56:02 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 21:21:52 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ extern int		g_signal_c;
 static int		left_command(t_pipe *spipe, t_redir *redir,\
 						t_command *command, t_parser comm)
 {
-	if (init_path(spipe->l_env, comm, spipe) == NULL &&\
-						spipe->b_ret[spipe->index] == 1)
+	int index;
+
+	index = spipe->b_ret[spipe->index];
+	if (index && (init_path(spipe->l_env, comm, spipe) == NULL))
 		return (spipe->ret[0] = invalid_command(spipe, &comm));
 	if ((g_child = fork()) == 0)
 	{
-		printf("Moi %d\n", spipe->b_ret[spipe->index]);
 		if (redir->std_in == -1 && redir->std_out == -1)
 			dup2(spipe->curr_p[1], 1);
 		close(spipe->curr_p[0]);
@@ -32,7 +33,6 @@ static int		left_command(t_pipe *spipe, t_redir *redir,\
 			exit(builtins(command, spipe, &comm));
 		else if (spipe->b_ret[spipe->index] == 1)
 		{
-			printf("Moi j execscs\n");
 			exit(execve(spipe->path, comm.argument, spipe->l_env));
 		}
 		if (redir->std_out != -1)
@@ -43,14 +43,16 @@ static int		left_command(t_pipe *spipe, t_redir *redir,\
 	}
 	spipe->child[0] = g_child;
 	free(comm.argument);
-	return (g_child);
+	return (0);
 }
 
 static int		right_command(t_pipe *spipe, t_redir *redir,\
 						t_command *command, t_parser comm)
 {
-	if (init_path(spipe->l_env, comm, spipe) == NULL &&\
-						spipe->b_ret[spipe->index] == 1)
+	int index;
+
+	index = spipe->b_ret[spipe->index];
+	if (index && (init_path(spipe->l_env, comm, spipe)) == NULL)
 		return (spipe->ret[spipe->index] = invalid_command(spipe, &comm));
 	if ((g_child = fork()) == 0)
 	{
@@ -66,7 +68,7 @@ static int		right_command(t_pipe *spipe, t_redir *redir,\
 	close(spipe->curr_p[0]);
 	close(spipe->curr_p[1]);
 	free(spipe->path);
-	return (g_child);
+	return (0);
 }
 
 int				left_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
@@ -79,7 +81,7 @@ int				left_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
 		return (-1);
 	set_local_env(spipe);
 	spipe->b_ret[spipe->index] = scan_builtins(command, spipe, &comm);
-	if ((left_command(spipe, redir, command, comm)) == -1)
+	if ((left_command(spipe, redir, command, comm)) != 0)
 		return (0);
 	end_redir(redir);
 	return (1);
@@ -98,7 +100,7 @@ int				right_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
 		return (-1);
 	set_local_env(spipe);
 	spipe->b_ret[++spipe->index] = scan_builtins(command, spipe, &comm);
-	if ((right_command(spipe, redir, command, comm)) == -1)
+	if ((right_command(spipe, redir, command, comm)) != 0)
 		return (0);
 	if (spipe->ret[spipe->index] <= 1)
 		free(comm.argument);
@@ -109,15 +111,14 @@ int				right_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
 
 int				single_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
 {
-	int			ret;
 	int			i;
 	t_command	*tmp;
 
-	ret = 0;
 	tmp = command;
 	i = 0;
 	spipe->curr_p[0] = -1;
 	spipe->curr_p[1] = -1;
+	spipe->index = 0;
 	while (i <= 1)
 	{
 		if ((tmp->argument == NULL || tmp->argument->content == NULL))

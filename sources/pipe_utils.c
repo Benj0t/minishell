@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/28 19:59:38 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 21:17:48 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void		get_ret_values(t_pipe *spipe)
 	i = spipe->index;
 	while (i >= 0)
 	{
-		if (spipe->ret[i] == 0)
+		if (spipe->b_ret[i] == 1)
 		{
 			waitpid(spipe->child[i], (int *)&(spipe->pid[i]), 0);
 			spipe->ret[i] = WEXITSTATUS(spipe->pid[i]);
@@ -47,10 +47,10 @@ void		pid_manager(t_pipe *spipe)
 {
 	int i;
 
-	i = 2;
-	while (--i >= 0)
+	i = 1;
+	while (i > -1)
 	{
-		if (spipe->ret[i] == 0)
+		if (spipe->b_ret[i] == 1)
 		{
 			waitpid(spipe->child[i], (int *)&(spipe->pid[i]), 0);
 			spipe->ret[i] = WEXITSTATUS(spipe->pid[i]);
@@ -65,6 +65,7 @@ void		pid_manager(t_pipe *spipe)
 			spipe->ret[i] = 130;
 			g_signal_b = 0;
 		}
+		i--;
 	}
 }
 
