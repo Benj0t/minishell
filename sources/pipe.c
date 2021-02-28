@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/28 19:34:41 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:40:10 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,11 @@ void	check_signals(t_pipe *spipe)
 {
 	if (g_signal_b == 131)
 	{
-		free(spipe->str);
 		spipe->ret[0] = 131;
 		g_signal_b = 0;
 	}
 	if (g_signal_c == 1)
 	{
-		free(spipe->str);
 		spipe->ret[0] = 130;
 		g_signal_c = 0;
 	}

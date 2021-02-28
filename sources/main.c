@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 22:17:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/28 19:26:17 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:40:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ int		main(int ac, char **av, char **envp)
 		ft_putstr_fd("> ", 2);
 		gnl_prompt(0, &str, &spipe.last_ret);
 		parser(&str, &redir, &spipe);
-		if (str)
-			free(str);
+		free(str);
 	}
 	return (0);
 }

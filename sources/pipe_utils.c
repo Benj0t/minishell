@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/28 19:28:01 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:40:18 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,11 @@ void		get_ret_values(t_pipe *spipe)
 			spipe->ret[i] = WEXITSTATUS(spipe->pid[i]);
 			if (g_signal_b == 131)
 			{
-				free(spipe->str);
 				spipe->ret[i] = 131;
 				g_signal_b = 0;
 			}
 			if (g_signal_c == 1)
 			{
-				free(spipe->str);
 				spipe->ret[i] = 130;
 				g_signal_c = 0;
 			}
@@ -59,13 +57,11 @@ void		pid_manager(t_pipe *spipe)
 		}
 		if (g_signal_b == 131)
 		{
-			free(spipe->str);
 			spipe->ret[i] = 131;
 			g_signal_b = 0;
 		}
 		if (g_signal_c == 1)
 		{
-			free(spipe->str);
 			spipe->ret[i] = 130;
 			g_signal_b = 0;
 		}
