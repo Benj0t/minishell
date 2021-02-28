@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/28 18:04:36 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:56:02 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,17 @@ static int		left_command(t_pipe *spipe, t_redir *redir,\
 		return (spipe->ret[0] = invalid_command(spipe, &comm));
 	if ((g_child = fork()) == 0)
 	{
+		printf("Moi %d\n", spipe->b_ret[spipe->index]);
 		if (redir->std_in == -1 && redir->std_out == -1)
 			dup2(spipe->curr_p[1], 1);
 		close(spipe->curr_p[0]);
 		if (spipe->b_ret[spipe->index] == 0)
 			exit(builtins(command, spipe, &comm));
 		else if (spipe->b_ret[spipe->index] == 1)
+		{
+			printf("Moi j execscs\n");
 			exit(execve(spipe->path, comm.argument, spipe->l_env));
+		}
 		if (redir->std_out != -1)
 		{
 			end_redir(redir);

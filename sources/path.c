@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/28 19:21:34 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:58:05 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char		*try_exec(char **tab, char **name, t_parser comm, t_pipe *spipe)
 			if (buf.st_mode & S_IFREG)
 				if (buf.st_mode & S_IXUSR)
 				{
-					spipe->b_ret[spipe->index] = 0;
+					spipe->b_ret[spipe->index] = 1;
 					dealloc_tab(tab);
 					return (*name);
 				}
