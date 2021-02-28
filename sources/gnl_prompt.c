@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 15:56:47 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/28 11:57:11 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/28 14:36:57 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,13 @@ int		prompt_test(int check, char *str, char **line, int *last_ret)
 		*line = ft_calloc(1, 1);
 		g_signal_c = 0;
 	}
-	if ((check == 0) && (ft_strlen(*line) == 0))
+	if (check == 0)
 	{
 		write(2, "exit\n", 5);
 		free(*line);
 		ft_lstclear(&g_env, &dealloc_varenv);
 		exit(*last_ret);
 	}
-	if (check == 0)
-		check = 1;
 	str[check] = 0;
 	return (prompt_rec(check, str, line, last_ret));
 }
@@ -75,7 +73,7 @@ int		prompt_rec(int check, char *str, char **line, int *last_ret)
 	char *tmp;
 
 	tmp = str;
-	if (!check && *line[ft_strlen(*line) - 1] != -1)
+	if (!check)
 		return (prompt_malloc(line, str) == -1 ? -1 : 0);
 	if (*tmp)
 	{

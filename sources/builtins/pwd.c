@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 20:01:04 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/28 11:18:19 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 14:48:39 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@ int		ft_pwd(void)
 {
 	char	*pwd;
 
-	pwd = getcwd(NULL, MAXPATHLEN);
+	pwd = get_env("PWD");
 	if (pwd == NULL)
 		return (-1);
 	else
 		ft_putstr_fd(pwd, 1);
 	ft_putchar_fd('\n', 1);
-	free(pwd);
 	return (0);
 }

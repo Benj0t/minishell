@@ -6,7 +6,7 @@
 /*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 18:24:48 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 18:24:51 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/02/28 14:05:00 by psemsari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/types.h>
 # include <sys/uio.h>
 
-# define BUFFER_SIZE 10
+# define BUFFER_SIZE 1
 
 typedef struct		s_list
 {
