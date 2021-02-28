@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/28 19:31:11 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:34:41 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,18 @@ int		is_bslash(int ret)
 	return (ret);
 }
 
-void	check_signals(t_pipe *spipe, int i)
+void	check_signals(t_pipe *spipe)
 {
 	if (g_signal_b == 131)
 	{
 		free(spipe->str);
-		spipe->ret[i] = 131;
+		spipe->ret[0] = 131;
 		g_signal_b = 0;
 	}
 	if (g_signal_c == 1)
 	{
 		free(spipe->str);
-		spipe->ret[i] = 130;
+		spipe->ret[0] = 130;
 		g_signal_c = 0;
 	}
 }
@@ -58,7 +58,7 @@ int		simple_fork(t_command *amd, t_redir *redir, t_pipe *spipe,\
 			exit(execve(spipe->path, comm1.argument, spipe->l_env));
 		waitpid(g_child, (int *)&(spipe->pid[0]), 0);
 		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
-		check_signals(spipe, i);
+		check_signals(spipe);
 	}
 	return (-1);
 }
