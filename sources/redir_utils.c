@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 05:39:44 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 22:25:41 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 23:49:34 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	end_redir(t_redir *redir)
 		close(redir->save_stdout);
 	if (redir->std_out != -1)
 		close(redir->std_out);
+	redir->std_out = -1;
+	redir->std_in = -1;
 }
 
 int		err_msg(char *str, t_pipe *spipe)

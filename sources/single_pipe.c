@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   single_pipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/28 21:21:52 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:05:57 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,15 @@ static int		left_command(t_pipe *spipe, t_redir *redir,\
 		return (spipe->ret[0] = invalid_command(spipe, &comm));
 	if ((g_child = fork()) == 0)
 	{
-		if (redir->std_in == -1 && redir->std_out == -1)
+		if (redir->std_out == -1)
 			dup2(spipe->curr_p[1], 1);
 		close(spipe->curr_p[0]);
 		if (spipe->b_ret[spipe->index] == 0)
 			exit(builtins(command, spipe, &comm));
 		else if (spipe->b_ret[spipe->index] == 1)
 			exit(execve(spipe->path, comm.argument, spipe->l_env));
-		if (redir->std_out != -1)
-		{
-			end_redir(redir);
-			return (0);
-		}
 	}
+	end_redir(redir);
 	spipe->child[0] = g_child;
 	free(comm.argument);
 	return (0);
@@ -63,6 +59,7 @@ static int		right_command(t_pipe *spipe, t_redir *redir,\
 			execve(spipe->path, comm.argument, spipe->l_env);
 	}
 	spipe->child[1] = g_child;
+	end_redir(redir);
 	close(spipe->curr_p[0]);
 	close(spipe->curr_p[1]);
 	free(spipe->path);
@@ -81,7 +78,6 @@ int				left_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
 	spipe->b_ret[spipe->index] = scan_builtins(command, spipe, &comm);
 	if ((left_command(spipe, redir, command, comm)) != 0)
 		return (0);
-	end_redir(redir);
 	return (1);
 }
 
@@ -102,8 +98,6 @@ int				right_pipe(t_command *command, t_redir *redir, t_pipe *spipe)
 		return (0);
 	if (spipe->ret[spipe->index] <= 1)
 		free(comm.argument);
-	close(spipe->curr_p[0]);
-	close(spipe->curr_p[1]);
 	return (1);
 }
 
