@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:53:51 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 22:27:21 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 18:05:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void		exec_fcomm_2(t_redir *redir, t_pipe *spipe, t_parser comm2,\
 	if (spipe->b_ret[spipe->index] == 0)
 		exit(builtins(command->pipe, spipe, &comm2));
 	else if (spipe->b_ret[spipe->index] == 1)
-		execve(spipe->path, comm2.argument, spipe->l_env);
+		exit(execve(spipe->path, comm2.argument, spipe->l_env));
 }
 
 int			second_command(t_command *cmd, t_pipe *spipe, t_redir *redir)
@@ -67,7 +67,7 @@ void		exec_fcomm_1(t_redir *redir, t_pipe *spipe, t_parser comm1,\
 	if (spipe->b_ret[spipe->index] == 0)
 		exit(builtins(command, spipe, &comm1));
 	else if (spipe->b_ret[spipe->index] == 1)
-		execve(spipe->path, comm1.argument, spipe->l_env);
+		exit(execve(spipe->path, comm1.argument, spipe->l_env));
 }
 
 int			first_command(t_command *cmd,\

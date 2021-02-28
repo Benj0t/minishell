@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 18:28:02 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 22:44:27 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 17:46:10 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ typedef struct				s_token
 
 extern t_list				*g_env;
 
+int							get_path_id(char **env);
 int							invalid_command(t_pipe *spipe, t_parser *comm1);
 void						close_pipe(t_pipe *spipe);
 void						end_redir(t_redir *redir);

@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:19:06 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 22:28:53 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 18:04:36 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int		left_command(t_pipe *spipe, t_redir *redir,\
 		if (spipe->b_ret[spipe->index] == 0)
 			exit(builtins(command, spipe, &comm));
 		else if (spipe->b_ret[spipe->index] == 1)
-			execve(spipe->path, comm.argument, spipe->l_env);
+			exit(execve(spipe->path, comm.argument, spipe->l_env));
 		if (redir->std_out != -1)
 		{
 			end_redir(redir);

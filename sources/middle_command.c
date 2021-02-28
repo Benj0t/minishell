@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 04:32:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 22:27:21 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 18:04:48 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void		exec_middle_command(t_redir *redir, t_pipe *spipe, t_parser comm1,\
 	if (spipe->b_ret[spipe->index] == 0)
 		exit(builtins(command, spipe, &comm1));
 	else if (spipe->b_ret[spipe->index] == 1)
-		execve(spipe->path, comm1.argument, spipe->l_env);
+		exit(execve(spipe->path, comm1.argument, spipe->l_env));
 }
 
 int			middle_commands(t_command *cmd,\

@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/27 22:27:37 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 18:06:05 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		simple_fork(t_command *amd, t_redir *redir, t_pipe *spipe,\
 	else
 	{
 		if ((g_child = fork()) == 0)
-			execve(spipe->path, comm1.argument, spipe->l_env);
+			exit(execve(spipe->path, comm1.argument, spipe->l_env));
 		waitpid(g_child, (int *)&(spipe->pid[0]), 0);
 		spipe->ret[0] = WEXITSTATUS(spipe->pid[0]);
 	}

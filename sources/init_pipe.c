@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:24:08 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 12:33:06 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 18:07:16 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,18 @@ char		**set_local_env(t_pipe *spipe)
 	}
 	spipe->l_env = list_to_envp();
 	return (spipe->l_env);
+}
+
+int			get_path_id(char **env)
+{
+	int i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (!ft_strncmp("PATH=", env[i], 5))
+			return (i);
+		i++;
+	}
+	return (-1);
 }

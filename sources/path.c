@@ -6,24 +6,20 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/27 22:43:03 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/02/28 18:07:35 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			get_path_id(char **env)
+void		error_msg(t_pipe *spipe, struct stat buf, int ret)
 {
-	int i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (!ft_strncmp("PATH=", env[i], 5))
-			return (i);
-		i++;
-	}
-	return (-1);
+	if (!(buf.st_mode & S_IFREG))
+		spipe->b_ret[spipe->index] = 6;
+	else if (!(buf.st_mode & S_IXUSR))
+		spipe->b_ret[spipe->index] = 7;
+	if (ret != 0)
+		spipe->b_ret[spipe->index] = 8;
 }
 
 char		*rel_path(char **env, t_parser comm, struct stat buf, t_pipe *spipe)
@@ -31,46 +27,52 @@ char		*rel_path(char **env, t_parser comm, struct stat buf, t_pipe *spipe)
 	int ret;
 
 	ret = 0;
-	if ((!(comm.argument[0][0] == '.' && comm.argument[0][1] == '/')))
-		return (NULL);
 	if ((ret = stat(comm.argument[0], &buf)) == 0 && (buf.st_mode & S_IXUSR)\
-												&& S_ISREG(buf.st_mode) == 1)
+												&& (buf.st_mode & S_IFREG))
 		return (ft_strdup(comm.argument[0]));
-	else
+	error_msg(spipe, buf, ret);
+	return (NULL);
+}
+
+int			rel_char(char *name)
+{
+	int i;
+
+	i = 0;
+	while (name[i])
 	{
-		if (ret == 1)
-			spipe->ret[spipe->index] = 127;
-		else if ((S_ISREG(buf.st_mode) == 0))
+		if (name[i] == '/')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char		*try_exec(char **tab, char **name, t_parser comm, t_pipe *spipe)
+{
+	struct stat buf;
+	int			i;
+
+	i = -1;
+	while (tab[++i])
+	{
+		if ((*name = ft_strjoin_c(tab[i], comm.command, '/')) == NULL)
 		{
-			spipe->b_ret[spipe->index] = 6;
+			dealloc_tab(tab);
+			return (NULL);
 		}
-		else
-			spipe->b_ret[spipe->index] = 7;
+		if (stat(*name, &buf) == 0)
+			if (buf.st_mode & S_IFREG)
+				if (buf.st_mode & S_IXUSR)
+				{
+					spipe->b_ret[spipe->index] = 0;
+					dealloc_tab(tab);
+					return (*name);
+				}
+		spipe->b_ret[spipe->index] = 127;
+		free(*name);
 	}
 	return (NULL);
-}
-
-char		*abs_path(char **env, t_parser comm, struct stat buf)
-{
-	if (!(comm.argument[0][0] == '/'))
-		return (NULL);
-	if (!stat(comm.argument[0], &buf))
-		return (ft_strdup(comm.argument[0]));
-	return (NULL);
-}
-
-char		*try_path(char **env, t_parser comm, struct stat buf, t_pipe *spipe)
-{
-	char *path;
-
-	path = NULL;
-	if (spipe->b_ret[spipe->index] == 3)
-		return (NULL);
-	path = rel_path(env, comm, buf, spipe);
-	if (path || spipe->b_ret[spipe->index] > 1)
-		return (path);
-	path = abs_path(env, comm, buf);
-	return (path);
 }
 
 char		*ft_path(char **env, t_parser comm, t_pipe *spipe)
@@ -80,23 +82,18 @@ char		*ft_path(char **env, t_parser comm, t_pipe *spipe)
 	int			i;
 	struct stat	buf;
 
-	if ((s = try_path(env, comm, buf, spipe)) ||\
-				(spipe->b_ret[spipe->index] > 1))
+	if (rel_char(comm.command))
+	{
+		s = rel_path(env, comm, buf, spipe);
 		return (s);
+	}
 	i = get_path_id(env);
 	if (i < 0 || (tab = ft_split(env[i] + 5, ':')) == NULL)
 		return (NULL);
 	i = 0;
-	if ((s = ft_strjoin_c(tab[i], comm.command, '/')) == NULL)
-	{
-		dealloc_tab(tab);
-		return (NULL);
-	}
-	while (tab[i] && (stat(s, &buf) == -1))
-	{
-		free(s);
-		s = ft_strjoin_c(tab[++i], comm.command, '/');
-	}
+	if (!rel_char(comm.command))
+		if ((s = try_exec(tab, &s, comm, spipe)))
+			return (s);
 	dealloc_tab(tab);
-	return (s);
+	return (NULL);
 }
