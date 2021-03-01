@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 02:10:41 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 19:49:34 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:44:28 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int		scan_builtins(t_command *cmd, t_pipe *spipe, t_parser *parse)
 {
 	int			ret;
 
+	(void)cmd;
+	(void)spipe;
 	ret = 1;
 	if (ft_strncmp(parse->command, "cd", 3) == 0)
 		ret = 0;

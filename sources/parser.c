@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 12:50:56 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/28 11:47:33 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:42:19 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ int		parser_token_way(t_token *tok, t_managparse *manag)
 int		parser_token(t_managparse *manag)
 {
 	t_token		tok;
-	t_list		*tmp;
 
 	tok = next_token(manag);
 	if (tok.type == tok_space || tok.type == tok_tab)

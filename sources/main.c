@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 22:17:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/28 19:40:28 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:38:55 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int		main(int ac, char **av, char **envp)
 	t_pipe		spipe;
 
 	(void)ac;
+	(void)av;
 	spipe.last_ret = 0;
 	init_env(envp);
 	spipe.ret = 0;

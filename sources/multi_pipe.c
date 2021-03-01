@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/22 15:19:00 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/28 21:21:36 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:43:06 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void		exec_lcomm(t_pipe *spipe, t_redir *redir, t_parser comm1,\
 static int	last_command(t_command *cmd,\
 						t_pipe *spipe, t_redir *redir)
 {
-	int			ret;
 	t_parser	comm1;
 
 	if (exec_redir(cmd, redir, spipe) == -1)
@@ -88,8 +87,6 @@ int			multi_pipe(t_command *cmd,\
 						t_pipe *spipe, t_redir *redir)
 {
 	int			i;
-	int			ret;
-	int			exec;
 	t_command	*tmp;
 
 	spipe->index = 0;

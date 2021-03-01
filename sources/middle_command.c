@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 04:32:57 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/28 21:21:22 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:44:39 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void		exec_middle_command(t_redir *redir, t_pipe *spipe, t_parser comm1,\
 int			middle_commands(t_command *cmd,\
 			t_pipe *spipe, t_redir *redir)
 {
-	int			ret;
 	t_parser	comm1;
 
 	if (exec_redir(cmd, redir, spipe) == -1)

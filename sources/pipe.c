@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 16:30:54 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/28 20:30:54 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:40:35 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void	check_signals(t_pipe *spipe)
 int		simple_fork(t_command *amd, t_redir *redir, t_pipe *spipe,\
 													t_parser comm1)
 {
+	(void)amd;
+	(void)redir;
 	if (init_path(spipe->l_env, comm1, spipe) == NULL)
 		return (spipe->ret[spipe->index] = invalid_command(spipe, &comm1));
 	else
@@ -94,7 +96,6 @@ int		simple_command(t_command *cmd,\
 int		execution(t_command *cmd, t_redir *redir, t_pipe *spipe)
 {
 	int i;
-	int ret;
 
 	i = 0;
 	spipe->n_comm = listlen(cmd);

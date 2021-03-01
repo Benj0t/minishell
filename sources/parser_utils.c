@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 11:31:23 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 19:16:40 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:44:57 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int				error_parser(char *str, char *name)
 
 void			malloc_fail(t_token tok, t_managparse *manag)
 {
+	(void)tok;
 	clear_multi_command(manag->command);
 	ft_lstclear(&g_env, &dealloc_varenv);
 	ft_putstr_fd("malloc_failed\n", 2);

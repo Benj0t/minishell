@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 14:08:51 by marvin            #+#    #+#             */
-/*   Updated: 2021/02/28 21:18:04 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:47:41 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ void		error_msg(t_pipe *spipe, struct stat buf, int ret)
 		spipe->b_ret[spipe->index] = 7;
 }
 
-char		*rel_path(char **env, t_parser comm, struct stat buf, t_pipe *spipe)
+char		*rel_path(char **env, t_parser comm, t_pipe *spipe)
 {
-	int ret;
+	struct stat	buf;
+	int			ret;
 
 	ret = 0;
+	(void)env;
 	if ((ret = stat(comm.argument[0], &buf)) == 0 && (buf.st_mode & S_IXUSR)\
 												&& (buf.st_mode & S_IFREG))
 		return (ft_strdup(comm.argument[0]));
@@ -79,11 +81,10 @@ char		*ft_path(char **env, t_parser comm, t_pipe *spipe)
 	char		*s;
 	char		**tab;
 	int			i;
-	struct stat	buf;
 
 	if (rel_char(comm.command))
 	{
-		s = rel_path(env, comm, buf, spipe);
+		s = rel_path(env, comm, spipe);
 		return (s);
 	}
 	i = get_path_id(env);

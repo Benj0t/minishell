@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 05:39:44 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/28 23:49:34 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:43:58 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int		err_msg(char *str, t_pipe *spipe)
 
 void	save_std(t_redir *redir, t_command *cmd)
 {
+	(void)cmd;
 	redir->save_stdin = dup(0);
 	redir->save_stdout = dup(1);
 	redir->std_in = -1;

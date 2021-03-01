@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+         #
+#    By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/13 19:04:13 by bemoreau          #+#    #+#              #
-#    Updated: 2021/02/27 11:12:55 by psemsari         ###   ########.fr        #
+#    Updated: 2021/03/01 00:39:15 by bemoreau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,7 @@ OBJ = $(SRCS:.c=.o)
 CC = gcc
 L_CC = clang
 LIB = ./libft/libft.a
-#FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 
 ### COLORS ###
 

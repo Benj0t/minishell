@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: psemsari <psemsari@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 12:06:18 by psemsari          #+#    #+#             */
-/*   Updated: 2021/02/27 21:52:04 by psemsari         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:45:15 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	add_char(char **result, size_t *i,\
 	size_t	len;
 	char	*tmp;
 
+	(void)manag;
 	len = ft_strlen(*result);
 	tmp = malloc(len + 1 + 1);
 	ft_strcpy(tmp, *result);

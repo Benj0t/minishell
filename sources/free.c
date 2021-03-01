@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/23 13:58:07 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/02/27 14:02:17 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:45:33 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int		free_struct(t_pipe *spipe, t_parser *parser, t_command *command)
 {
+	(void)command;
 	free_spipe(spipe);
 	spipe = NULL;
 	if (parser)

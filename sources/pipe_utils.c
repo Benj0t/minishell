@@ -6,7 +6,7 @@
 /*   By: bemoreau <bemoreau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 04:21:23 by bemoreau          #+#    #+#             */
-/*   Updated: 2021/03/01 00:04:44 by bemoreau         ###   ########.fr       */
+/*   Updated: 2021/03/01 00:43:44 by bemoreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ extern int	g_signal_c;
 void		get_ret_values(t_pipe *spipe)
 {
 	int i;
-	int end;
 
 	i = spipe->index;
 	while (i >= 0)
